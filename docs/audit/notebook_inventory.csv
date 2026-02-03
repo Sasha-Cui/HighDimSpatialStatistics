@@ -1,0 +1,186 @@
+path,size_kb,modified,cells,code_cells,md_cells,title,uses_core,read_h5ad,uses_cuda,uses_sklearn
+notebooks/legacy/16_BivariateDEAtretic_Linux.ipynb,1186.4,2026-02-03,48,40,8,**Atresia** refers to the process by which ovarian follicles degenerate and are reabsorbed before reaching maturity. This is a natural part of the ovarian cycle in females and affects the majority of follicles within the ovaries.,,1,0,0
+notebooks/legacy/19_basic_gp_linux.ipynb,793.3,2026-02-03,28,24,4,As of Mon 12th of Oct running on devel branch of GPy 0.8.8,,1,0,0
+notebooks/legacy/21_BivariateKernel.ipynb,546.4,2026-02-03,39,37,2,"Note to self: currently, the code works, but the scipy.optimise minimise does not work as expected.  The raeson I think has to do with the bound and the. way to deal with positive definiteness.  If they just arbitrarily give out some perturbations, then obviously they will get just zero gradient.",,1,0,1
+notebooks/legacy/32_SyntheticDataCreation.ipynb,437.7,2026-02-03,37,31,6,We create 300 csv files of trivariate synthetic data,,0,1,1
+notebooks/legacy/33_DirectContestwR.ipynb,247.8,2026-02-03,10,9,1,# We use the 300 csv files created and implement a direct contest against the r codes.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/33_DirectContestwROut-Copy1.ipynb,554.2,2026-02-03,6,5,1,# We use the 300 csv files created and implement a direct contest against the r codes.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/35_HattieMultipleData.ipynb,793.6,2026-02-03,22,17,5,# This notebook tracks the amount of memory needed to do the optimisation.  Note that we only run for 1 step each cycle.  Otherwise the time taken will be too long.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/37_MemoryTracking.ipynb,16.1,2026-02-03,15,10,5,# This notebook tracks the amount of memory needed to do the optimisation.  Note that we only run for 1 step each cycle.  Otherwise the time taken will be too long.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/38_marginal_fitting.ipynb,5.2,2026-02-03,8,5,3,# Do the actual fitting marginally.  Separate the gene list into 4 subsets of 6 each.  Track also the time and memory usage in the meanwhile.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/39_cpu.ipynb,143.0,2026-02-03,13,9,4,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/39_gpu.ipynb,10.6,2026-02-03,11,8,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/40_CrossFitting.ipynb,10.6,2026-02-03,13,9,4,"# Giving marginal fitting results, fit the cross terms","preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/41_create_synthetic_data.ipynb,18.3,2026-02-03,14,11,3,# Goal of this notebook is to create synthetic data that look like Hattie's data.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/42_kernel_smoother.ipynb,8.1,2026-02-03,10,8,2,"# Goal of this notebook is to read in locations, kernel smooth them into various grids.","preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/42_random_subsampler.ipynb,9.8,2026-02-03,12,10,2,# Goal of this notebook is subsample the locations randomly.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/43_fitting_and_validation_metric.ipynb,19.4,2026-02-03,9,6,3,# This is the notebook that takes in the kernel-smoothed data and does fitting.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/43_randomly_subsampled_fitting_and_validation_metric.ipynb,15.7,2026-02-03,8,5,3,# This is the notebook that takes in the kernel-smoothed data and does fitting.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/44_metric_calculation.ipynb,35.4,2026-02-03,13,7,6,"<span style=""color:red; font-family:Helvetica Neue, Helvetica, Arial, sans-serif; font-size:2em;"">An Exception was encountered at '<a href=""#papermill-error-cell"">In [4]</a>'.</span>","preambles,helper_functions,fitting_functions",0,1,0
+notebooks/legacy/44_randomply_subsampled_metric_calculation.ipynb,29.9,2026-02-03,11,7,4,# calculates the val metric after fitting is completed,"preambles,helper_functions,fitting_functions",0,1,0
+notebooks/legacy/45_visualisation_of_hyperparams.ipynb,536.7,2026-02-03,16,13,3,# This notebook contains the visualisation of hyperparameters based on the validation metric used.,,0,0,0
+notebooks/legacy/46_basic_data_analysis_metric_against_hyperparam.ipynb,339.2,2026-02-03,15,12,3,# how does validation metric depend on hyperparameter?,"preambles,helper_functions,fitting_functions",0,0,1
+notebooks/legacy/47_cross_fitting.ipynb,33.2,2026-02-03,16,10,6,# Takes fitted marginal parameters and performs cross terms fitting.,"preambles,helper_functions,fitting_functions",0,1,0
+notebooks/legacy/51_create_real_data.ipynb,4.9,2026-02-03,9,7,2,# Goal of this notebook is to put Hattie's data into the directory,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/52_kernel_smoothing_real_data.ipynb,12.6,2026-02-03,11,8,3,"# Goal of this notebook is to read in locations, kernel smooth them into various grids.","preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/53_fitting_and_validation_metric_real_data.ipynb,27.7,2026-02-03,17,12,5,# Just write down the two directories.  The estimation results should come out in the output address,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/54_finding_best_param_real_data.ipynb,930.4,2026-02-03,5,4,1,"# for each feature $j$, we look through hyperparams to find $l$ the smallest minimal loss.  We report both best param, optimized param, as well as the loss history for that $l$",,0,0,0
+notebooks/legacy/61_nonparametric_boostrap.ipynb,461.7,2026-02-03,20,16,4,# Nonparametric Permutation Test of Spatial Dependence.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/62_pseudo_distance.ipynb,344.8,2026-02-03,15,12,3,# Learning the Pseudo Distance,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/63_pseudo_distance.ipynb,2571.2,2026-02-03,18,13,5,# Detecting Boundaries and Teleconnections via Contrasting Euclidean Distance Against Spatial Similarities,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/Code Packages/pykridge/00_ordinary.ipynb,34.0,2026-02-03,8,4,4,# Ordinary Kriging Example,,0,0,0
+notebooks/legacy/Code Packages/pykridge/01_universal.ipynb,12.0,2026-02-03,8,5,3,# Universal Kriging Example,,0,0,0
+notebooks/legacy/Code Packages/pykridge/02_kriging3D.ipynb,39.2,2026-02-03,13,7,6,# Three-Dimensional Kriging Example,,0,0,0
+notebooks/legacy/Code Packages/pykridge/03_gstools_covmodel.ipynb,24.5,2026-02-03,3,2,1,# GSTools Interface,,0,0,0
+notebooks/legacy/Code Packages/pykridge/04_krige_geometric.ipynb,3.8,2026-02-03,6,3,3,# Geometric example,,0,0,0
+notebooks/legacy/Code Packages/pykridge/05_kriging_1D.ipynb,3.4,2026-02-03,2,1,1,# 1D Kriging,,0,0,0
+notebooks/legacy/Code Packages/pykridge/06_exact_values_example_1D.ipynb,63.9,2026-02-03,3,2,1,# Exact Values,,0,0,0
+notebooks/legacy/Code Packages/pykridge/07_regression_kriging2d.ipynb,3.5,2026-02-03,4,3,1,# Regression kriging,,0,0,1
+notebooks/legacy/Code Packages/pykridge/08_krige_cv.ipynb,9.9,2026-02-03,3,2,1,# Krige CV,,0,0,1
+notebooks/legacy/Code Packages/pykridge/10_classification_kriging2d.ipynb,2.3,2026-02-03,2,1,1,# Classification kriging,,0,0,1
+notebooks/legacy/Code Packages/pykridge/kriging_1D.ipynb,3.6,2026-02-03,3,2,1,1D Kriging,,0,0,0
+notebooks/legacy/archived_code/21_BivariateKernel_misha (nothing here).ipynb,561.5,2026-02-03,39,37,2,"Note to self: currently, the code works, but the scipy.optimise minimise does not work as expected.  The raeson I think has to do with the bound and the. way to deal with positive definiteness.  If they just arbitrarily give out some perturbations, then obviously they will get just zero gradient.",,1,0,1
+notebooks/legacy/archived_code/22_GentonJASA2012_Corrected.ipynb,501.5,2026-02-03,29,23,6,"# My goal here is to make use of the JASA2012 parametrisation, so that the optimisation problem becomes easy.",,0,0,1
+notebooks/legacy/archived_code/22_GentonJASA2012_CorrectedOut.ipynb,505.1,2026-02-03,19,13,6,"# My goal here is to make use of the JASA2012 parametrisation, so that the optimisation problem becomes easy.",,0,0,1
+notebooks/legacy/archived_code/23_SubmissionAttempt (nothing here).ipynb,447.5,2026-02-03,1,1,0,,,0,0,1
+notebooks/legacy/archived_code/23_SubmissionAttemptOut (nothing here).ipynb,453.4,2026-02-03,1,1,0,,,0,0,1
+notebooks/legacy/archived_code/24_Genton_ThreeDimensionalOut.ipynb,313.4,2026-02-03,20,19,1,"# In the previous two notebooks, we implemented the bivariate parametrisation given in JASA2012.  In this notebook, we implement its 3-variate version.  Most of the code should be identical to notebook 22, but the parametrisation becomes more complicated.",,0,0,1
+notebooks/legacy/archived_code/24_Genton_ThreeDimensional_Corrected.ipynb,293.2,2026-02-03,20,19,1,"# In the previous two notebooks, we implemented the bivariate parametrisation given in JASA2012.  In this notebook, we implement its 3-variate version.  Most of the code should be identical to notebook 22, but the parametrisation becomes more complicated.",,0,0,1
+notebooks/legacy/archived_code/25_FirstPyTorch (nothing here).ipynb,18.9,2026-02-03,9,8,1,"Finally, I am able to make use of GPU.",,0,1,1
+notebooks/legacy/archived_code/26_pVariatePyTorch (obsolete).ipynb,297.6,2026-02-03,35,31,4,# This notebook has three parts.,,0,1,1
+notebooks/legacy/archived_code/26_pVariatePyTorchOut.ipynb,73.1,2026-02-03,39,35,4,# This notebook has three parts.,,0,1,1
+notebooks/legacy/archived_code/27_RealData.ipynb,6900.9,2026-02-03,40,38,2,# This notebook runs the written code on the real data.,,1,1,1
+notebooks/legacy/archived_code/27_RealDataMultipleOut.ipynb,4563.4,2026-02-03,39,37,2,# This notebook runs the written code on the real data.,,1,1,1
+notebooks/legacy/archived_code/27_RealDataOut.ipynb,11634.5,2026-02-03,39,37,2,# This notebook runs the written code on the real data.,,1,1,1
+notebooks/legacy/archived_code/28_BatchLearning-Copy2.ipynb,312.3,2026-02-03,27,23,4,"# This notebook implements batch learning for either synthetic or real data.  Notably, with a switch of commands, I can change between working with real and synthetic data.",,1,1,1
+notebooks/legacy/archived_code/28_BatchLearning-Copy2Out.ipynb,56.8,2026-02-03,27,23,4,"# This notebook implements batch learning for either synthetic or real data.  Notably, with a switch of commands, I can change between working with real and synthetic data.",,1,1,1
+notebooks/legacy/archived_code/28_BatchLearning-Copy3.ipynb,312.3,2026-02-03,27,23,4,"# This notebook implements batch learning for either synthetic or real data.  Notably, with a switch of commands, I can change between working with real and synthetic data.",,1,1,1
+notebooks/legacy/archived_code/28_BatchLearning-Copy3Out.ipynb,171.3,2026-02-03,27,23,4,"# This notebook implements batch learning for either synthetic or real data.  Notably, with a switch of commands, I can change between working with real and synthetic data.",,1,1,1
+notebooks/legacy/archived_code/28_BatchLearning-Copy4.ipynb,52.3,2026-02-03,27,23,4,"# This notebook implements batch learning for either synthetic or real data.  Notably, with a switch of commands, I can change between working with real and synthetic data.",,1,1,1
+notebooks/legacy/archived_code/28_BatchLearning-Copy4Out.ipynb,61.8,2026-02-03,27,23,4,"# This notebook implements batch learning for either synthetic or real data.  Notably, with a switch of commands, I can change between working with real and synthetic data.",,1,1,1
+notebooks/legacy/archived_code/28_BatchLearning.ipynb,312.3,2026-02-03,27,23,4,"# This notebook implements batch learning for either synthetic or real data.  Notably, with a switch of commands, I can change between working with real and synthetic data.",,1,1,1
+notebooks/legacy/archived_code/28_BatchLearningCopy1.ipynb,57.8,2026-02-03,27,23,4,"# This notebook implements batch learning for either synthetic or real data.  Notably, with a switch of commands, I can change between working with real and synthetic data.",,1,1,1
+notebooks/legacy/archived_code/28_BatchLearningCopy1Out.ipynb,468.2,2026-02-03,27,23,4,"# This notebook implements batch learning for either synthetic or real data.  Notably, with a switch of commands, I can change between working with real and synthetic data.",,1,1,1
+notebooks/legacy/archived_code/28_BatchLearningOut.ipynb,469.4,2026-02-03,27,23,4,"# This notebook implements batch learning for either synthetic or real data.  Notably, with a switch of commands, I can change between working with real and synthetic data.",,1,1,1
+notebooks/legacy/archived_code/29_PositiveDefinite (obsolete).ipynb,33.5,2026-02-03,17,14,3,# The _PositiveDefinite() function in pytorch is problematic.,,0,0,1
+notebooks/legacy/archived_code/30_SanityCheckTorchvsScipy (obsolete).ipynb,38.1,2026-02-03,14,12,2,"# The purpose is to perform a sanity check.  I want to make sure that for the same data set and same parameters, torch and scipy and yielding the same log likelihood.",,1,1,1
+notebooks/legacy/archived_code/31_ConvertToRData.ipynb,21.9,2026-02-03,8,7,1,# I convert Hattie Chung's data set into an .RData file.,,1,0,0
+notebooks/legacy/archived_code/33_DirectContestwROut.ipynb,474.2,2026-02-03,6,5,1,# We use the 300 csv files created and implement a direct contest against the r codes.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/33_DirectContestwROutOld.ipynb,767.8,2026-02-03,20,16,4,# We use the 300 csv files created and implement a direct contest against the r codes.,,1,1,1
+notebooks/legacy/archived_code/35_HattieMultipleData-LocGeneTradeoff.ipynb,13.0,2026-02-03,21,16,5,# This notebook tracks the amount of memory needed to do the optimisation.  Note that we only run for 1 step each cycle.  Otherwise the time taken will be too long.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/35_HattieMultipleData-LocGeneTradeoffOut.ipynb,24.2,2026-02-03,21,16,5,# This notebook tracks the amount of memory needed to do the optimisation.  Note that we only run for 1 step each cycle.  Otherwise the time taken will be too long.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/35_HattieMultipleData-LocGeneTradeoffOutOld.ipynb,53.6,2026-02-03,21,16,5,# This notebook tracks the amount of memory needed to do the optimisation.  Note that we only run for 1 step each cycle.  Otherwise the time taken will be too long.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/35_HattieMultipleDataOut1.ipynb,837.7,2026-02-03,40,33,7,"<span style=""color:red; font-family:Helvetica Neue, Helvetica, Arial, sans-serif; font-size:2em;"">An Exception was encountered at '<a href=""#papermill-error-cell"">In [24]</a>'.</span>","preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/35_HattieMultipleDataOut2.ipynb,850.8,2026-02-03,25,20,5,# This notebook tracks the amount of memory needed to do the optimisation.  Note that we only run for 1 step each cycle.  Otherwise the time taken will be too long.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/35_HattieMultipleDataOut3.ipynb,821.1,2026-02-03,24,17,7,"<span style=""color:red; font-family:Helvetica Neue, Helvetica, Arial, sans-serif; font-size:2em;"">An Exception was encountered at '<a href=""#papermill-error-cell"">In [13]</a>'.</span>","preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/35_HattieMultipleDataOut4.ipynb,90.1,2026-02-03,22,17,5,# This notebook tracks the amount of memory needed to do the optimisation.  Note that we only run for 1 step each cycle.  Otherwise the time taken will be too long.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/35_HattieMultipleDataOut5.ipynb,804.0,2026-02-03,22,17,5,# This notebook tracks the amount of memory needed to do the optimisation.  Note that we only run for 1 step each cycle.  Otherwise the time taken will be too long.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/35_HattieMultipleDataOutOld.ipynb,933.4,2026-02-03,24,19,5,# Let us apply the latest optimisation code to Hattie's latest data set,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/36_AdaptiveLearningRate (obsolete).ipynb,108.7,2026-02-03,5,4,1,Let us produce the simplest version of a torch SGD adam learning where the learning rate adapts.,,0,0,0
+notebooks/legacy/archived_code/36_SubsamplingwReplacementDay.ipynb,3.5,2026-02-03,6,5,1,"# We subsample 20 times, with replacement, and check if the fitting results are comparable to each other","preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/36_SubsamplingwReplacementDayOut.ipynb,60.5,2026-02-03,6,5,1,"# We subsample 20 times, with replacement, and check if the fitting results are comparable to each other","preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/36_SubsamplingwReplacementDayOutOld.ipynb,47.6,2026-02-03,5,4,1,"# We subsample 20 times, with replacement, and check if the fitting results are comparable to each other","preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/36_SubsamplingwReplacementWeek.ipynb,25.7,2026-02-03,14,13,1,"# We subsample 20 times, with replacement, and check if the fitting results are comparable to each other","preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/36_SubsamplingwReplacementWeekOut.ipynb,25.1,2026-02-03,14,13,1,"# We subsample 20 times, with replacement, and check if the fitting results are comparable to each other","preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/37_MemoryTracking-Copy1.ipynb,15.8,2026-02-03,15,10,5,# This notebook tracks the amount of memory needed to do the optimisation.  Note that we only run for 1 step each cycle.  Otherwise the time taken will be too long.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/38_61872_1.ipynb,538.6,2026-02-03,8,5,3,# Do the actual fitting marginally.  Separate the gene list into 4 subsets of 6 each.  Track also the time and memory usage in the meanwhile.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/38_61872_10.ipynb,535.9,2026-02-03,8,5,3,# Do the actual fitting marginally.  Separate the gene list into 4 subsets of 6 each.  Track also the time and memory usage in the meanwhile.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/38_61872_2.ipynb,550.1,2026-02-03,8,5,3,# Do the actual fitting marginally.  Separate the gene list into 4 subsets of 6 each.  Track also the time and memory usage in the meanwhile.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/38_61872_3.ipynb,558.0,2026-02-03,8,5,3,# Do the actual fitting marginally.  Separate the gene list into 4 subsets of 6 each.  Track also the time and memory usage in the meanwhile.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/38_61872_4.ipynb,552.7,2026-02-03,8,5,3,# Do the actual fitting marginally.  Separate the gene list into 4 subsets of 6 each.  Track also the time and memory usage in the meanwhile.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/38_61872_5.ipynb,550.9,2026-02-03,8,5,3,# Do the actual fitting marginally.  Separate the gene list into 4 subsets of 6 each.  Track also the time and memory usage in the meanwhile.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/38_61872_6.ipynb,549.8,2026-02-03,8,5,3,# Do the actual fitting marginally.  Separate the gene list into 4 subsets of 6 each.  Track also the time and memory usage in the meanwhile.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/38_61872_7.ipynb,552.0,2026-02-03,8,5,3,# Do the actual fitting marginally.  Separate the gene list into 4 subsets of 6 each.  Track also the time and memory usage in the meanwhile.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/38_61872_8.ipynb,547.6,2026-02-03,8,5,3,# Do the actual fitting marginally.  Separate the gene list into 4 subsets of 6 each.  Track also the time and memory usage in the meanwhile.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/38_61872_9.ipynb,543.8,2026-02-03,8,5,3,# Do the actual fitting marginally.  Separate the gene list into 4 subsets of 6 each.  Track also the time and memory usage in the meanwhile.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/38_MarginalFitting1.ipynb,10.9,2026-02-03,9,6,3,# Do the actual fitting marginally.  Separate the gene list into 4 subsets of 6 each.  Track also the time and memory usage in the meanwhile.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/38_MarginalFitting2.ipynb,9.7,2026-02-03,10,7,3,# Do the actual fitting marginally.  Separate the gene list into 4 subsets of 6 each.  Track also the time and memory usage in the meanwhile.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/38_MarginalFitting3.ipynb,10.9,2026-02-03,9,6,3,# Do the actual fitting marginally.  Separate the gene list into 4 subsets of 6 each.  Track also the time and memory usage in the meanwhile.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/38_MarginalFitting4-old.ipynb,14.5,2026-02-03,9,6,3,# Do the actual fitting marginally.  Separate the gene list into 4 subsets of 6 each.  Track also the time and memory usage in the meanwhile.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/38_MarginalFitting4.ipynb,9.6,2026-02-03,9,6,3,# Do the actual fitting marginally.  Separate the gene list into 4 subsets of 6 each.  Track also the time and memory usage in the meanwhile.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/38_MarginalFitting4_1.ipynb,8.9,2026-02-03,10,7,3,# Do the actual fitting marginally.  Separate the gene list into 4 subsets of 6 each.  Track also the time and memory usage in the meanwhile.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/38_MarginalFitting4_1_51278.ipynb,9.5,2026-02-03,9,6,3,# Do the actual fitting marginally.  Separate the gene list into 4 subsets of 6 each.  Track also the time and memory usage in the meanwhile.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/38_MarginalFitting4_2.ipynb,14.5,2026-02-03,9,6,3,# Do the actual fitting marginally.  Separate the gene list into 4 subsets of 6 each.  Track also the time and memory usage in the meanwhile.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/38_MarginalFitting4_2_51279.ipynb,10.9,2026-02-03,9,6,3,# Do the actual fitting marginally.  Separate the gene list into 4 subsets of 6 each.  Track also the time and memory usage in the meanwhile.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/38_MarginalFitting4_3.ipynb,14.5,2026-02-03,9,6,3,# Do the actual fitting marginally.  Separate the gene list into 4 subsets of 6 each.  Track also the time and memory usage in the meanwhile.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/38_MarginalFitting4_3_51280.ipynb,7.7,2026-02-03,9,6,3,# Do the actual fitting marginally.  Separate the gene list into 4 subsets of 6 each.  Track also the time and memory usage in the meanwhile.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/38_MarginalFitting4_51281.ipynb,7.9,2026-02-03,9,6,3,# Do the actual fitting marginally.  Separate the gene list into 4 subsets of 6 each.  Track also the time and memory usage in the meanwhile.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/39_cpu_10_51276.ipynb,9.5,2026-02-03,10,7,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/39_cpu_1_20241022_142522.ipynb,8.2,2026-02-03,10,7,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/39_cpu_1_51276.ipynb,9.6,2026-02-03,10,7,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/39_cpu_2_51276.ipynb,9.6,2026-02-03,10,7,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/39_cpu_3_51276.ipynb,9.5,2026-02-03,10,7,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/39_cpu_4_51276.ipynb,9.5,2026-02-03,10,7,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/39_cpu_5_51276.ipynb,9.5,2026-02-03,10,7,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/39_cpu_61732_1.ipynb,9.7,2026-02-03,10,7,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/39_cpu_61732_10.ipynb,9.6,2026-02-03,10,7,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/39_cpu_61732_2.ipynb,9.6,2026-02-03,10,7,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/39_cpu_61732_3.ipynb,9.6,2026-02-03,10,7,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/39_cpu_61732_4.ipynb,9.7,2026-02-03,10,7,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/39_cpu_61732_5.ipynb,9.7,2026-02-03,10,7,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/39_cpu_61732_6.ipynb,9.7,2026-02-03,10,7,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/39_cpu_61732_7.ipynb,9.7,2026-02-03,10,7,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/39_cpu_61732_8.ipynb,9.7,2026-02-03,10,7,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/39_cpu_61732_9.ipynb,9.6,2026-02-03,10,7,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/39_cpu_6_51276.ipynb,9.5,2026-02-03,10,7,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/39_cpu_7_51276.ipynb,9.5,2026-02-03,10,7,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/39_cpu_8_51276.ipynb,9.5,2026-02-03,10,7,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/39_cpu_9_51276.ipynb,9.5,2026-02-03,10,7,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/39_gpu_1_51515.ipynb,9.0,2026-02-03,11,8,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/39_gpu_61733_1.ipynb,10.5,2026-02-03,11,8,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/39_gpu_61733_10.ipynb,10.5,2026-02-03,11,8,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/39_gpu_61733_2.ipynb,10.5,2026-02-03,11,8,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/39_gpu_61733_3.ipynb,10.5,2026-02-03,11,8,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/39_gpu_61733_4.ipynb,10.5,2026-02-03,11,8,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/39_gpu_61733_5.ipynb,10.5,2026-02-03,11,8,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/39_gpu_61733_6.ipynb,10.5,2026-02-03,11,8,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/39_gpu_61733_7.ipynb,10.5,2026-02-03,11,8,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/39_gpu_61733_8.ipynb,10.5,2026-02-03,11,8,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/39_gpu_61733_9.ipynb,10.5,2026-02-03,11,8,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/archived_code/40_preprocessing_techniques.ipynb,3155.9,2026-02-03,12,11,1,# Compare different preprocessing strategies,"preambles,helper_functions,fitting_functions",0,0,1
+notebooks/legacy/archived_code/NonStationary/01_Nychka.ipynb,8.9,2026-02-03,14,9,5,This implements Kleiber and Nychka JMVA nonstationary model.,"preambles,helper_functions",0,0,0
+notebooks/legacy/ping_luo/39_cpu.ipynb,14.6,2026-02-03,10,7,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/ping_luo/39_cpu_10_82785.ipynb,9.2,2026-02-03,10,7,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/ping_luo/39_cpu_1_82785.ipynb,9.2,2026-02-03,10,7,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/ping_luo/39_cpu_2_82785.ipynb,9.2,2026-02-03,10,7,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/ping_luo/39_cpu_3_82785.ipynb,9.2,2026-02-03,10,7,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/ping_luo/39_cpu_4_82785.ipynb,9.2,2026-02-03,10,7,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/ping_luo/39_cpu_5_82785.ipynb,9.2,2026-02-03,10,7,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/ping_luo/39_cpu_6_82785.ipynb,9.2,2026-02-03,10,7,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/ping_luo/39_cpu_7_82785.ipynb,9.2,2026-02-03,10,7,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/ping_luo/39_cpu_8_82785.ipynb,9.2,2026-02-03,10,7,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/ping_luo/39_cpu_9_82785.ipynb,9.2,2026-02-03,10,7,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/ping_luo/39_gpu.ipynb,10.6,2026-02-03,11,8,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/ping_luo/39_gpu_10_82784.ipynb,10.3,2026-02-03,11,8,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/ping_luo/39_gpu_1_82784.ipynb,10.3,2026-02-03,11,8,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/ping_luo/39_gpu_2_82784.ipynb,10.3,2026-02-03,11,8,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/ping_luo/39_gpu_3_82784.ipynb,10.3,2026-02-03,11,8,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/ping_luo/39_gpu_4_82784.ipynb,10.3,2026-02-03,11,8,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/ping_luo/39_gpu_5_82784.ipynb,10.3,2026-02-03,11,8,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/ping_luo/39_gpu_6_82784.ipynb,10.3,2026-02-03,11,8,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/ping_luo/39_gpu_7_82784.ipynb,10.3,2026-02-03,11,8,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/ping_luo/39_gpu_8_82784.ipynb,10.3,2026-02-03,11,8,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/ping_luo/39_gpu_9_82784.ipynb,10.3,2026-02-03,11,8,3,# GPU: are we really running on GPU?,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/temporary_code/01_importing_util.ipynb,2.0,2026-02-03,7,6,1,Modularise codes that are used repetitively.,,0,0,0
+notebooks/legacy/temporary_code/01_out.ipynb,4.9,2026-02-03,7,6,1,Modularise codes that are used repetitively.,,0,0,0
+notebooks/legacy/temporary_code/02_linear_regression.ipynb,119.0,2026-02-03,6,6,0,,,0,0,0
+notebooks/legacy/temporary_code/03_get_the_name.ipynb,4.7,2026-02-03,3,3,0,,,0,0,0
+notebooks/legacy/temporary_code/04_some_visualisation.ipynb,7710.8,2026-02-03,7,7,0,,,0,0,0
+notebooks/legacy/temporary_code/05_number_of_features.ipynb,2.4,2026-02-03,5,5,0,,,0,0,0
+notebooks/legacy/temporary_code/06_preprocessing.ipynb,6063.2,2026-02-03,9,8,1,# Figure out the right way to preprocess,"preambles,helper_functions,fitting_functions",1,0,0
+notebooks/legacy/temporary_code/07_save_and_load.ipynb,20.7,2026-02-03,22,18,4,# Check save and load data.,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/temporary_code/08_quantisation_of_dist-Copy1.ipynb,16.9,2026-02-03,4,3,1,# To quantise the possible distances and speed up to the computations of K,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/temporary_code/08_quantisation_of_dist.ipynb,143.6,2026-02-03,29,22,7,# To quantise the possible distances and speed up to the computations of K,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/temporary_code/09_name_of_jupyter.ipynb,6.6,2026-02-03,2,2,0,,,0,0,0
+notebooks/legacy/temporary_code/10_testing_new_matern_kernel.ipynb,6.4,2026-02-03,9,8,1,# Compare three ways of computing marginal Matern Kernel Matrix,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/temporary_code/11_subsampling_by_grid.ipynb,22.2,2026-02-03,7,6,1,# Develops the subsampling by regular rectangular grid,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/temporary_code/12_best_lr.ipynb,1343.3,2026-02-03,10,9,1,## Let us look back at the synthetic data set,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/temporary_code/13_parallel_processing.ipynb,28.1,2026-02-03,2,1,1,# Testing if parallel processing really speeds things up,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/temporary_code/14_visualisation_loss_history.ipynb,1070.7,2026-02-03,5,5,0,,,0,0,0
+notebooks/legacy/temporary_code/15_cov_norm.ipynb,2.6,2026-02-03,2,2,0,,,0,0,0
+notebooks/legacy/temporary_code/16_atresia_markers.ipynb,464.2,2026-02-03,23,17,6,"# This notes aims to identify the genes that are biomarkers for atresia.  Hopefully, they include ```Ghr```, ```Cfh```, and ```Pik3r1```.","preambles,helper_functions,fitting_functions",1,0,0
+notebooks/legacy/temporary_code/Untitled.ipynb,4.5,2026-02-03,4,4,0,,"preambles,helper_functions,fitting_functions",0,1,0
+notebooks/legacy/temporary_code/Untitled1.ipynb,54.4,2026-02-03,4,4,0,,,0,0,0
+notebooks/legacy/temporary_code/fourier_analysis/1_exploratory.ipynb,3389.9,2026-02-03,17,16,1,# check if the default multi-variate fourier analysis tools give some visualisation and insight to the data set.,"preambles,helper_functions,fitting_functions",0,0,1
+notebooks/legacy/temporary_code/fourier_analysis/2_exploratory_data_visualisation.ipynb,5290.4,2026-02-03,17,15,2,# Think of it as a spatial point process,"preambles,helper_functions,fitting_functions",0,0,0
+notebooks/legacy/temporary_code/rename_some_files.ipynb,1.6,2026-02-03,1,1,0,,,0,0,0
