@@ -1,0 +1,136 @@
+GpGp                    GpGp: Fast Gaussian Process Computing.
+L_mult                  Multiply approximate Cholesky by a vector
+L_t_mult                Multiply transpose of approximate Cholesky by a
+                        vector
+Linv_mult               Multiply approximate inverse Cholesky by a
+                        vector
+Linv_t_mult             Multiply transpose of approximate inverse
+                        Cholesky by a vector
+argo2016                Ocean temperatures from Argo profiling floats
+cond_sim                Conditional Simulation using Vecchia's
+                        approximation
+condition_number        compute condition number of matrix
+expit                   expit function and integral of expit function
+exponential_anisotropic2D
+                        Geometrically anisotropic exponential
+                        covariance function (two dimensions)
+exponential_anisotropic3D
+                        Geometrically anisotropic exponential
+                        covariance function (three dimensions)
+exponential_anisotropic3D_alt
+                        Geometrically anisotropic exponential
+                        covariance function (three dimensions,
+                        alternate parameterization)
+exponential_isotropic   Isotropic exponential covariance function
+exponential_nonstat_var
+                        Isotropic exponential covariance function,
+                        nonstationary variances
+exponential_scaledim    Exponential covariance function, different
+                        range parameter for each dimension
+exponential_spacetime   Spatial-Temporal exponential covariance
+                        function
+exponential_sphere      Isotropic exponential covariance function on
+                        sphere
+exponential_sphere_warp
+                        Deformed exponential covariance function on
+                        sphere
+exponential_spheretime
+                        Exponential covariance function on sphere x
+                        time
+exponential_spheretime_warp
+                        Deformed exponential covariance function on
+                        sphere
+fast_Gp_sim             Approximate GP simulation
+fast_Gp_sim_Linv        Approximate GP simulation with specified
+                        Linverse
+find_ordered_nn         Find ordered nearest neighbors.
+find_ordered_nn_brute   Naive brute force nearest neighbor finder
+fisher_scoring          Fisher scoring algorithm
+fit_model               Estimate mean and covariance parameters
+get_linkfun             get link function, whether locations are lonlat
+                        and space time
+get_penalty             get penalty function
+get_start_parms         get default starting values of covariance
+                        parameters
+group_obs               Automatic grouping (partitioning) of locations
+jason3                  Windspeed measurements from Jason-3 Satellite
+matern15_isotropic      Isotropic Matern covariance function,
+                        smoothness = 1.5
+matern15_scaledim       Matern covariance function, smoothess = 1.5,
+                        different range parameter for each dimension
+matern25_isotropic      Isotropic Matern covariance function,
+                        smoothness = 2.5
+matern25_scaledim       Matern covariance function, smoothess = 2.5,
+                        different range parameter for each dimension
+matern35_isotropic      Isotropic Matern covariance function,
+                        smoothness = 3.5
+matern35_scaledim       Matern covariance function, smoothess = 3.5,
+                        different range parameter for each dimension
+matern45_isotropic      Isotropic Matern covariance function,
+                        smoothness = 4.5
+matern45_scaledim       Matern covariance function, smoothess = 3.5,
+                        different range parameter for each dimension
+matern_anisotropic2D    Geometrically anisotropic Matern covariance
+                        function (two dimensions)
+matern_anisotropic3D    Geometrically anisotropic Matern covariance
+                        function (three dimensions)
+matern_anisotropic3D_alt
+                        Geometrically anisotropic Matern covariance
+                        function (three dimensions, alternate
+                        parameterization)
+matern_categorical      Isotropic Matern covariance function with
+                        random effects for categories
+matern_isotropic        Isotropic Matern covariance function
+matern_nonstat_var      Isotropic Matern covariance function,
+                        nonstationary variances
+matern_scaledim         Matern covariance function, different range
+                        parameter for each dimension
+matern_spacetime        Spatial-Temporal Matern covariance function
+matern_spacetime_categorical
+                        Space-Time Matern covariance function with
+                        random effects for categories
+matern_spacetime_categorical_local
+                        Space-Time Matern covariance function with
+                        local random effects for categories
+matern_sphere           Isotropic Matern covariance function on sphere
+matern_sphere_warp      Deformed Matern covariance function on sphere
+matern_spheretime       Matern covariance function on sphere x time
+matern_spheretime_warp
+                        Deformed Matern covariance function on sphere
+order_coordinate        Sorted coordinate ordering
+order_dist_to_point     Distance to specified point ordering
+order_maxmin            Maximum minimum distance ordering
+order_middleout         Middle-out ordering
+pen_hi                  penalize large values of parameter: penalty,
+                        1st deriative, 2nd derivative
+pen_lo                  penalize small values of parameter: penalty,
+                        1st deriative, 2nd derivative
+pen_loglo               penalize small values of log parameter:
+                        penalty, 1st deriative, 2nd derivative
+predictions             Compute Gaussian process predictions using
+                        Vecchia's approximations
+sph_grad_xyz            compute gradient of spherical harmonics
+                        functions
+summary.GpGp_fit        Print summary of GpGp fit
+test_likelihood_object
+                        test likelihood object for NA or Inf values
+vecchia_Linv            Entries of inverse Cholesky approximation
+vecchia_grouped_meanzero_loglik
+                        Grouped Vecchia approximation to the Gaussian
+                        loglikelihood, zero mean
+vecchia_grouped_profbeta_loglik
+                        Grouped Vecchia approximation, profiled
+                        regression coefficients
+vecchia_grouped_profbeta_loglik_grad_info
+                        Grouped Vecchia loglikelihood, gradient, Fisher
+                        information
+vecchia_meanzero_loglik
+                        Vecchia's approximation to the Gaussian
+                        loglikelihood, zero mean
+vecchia_profbeta_loglik
+                        Vecchia's approximation to the Gaussian
+                        loglikelihood, with profiled regression
+                        coefficients.
+vecchia_profbeta_loglik_grad_info
+                        Vecchia's loglikelihood, gradient, and Fisher
+                        information

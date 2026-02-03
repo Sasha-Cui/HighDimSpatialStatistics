@@ -1,0 +1,62 @@
+The following modules were not unloaded:
+  (Use "module --force purge" to unload all):
+
+  1) StdEnv
+Input Notebook:  13_parallel_processing.ipynb
+Output Notebook: 13_parallel_processing.ipynb
+Executing:   0%|          | 0/2 [00:00<?, ?cell/s]Executing notebook with kernel: python3
+Executing:  50%|█████     | 1/2 [00:00<00:00,  1.49cell/s]Executing: 100%|██████████| 2/2 [00:03<00:00,  1.67s/cell]Executing: 100%|██████████| 2/2 [00:03<00:00,  1.67s/cell]
+Traceback (most recent call last):
+  File "/home/zc362/.conda/envs/myenv/bin/papermill", line 10, in <module>
+    sys.exit(papermill())
+             ^^^^^^^^^^^
+  File "/home/zc362/.conda/envs/myenv/lib/python3.12/site-packages/click/core.py", line 1157, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/zc362/.conda/envs/myenv/lib/python3.12/site-packages/click/core.py", line 1078, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "/home/zc362/.conda/envs/myenv/lib/python3.12/site-packages/click/core.py", line 1434, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/zc362/.conda/envs/myenv/lib/python3.12/site-packages/click/core.py", line 783, in invoke
+    return __callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/zc362/.conda/envs/myenv/lib/python3.12/site-packages/click/decorators.py", line 33, in new_func
+    return f(get_current_context(), *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/zc362/.conda/envs/myenv/lib/python3.12/site-packages/papermill/cli.py", line 235, in papermill
+    execute_notebook(
+  File "/home/zc362/.conda/envs/myenv/lib/python3.12/site-packages/papermill/execute.py", line 131, in execute_notebook
+    raise_for_execution_errors(nb, output_path)
+  File "/home/zc362/.conda/envs/myenv/lib/python3.12/site-packages/papermill/execute.py", line 251, in raise_for_execution_errors
+    raise error
+papermill.exceptions.PapermillExecutionError: 
+---------------------------------------------------------------------------
+Exception encountered at "In [1]":
+---------------------------------------------------------------------------
+NameError                                 Traceback (most recent call last)
+Cell In[1], line 80
+     77 if __name__ == '__main__':
+     78     # Measure serial processing time
+     79     start_time = time.time()
+---> 80     test_serial()
+     81     serial_time = time.time() - start_time
+     82     print(f"Serial processing time: {serial_time:.2f} seconds")
+
+Cell In[1], line 70, in test_serial()
+     68 def test_serial():
+     69     for l, (lr_set, init_set) in enumerate(itertools.product(learning_rates, initializations)):
+---> 70         run_optimization(l, lr_set, init_set)
+
+Cell In[1], line 43, in run_optimization(l, lr_set, init_set)
+     40 hyperparameters_path = os.path.expanduser(f'{output_dir_base}/hyperparameters_{l}.csv')
+     41 pd.DataFrame([lr_set | init_set]).to_csv(hyperparameters_path, index=False)
+---> 43 optimized_params, best_params, loss_histories = optimize_marginal_parameters_in_groups(
+     44     lr_set, init_set, X_groups, Y_groups, number_of_cycles, steps_per_batch
+     45 )
+     47 for j, (optimized_params_j, best_params_j) in enumerate(zip(optimized_params, best_params)):
+     48     optimized_params_j = [v.item() if isinstance(v, torch.Tensor) else v for v in optimized_params_j]
+
+NameError: name 'optimize_marginal_parameters_in_groups' is not defined
+

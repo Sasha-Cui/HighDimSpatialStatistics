@@ -1,0 +1,50 @@
+The following modules were not unloaded:
+  (Use "module --force purge" to unload all):
+
+  1) StdEnv
+
+CondaError: Run 'conda init' before 'conda deactivate'
+
+Input Notebook:  08_quantisation_of_dist-Copy1.ipynb
+Output Notebook: 08_quantisation_of_dist-Copy1.ipynb
+Executing:   0%|                                                                                                                                 | 0/4 [00:00<?, ?cell/s]Executing notebook with kernel: python3
+Executing:  25%|██████████████████████████████▎                                                                                          | 1/4 [00:00<00:02,  1.19cell/s]Executing:  50%|████████████████████████████████████████████████████████████▌                                                            | 2/4 [00:11<00:13,  6.77s/cell]Executing:  75%|██████████████████████████████████████████████████████████████████████████████████████████▊                              | 3/4 [00:23<00:09,  9.03s/cell]Executing:  75%|██████████████████████████████████████████████████████████████████████████████████████████▊                              | 3/4 [00:24<00:08,  8.23s/cell]
+Traceback (most recent call last):
+  File "/home/zc362/.conda/envs/myenv/bin/papermill", line 10, in <module>
+    sys.exit(papermill())
+             ^^^^^^^^^^^
+  File "/home/zc362/.conda/envs/myenv/lib/python3.12/site-packages/click/core.py", line 1157, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/zc362/.conda/envs/myenv/lib/python3.12/site-packages/click/core.py", line 1078, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "/home/zc362/.conda/envs/myenv/lib/python3.12/site-packages/click/core.py", line 1434, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/zc362/.conda/envs/myenv/lib/python3.12/site-packages/click/core.py", line 783, in invoke
+    return __callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/zc362/.conda/envs/myenv/lib/python3.12/site-packages/click/decorators.py", line 33, in new_func
+    return f(get_current_context(), *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/zc362/.conda/envs/myenv/lib/python3.12/site-packages/papermill/cli.py", line 235, in papermill
+    execute_notebook(
+  File "/home/zc362/.conda/envs/myenv/lib/python3.12/site-packages/papermill/execute.py", line 131, in execute_notebook
+    raise_for_execution_errors(nb, output_path)
+  File "/home/zc362/.conda/envs/myenv/lib/python3.12/site-packages/papermill/execute.py", line 251, in raise_for_execution_errors
+    raise error
+papermill.exceptions.PapermillExecutionError: 
+---------------------------------------------------------------------------
+Exception encountered at "In [2]":
+---------------------------------------------------------------------------
+RuntimeError                              Traceback (most recent call last)
+Cell In[2], line 6
+      3 off_diagonal_mask = ~torch.eye(X_dist.size(0), dtype=bool)
+      5 # Step 2: Use the mask to extract only the off-diagonal elements
+----> 6 off_diagonal_elements = X_dist[off_diagonal_mask]
+      8 # Step 3: Flatten the off-diagonal elements
+      9 off_diagonal = off_diagonal_elements.flatten()
+
+RuntimeError: [enforce fail at alloc_cpu.cpp:117] err == 0. DefaultCPUAllocator: can't allocate memory: you tried to allocate 650645503872 bytes. Error code 12 (Cannot allocate memory)
+

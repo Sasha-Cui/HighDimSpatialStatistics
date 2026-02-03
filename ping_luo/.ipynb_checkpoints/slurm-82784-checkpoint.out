@@ -1,0 +1,83 @@
+The following modules were not unloaded:
+  (Use "module --force purge" to unload all):
+
+  1) StdEnv
+
+CondaError: Run 'conda init' before 'conda deactivate'
+
+Input Notebook:  39_gpu.ipynb
+Output Notebook: 39_gpu_1_82784.ipynb
+Executing:   0%|                                                                                                          | 0/11 [00:00<?, ?cell/s]Executing notebook with kernel: python3
+Executing:   9%|████████▉                                                                                         | 1/11 [00:02<00:23,  2.31s/cell]Executing:  18%|█████████████████▊                                                                                | 2/11 [00:13<01:09,  7.78s/cell]Executing:  27%|██████████████████████████▋                                                                       | 3/11 [00:14<00:35,  4.48s/cell]Executing:  45%|████████████████████████████████████████████▌                                                     | 5/11 [00:21<00:23,  3.94s/cell]Executing:  64%|█████████████████████████████████████████████████████████████▋                                   | 7/11 [10:18<09:02, 135.66s/cell]Executing: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 11/11 [10:21<00:00, 56.51s/cell]
+The following modules were not unloaded:
+  (Use "module --force purge" to unload all):
+
+  1) StdEnv
+Input Notebook:  39_gpu.ipynb
+Output Notebook: 39_gpu_2_82784.ipynb
+Executing:   0%|                                                                                                          | 0/11 [00:00<?, ?cell/s]Executing notebook with kernel: python3
+Executing:   9%|████████▉                                                                                         | 1/11 [00:00<00:07,  1.31cell/s]Executing:  18%|█████████████████▊                                                                                | 2/11 [00:04<00:23,  2.57s/cell]Executing:  45%|████████████████████████████████████████████▌                                                     | 5/11 [00:10<00:13,  2.25s/cell]Executing:  64%|█████████████████████████████████████████████████████████████▋                                   | 7/11 [10:12<08:13, 123.31s/cell]Executing: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 11/11 [10:13<00:00, 55.80s/cell]
+The following modules were not unloaded:
+  (Use "module --force purge" to unload all):
+
+  1) StdEnv
+Input Notebook:  39_gpu.ipynb
+Output Notebook: 39_gpu_3_82784.ipynb
+Executing:   0%|                                                                                                          | 0/11 [00:00<?, ?cell/s]Executing notebook with kernel: python3
+Executing:   9%|████████▉                                                                                         | 1/11 [00:00<00:07,  1.25cell/s]Executing:  18%|█████████████████▊                                                                                | 2/11 [00:04<00:24,  2.70s/cell]Executing:  45%|████████████████████████████████████████████▌                                                     | 5/11 [00:11<00:14,  2.43s/cell]Executing:  64%|█████████████████████████████████████████████████████████████▋                                   | 7/11 [10:02<08:04, 121.21s/cell]Executing: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 11/11 [10:03<00:00, 54.88s/cell]
+The following modules were not unloaded:
+  (Use "module --force purge" to unload all):
+
+  1) StdEnv
+Input Notebook:  39_gpu.ipynb
+Output Notebook: 39_gpu_4_82784.ipynb
+Executing:   0%|                                                                                                          | 0/11 [00:00<?, ?cell/s]Executing notebook with kernel: python3
+Executing:   9%|████████▉                                                                                         | 1/11 [00:00<00:08,  1.20cell/s]Executing:  18%|█████████████████▊                                                                                | 2/11 [00:04<00:24,  2.77s/cell]Executing:  45%|████████████████████████████████████████████▌                                                     | 5/11 [00:11<00:13,  2.30s/cell]Executing:  64%|█████████████████████████████████████████████████████████████▋                                   | 7/11 [10:15<08:15, 123.87s/cell]Executing: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 11/11 [10:16<00:00, 56.07s/cell]
+The following modules were not unloaded:
+  (Use "module --force purge" to unload all):
+
+  1) StdEnv
+Input Notebook:  39_gpu.ipynb
+Output Notebook: 39_gpu_5_82784.ipynb
+Executing:   0%|                                                                                                          | 0/11 [00:00<?, ?cell/s]Executing notebook with kernel: python3
+Executing:   9%|████████▉                                                                                         | 1/11 [00:00<00:09,  1.00cell/s]Executing:  18%|█████████████████▊                                                                                | 2/11 [00:05<00:27,  3.10s/cell]Executing:  45%|████████████████████████████████████████████▌                                                     | 5/11 [00:11<00:14,  2.41s/cell]Executing:  64%|█████████████████████████████████████████████████████████████▋                                   | 7/11 [10:03<08:05, 121.26s/cell]Executing: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 11/11 [10:04<00:00, 54.93s/cell]
+The following modules were not unloaded:
+  (Use "module --force purge" to unload all):
+
+  1) StdEnv
+Input Notebook:  39_gpu.ipynb
+Output Notebook: 39_gpu_6_82784.ipynb
+Executing:   0%|                                                                                                          | 0/11 [00:00<?, ?cell/s]Executing notebook with kernel: python3
+Executing:   9%|████████▉                                                                                         | 1/11 [00:00<00:07,  1.34cell/s]Executing:  18%|█████████████████▊                                                                                | 2/11 [00:04<00:23,  2.62s/cell]Executing:  45%|████████████████████████████████████████████▌                                                     | 5/11 [00:11<00:13,  2.27s/cell]Executing:  64%|█████████████████████████████████████████████████████████████▋                                   | 7/11 [12:24<10:00, 150.04s/cell]Executing: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 11/11 [12:25<00:00, 67.78s/cell]
+The following modules were not unloaded:
+  (Use "module --force purge" to unload all):
+
+  1) StdEnv
+Input Notebook:  39_gpu.ipynb
+Output Notebook: 39_gpu_7_82784.ipynb
+Executing:   0%|                                                                                                          | 0/11 [00:00<?, ?cell/s]Executing notebook with kernel: python3
+Executing:   9%|████████▉                                                                                         | 1/11 [00:00<00:08,  1.20cell/s]Executing:  18%|█████████████████▊                                                                                | 2/11 [00:05<00:25,  2.81s/cell]Executing:  45%|████████████████████████████████████████████▌                                                     | 5/11 [00:11<00:14,  2.38s/cell]Executing:  64%|█████████████████████████████████████████████████████████████▋                                   | 7/11 [10:21<08:20, 125.09s/cell]Executing: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 11/11 [10:22<00:00, 56.63s/cell]
+The following modules were not unloaded:
+  (Use "module --force purge" to unload all):
+
+  1) StdEnv
+Input Notebook:  39_gpu.ipynb
+Output Notebook: 39_gpu_8_82784.ipynb
+Executing:   0%|                                                                                                          | 0/11 [00:00<?, ?cell/s]Executing notebook with kernel: python3
+Executing:   9%|████████▉                                                                                         | 1/11 [00:00<00:09,  1.07cell/s]Executing:  18%|█████████████████▊                                                                                | 2/11 [00:05<00:28,  3.13s/cell]Executing:  45%|████████████████████████████████████████████▌                                                     | 5/11 [00:11<00:14,  2.41s/cell]Executing:  64%|█████████████████████████████████████████████████████████████▋                                   | 7/11 [10:19<08:18, 124.50s/cell]Executing:  73%|███████████████████████████████████████████████████████████████████████▎                          | 8/11 [10:19<04:49, 96.60s/cell]Executing: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 11/11 [10:20<00:00, 56.40s/cell]
+The following modules were not unloaded:
+  (Use "module --force purge" to unload all):
+
+  1) StdEnv
+Input Notebook:  39_gpu.ipynb
+Output Notebook: 39_gpu_9_82784.ipynb
+Executing:   0%|                                                                                                          | 0/11 [00:00<?, ?cell/s]Executing notebook with kernel: python3
+Executing:   9%|████████▉                                                                                         | 1/11 [00:00<00:09,  1.05cell/s]Executing:  18%|█████████████████▊                                                                                | 2/11 [00:05<00:28,  3.15s/cell]Executing:  45%|████████████████████████████████████████████▌                                                     | 5/11 [00:12<00:14,  2.43s/cell]Executing:  64%|█████████████████████████████████████████████████████████████▋                                   | 7/11 [10:10<08:11, 122.75s/cell]Executing: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 11/11 [10:11<00:00, 55.59s/cell]
+The following modules were not unloaded:
+  (Use "module --force purge" to unload all):
+
+  1) StdEnv
+Input Notebook:  39_gpu.ipynb
+Output Notebook: 39_gpu_10_82784.ipynb
+Executing:   0%|                                                                                                          | 0/11 [00:00<?, ?cell/s]Executing notebook with kernel: python3
+Executing:   9%|████████▉                                                                                         | 1/11 [00:00<00:07,  1.32cell/s]Executing:  18%|█████████████████▊                                                                                | 2/11 [00:04<00:23,  2.57s/cell]Executing:  45%|████████████████████████████████████████████▌                                                     | 5/11 [00:10<00:13,  2.23s/cell]Executing:  64%|█████████████████████████████████████████████████████████████▋                                   | 7/11 [09:08<07:20, 110.23s/cell]Executing: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 11/11 [09:09<00:00, 49.91s/cell]

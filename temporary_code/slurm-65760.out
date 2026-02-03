@@ -1,0 +1,42 @@
+The following modules were not unloaded:
+  (Use "module --force purge" to unload all):
+
+  1) StdEnv
+Input Notebook:  13_parallel_processing.ipynb
+Output Notebook: 13_parallel_processing.ipynb
+Executing:   0%|          | 0/2 [00:00<?, ?cell/s]Executing notebook with kernel: python3
+Executing:  50%|█████     | 1/2 [00:00<00:00,  1.04cell/s]Executing: 100%|██████████| 2/2 [00:01<00:00,  1.85cell/s]
+Traceback (most recent call last):
+  File "/home/zc362/.conda/envs/myenv/bin/papermill", line 10, in <module>
+    sys.exit(papermill())
+             ^^^^^^^^^^^
+  File "/home/zc362/.conda/envs/myenv/lib/python3.12/site-packages/click/core.py", line 1157, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/zc362/.conda/envs/myenv/lib/python3.12/site-packages/click/core.py", line 1078, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "/home/zc362/.conda/envs/myenv/lib/python3.12/site-packages/click/core.py", line 1434, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/zc362/.conda/envs/myenv/lib/python3.12/site-packages/click/core.py", line 783, in invoke
+    return __callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/zc362/.conda/envs/myenv/lib/python3.12/site-packages/click/decorators.py", line 33, in new_func
+    return f(get_current_context(), *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/zc362/.conda/envs/myenv/lib/python3.12/site-packages/papermill/cli.py", line 235, in papermill
+    execute_notebook(
+  File "/home/zc362/.conda/envs/myenv/lib/python3.12/site-packages/papermill/execute.py", line 131, in execute_notebook
+    raise_for_execution_errors(nb, output_path)
+  File "/home/zc362/.conda/envs/myenv/lib/python3.12/site-packages/papermill/execute.py", line 251, in raise_for_execution_errors
+    raise error
+papermill.exceptions.PapermillExecutionError: 
+---------------------------------------------------------------------------
+Exception encountered at "In [1]":
+  Cell In[1], line 63
+    i += 1
+    ^
+IndentationError: expected an indented block after 'if' statement on line 61
+
+

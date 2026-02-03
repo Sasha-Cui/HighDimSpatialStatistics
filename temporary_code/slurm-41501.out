@@ -1,0 +1,8 @@
+The following modules were not unloaded:
+  (Use "module --force purge" to unload all):
+
+  1) StdEnv
+Input Notebook:  06.ipynb
+Output Notebook: 06.ipynb
+Executing:   0%|          | 0/2 [00:00<?, ?cell/s]Executing notebook with kernel: python3
+Executing:  50%|█████     | 1/2 [00:00<00:00,  1.50cell/s]Executing: 100%|██████████| 2/2 [00:00<00:00,  2.55cell/s]

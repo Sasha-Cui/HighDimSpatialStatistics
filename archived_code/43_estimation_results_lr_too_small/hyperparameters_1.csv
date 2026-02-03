@@ -1,0 +1,2 @@
+alpha_lr,nu_lr,sigma_lr,alpha_init,nu_init,sigma_init
+1e-05,0.001,0.001,0.2,3.0,2.0

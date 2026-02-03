@@ -1,0 +1,83 @@
+The following modules were not unloaded:
+  (Use "module --force purge" to unload all):
+
+  1) StdEnv
+
+CondaError: Run 'conda init' before 'conda deactivate'
+
+Input Notebook:  39_cpu.ipynb
+Output Notebook: 39_cpu_1_82785.ipynb
+Executing:   0%|                                                                                                          | 0/10 [00:00<?, ?cell/s]Executing notebook with kernel: python3
+Executing:  10%|█████████▊                                                                                        | 1/10 [00:00<00:08,  1.03cell/s]Executing:  20%|███████████████████▌                                                                              | 2/10 [00:03<00:16,  2.12s/cell]Executing:  30%|█████████████████████████████▍                                                                    | 3/10 [00:03<00:08,  1.20s/cell]Executing:  50%|█████████████████████████████████████████████████                                                 | 5/10 [00:10<00:11,  2.28s/cell]Executing:  70%|████████████████████████████████████████████████████████████████████▌                             | 7/10 [03:54<02:34, 51.37s/cell]Executing: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [03:55<00:00, 23.52s/cell]
+The following modules were not unloaded:
+  (Use "module --force purge" to unload all):
+
+  1) StdEnv
+Input Notebook:  39_cpu.ipynb
+Output Notebook: 39_cpu_2_82785.ipynb
+Executing:   0%|                                                                                                          | 0/10 [00:00<?, ?cell/s]Executing notebook with kernel: python3
+Executing:  10%|█████████▊                                                                                        | 1/10 [00:00<00:06,  1.49cell/s]Executing:  20%|███████████████████▌                                                                              | 2/10 [00:02<00:11,  1.44s/cell]Executing:  50%|█████████████████████████████████████████████████                                                 | 5/10 [00:08<00:09,  1.82s/cell]Executing:  70%|████████████████████████████████████████████████████████████████████▌                             | 7/10 [04:49<02:53, 57.99s/cell]Executing: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [04:50<00:00, 29.00s/cell]
+The following modules were not unloaded:
+  (Use "module --force purge" to unload all):
+
+  1) StdEnv
+Input Notebook:  39_cpu.ipynb
+Output Notebook: 39_cpu_3_82785.ipynb
+Executing:   0%|                                                                                                          | 0/10 [00:00<?, ?cell/s]Executing notebook with kernel: python3
+Executing:  10%|█████████▊                                                                                        | 1/10 [00:00<00:06,  1.49cell/s]Executing:  20%|███████████████████▌                                                                              | 2/10 [00:02<00:11,  1.42s/cell]Executing:  50%|█████████████████████████████████████████████████                                                 | 5/10 [00:08<00:08,  1.79s/cell]Executing:  70%|████████████████████████████████████████████████████████████████████▌                             | 7/10 [03:52<02:19, 46.47s/cell]Executing: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [03:53<00:00, 23.31s/cell]
+The following modules were not unloaded:
+  (Use "module --force purge" to unload all):
+
+  1) StdEnv
+Input Notebook:  39_cpu.ipynb
+Output Notebook: 39_cpu_4_82785.ipynb
+Executing:   0%|                                                                                                          | 0/10 [00:00<?, ?cell/s]Executing notebook with kernel: python3
+Executing:  10%|█████████▊                                                                                        | 1/10 [00:00<00:06,  1.49cell/s]Executing:  20%|███████████████████▌                                                                              | 2/10 [00:02<00:11,  1.42s/cell]Executing:  50%|█████████████████████████████████████████████████                                                 | 5/10 [00:08<00:08,  1.80s/cell]Executing:  70%|████████████████████████████████████████████████████████████████████▌                             | 7/10 [03:52<02:19, 46.56s/cell]Executing: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [03:53<00:00, 23.36s/cell]
+The following modules were not unloaded:
+  (Use "module --force purge" to unload all):
+
+  1) StdEnv
+Input Notebook:  39_cpu.ipynb
+Output Notebook: 39_cpu_5_82785.ipynb
+Executing:   0%|                                                                                                          | 0/10 [00:00<?, ?cell/s]Executing notebook with kernel: python3
+Executing:  10%|█████████▊                                                                                        | 1/10 [00:00<00:06,  1.49cell/s]Executing:  20%|███████████████████▌                                                                              | 2/10 [00:02<00:11,  1.38s/cell]Executing:  50%|█████████████████████████████████████████████████                                                 | 5/10 [00:08<00:08,  1.78s/cell]Executing:  70%|████████████████████████████████████████████████████████████████████▌                             | 7/10 [05:40<03:25, 68.36s/cell]Executing: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [05:41<00:00, 34.11s/cell]
+The following modules were not unloaded:
+  (Use "module --force purge" to unload all):
+
+  1) StdEnv
+Input Notebook:  39_cpu.ipynb
+Output Notebook: 39_cpu_6_82785.ipynb
+Executing:   0%|                                                                                                          | 0/10 [00:00<?, ?cell/s]Executing notebook with kernel: python3
+Executing:  10%|█████████▊                                                                                        | 1/10 [00:00<00:06,  1.49cell/s]Executing:  20%|███████████████████▌                                                                              | 2/10 [00:02<00:11,  1.42s/cell]Executing:  50%|█████████████████████████████████████████████████                                                 | 5/10 [00:08<00:08,  1.78s/cell]Executing:  70%|████████████████████████████████████████████████████████████████████▌                             | 7/10 [04:49<02:54, 58.13s/cell]Executing: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [04:50<00:00, 29.06s/cell]
+The following modules were not unloaded:
+  (Use "module --force purge" to unload all):
+
+  1) StdEnv
+Input Notebook:  39_cpu.ipynb
+Output Notebook: 39_cpu_7_82785.ipynb
+Executing:   0%|                                                                                                          | 0/10 [00:00<?, ?cell/s]Executing notebook with kernel: python3
+Executing:  10%|█████████▊                                                                                        | 1/10 [00:00<00:06,  1.50cell/s]Executing:  20%|███████████████████▌                                                                              | 2/10 [00:02<00:11,  1.42s/cell]Executing:  50%|█████████████████████████████████████████████████                                                 | 5/10 [00:08<00:08,  1.79s/cell]Executing:  70%|████████████████████████████████████████████████████████████████████▌                             | 7/10 [03:51<02:18, 46.33s/cell]Executing: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [03:52<00:00, 23.25s/cell]
+The following modules were not unloaded:
+  (Use "module --force purge" to unload all):
+
+  1) StdEnv
+Input Notebook:  39_cpu.ipynb
+Output Notebook: 39_cpu_8_82785.ipynb
+Executing:   0%|                                                                                                          | 0/10 [00:00<?, ?cell/s]Executing notebook with kernel: python3
+Executing:  10%|█████████▊                                                                                        | 1/10 [00:00<00:06,  1.49cell/s]Executing:  20%|███████████████████▌                                                                              | 2/10 [00:02<00:10,  1.37s/cell]Executing:  50%|█████████████████████████████████████████████████                                                 | 5/10 [00:08<00:08,  1.77s/cell]Executing:  70%|████████████████████████████████████████████████████████████████████▌                             | 7/10 [03:52<02:19, 46.45s/cell]Executing: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [03:53<00:00, 23.31s/cell]
+The following modules were not unloaded:
+  (Use "module --force purge" to unload all):
+
+  1) StdEnv
+Input Notebook:  39_cpu.ipynb
+Output Notebook: 39_cpu_9_82785.ipynb
+Executing:   0%|                                                                                                          | 0/10 [00:00<?, ?cell/s]Executing notebook with kernel: python3
+Executing:  10%|█████████▊                                                                                        | 1/10 [00:00<00:05,  1.50cell/s]Executing:  20%|███████████████████▌                                                                              | 2/10 [00:02<00:10,  1.37s/cell]Executing:  50%|█████████████████████████████████████████████████                                                 | 5/10 [00:08<00:08,  1.76s/cell]Executing:  70%|████████████████████████████████████████████████████████████████████▌                             | 7/10 [03:57<02:22, 47.51s/cell]Executing: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [03:58<00:00, 23.83s/cell]
+The following modules were not unloaded:
+  (Use "module --force purge" to unload all):
+
+  1) StdEnv
+Input Notebook:  39_cpu.ipynb
+Output Notebook: 39_cpu_10_82785.ipynb
+Executing:   0%|                                                                                                          | 0/10 [00:00<?, ?cell/s]Executing notebook with kernel: python3
+Executing:  10%|█████████▊                                                                                        | 1/10 [00:00<00:06,  1.50cell/s]Executing:  20%|███████████████████▌                                                                              | 2/10 [00:02<00:10,  1.37s/cell]Executing:  50%|█████████████████████████████████████████████████                                                 | 5/10 [00:08<00:08,  1.77s/cell]Executing:  70%|████████████████████████████████████████████████████████████████████▌                             | 7/10 [03:35<02:09, 43.08s/cell]Executing: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [03:36<00:00, 21.65s/cell]

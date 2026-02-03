@@ -1,0 +1,11 @@
+The following modules were not unloaded:
+  (Use "module --force purge" to unload all):
+
+  1) StdEnv
+
+CondaError: Run 'conda init' before 'conda deactivate'
+
+Input Notebook:  08_quantisation_of_dist-Copy1.ipynb
+Output Notebook: 08_quantisation_of_dist-Copy1.ipynb
+Executing:   0%|                                                                         | 0/4 [00:00<?, ?cell/s]Executing notebook with kernel: python3
+Executing:  25%|████████████████▎                                                | 1/4 [00:00<00:02,  1.07cell/s]Executing:  50%|████████████████████████████████▌                                | 2/4 [00:07<00:08,  4.40s/cell]Executing:  75%|████████████████████████████████████████████████                | 3/4 [03:43<01:40, 100.81s/cell]Executing: 100%|█████████████████████████████████████████████████████████████████| 4/4 [03:44<00:00, 56.11s/cell]

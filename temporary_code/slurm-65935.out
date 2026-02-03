@@ -1,0 +1,8 @@
+The following modules were not unloaded:
+  (Use "module --force purge" to unload all):
+
+  1) StdEnv
+Input Notebook:  13_parallel_processing.ipynb
+Output Notebook: 13_parallel_processing.ipynb
+Executing:   0%|          | 0/2 [00:00<?, ?cell/s]Executing notebook with kernel: python3
+Executing:  50%|█████     | 1/2 [00:00<00:00,  1.49cell/s]slurmstepd: error: *** JOB 65935 ON r817u23n01 CANCELLED AT 2024-11-02T20:43:30 ***

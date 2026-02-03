@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<head><title>R: Fast Gaussian Process Computation Using Vecchia's Approximation</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+<h1> Fast Gaussian Process Computation Using Vecchia's Approximation
+<img class="toplogo" src="../../../doc/html/Rlogo.svg" alt="[R logo]" />
+</h1>
+<hr/>
+<div style="text-align: center;">
+<a href="../../../doc/html/packages.html"><img class="arrow" src="../../../doc/html/left.jpg" alt="[Up]" /></a>
+<a href="../../../doc/html/index.html"><img class="arrow" src="../../../doc/html/up.jpg" alt="[Top]" /></a>
+</div><h2>Documentation for package &lsquo;GpGp&rsquo; version 0.5.0</h2>
+
+<ul><li><a href="../DESCRIPTION">DESCRIPTION file</a>.</li>
+<li><a href="../NEWS">Package NEWS</a>.</li>
+</ul>
+
+<h2>Help Pages</h2>
+
+
+<p style="text-align: center;">
+<a href="# "> </a>
+<a href="#A">A</a>
+<a href="#C">C</a>
+<a href="#D">D</a>
+<a href="#E">E</a>
+<a href="#F">F</a>
+<a href="#G">G</a>
+<a href="#I">I</a>
+<a href="#J">J</a>
+<a href="#L">L</a>
+<a href="#M">M</a>
+<a href="#O">O</a>
+<a href="#P">P</a>
+<a href="#S">S</a>
+<a href="#T">T</a>
+<a href="#V">V</a>
+</p>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="GpGp.html">GpGp-package</a></td>
+<td>GpGp: Fast Gaussian Process Computing.</td></tr>
+</table>
+
+<h2><a id="A">-- A --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="argo2016.html">argo2016</a></td>
+<td>Ocean temperatures from Argo profiling floats</td></tr>
+</table>
+
+<h2><a id="C">-- C --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="condition_number.html">condition_number</a></td>
+<td>compute condition number of matrix</td></tr>
+<tr><td style="width: 25%;"><a href="cond_sim.html">cond_sim</a></td>
+<td>Conditional Simulation using Vecchia's approximation</td></tr>
+</table>
+
+<h2><a id="D">-- D --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="pen_hi.html">ddpen_hi</a></td>
+<td>penalize large values of parameter: penalty, 1st deriative, 2nd derivative</td></tr>
+<tr><td style="width: 25%;"><a href="pen_lo.html">ddpen_lo</a></td>
+<td>penalize small values of parameter: penalty, 1st deriative, 2nd derivative</td></tr>
+<tr><td style="width: 25%;"><a href="pen_loglo.html">ddpen_loglo</a></td>
+<td>penalize small values of log parameter: penalty, 1st deriative, 2nd derivative</td></tr>
+<tr><td style="width: 25%;"><a href="pen_hi.html">dpen_hi</a></td>
+<td>penalize large values of parameter: penalty, 1st deriative, 2nd derivative</td></tr>
+<tr><td style="width: 25%;"><a href="pen_lo.html">dpen_lo</a></td>
+<td>penalize small values of parameter: penalty, 1st deriative, 2nd derivative</td></tr>
+<tr><td style="width: 25%;"><a href="pen_loglo.html">dpen_loglo</a></td>
+<td>penalize small values of log parameter: penalty, 1st deriative, 2nd derivative</td></tr>
+<tr><td style="width: 25%;"><a href="exponential_anisotropic2D.html">d_exponential_anisotropic2D</a></td>
+<td>Geometrically anisotropic exponential covariance function (two dimensions)</td></tr>
+<tr><td style="width: 25%;"><a href="exponential_anisotropic3D.html">d_exponential_anisotropic3D</a></td>
+<td>Geometrically anisotropic exponential covariance function (three dimensions)</td></tr>
+<tr><td style="width: 25%;"><a href="exponential_anisotropic3D_alt.html">d_exponential_anisotropic3D_alt</a></td>
+<td>Geometrically anisotropic exponential covariance function (three dimensions, alternate parameterization)</td></tr>
+<tr><td style="width: 25%;"><a href="exponential_isotropic.html">d_exponential_isotropic</a></td>
+<td>Isotropic exponential covariance function</td></tr>
+<tr><td style="width: 25%;"><a href="exponential_nonstat_var.html">d_exponential_nonstat_var</a></td>
+<td>Isotropic exponential covariance function, nonstationary variances</td></tr>
+<tr><td style="width: 25%;"><a href="exponential_scaledim.html">d_exponential_scaledim</a></td>
+<td>Exponential covariance function, different range parameter for each dimension</td></tr>
+<tr><td style="width: 25%;"><a href="exponential_spacetime.html">d_exponential_spacetime</a></td>
+<td>Spatial-Temporal exponential covariance function</td></tr>
+<tr><td style="width: 25%;"><a href="exponential_sphere.html">d_exponential_sphere</a></td>
+<td>Isotropic exponential covariance function on sphere</td></tr>
+<tr><td style="width: 25%;"><a href="exponential_spheretime.html">d_exponential_spheretime</a></td>
+<td>Exponential covariance function on sphere x time</td></tr>
+<tr><td style="width: 25%;"><a href="exponential_spheretime_warp.html">d_exponential_spheretime_warp</a></td>
+<td>Deformed exponential covariance function on sphere</td></tr>
+<tr><td style="width: 25%;"><a href="exponential_sphere_warp.html">d_exponential_sphere_warp</a></td>
+<td>Deformed exponential covariance function on sphere</td></tr>
+<tr><td style="width: 25%;"><a href="exponential_isotropic.html">d_matern15_isotropic</a></td>
+<td>Isotropic exponential covariance function</td></tr>
+<tr><td style="width: 25%;"><a href="matern15_scaledim.html">d_matern15_scaledim</a></td>
+<td>Matern covariance function, smoothess = 1.5, different range parameter for each dimension</td></tr>
+<tr><td style="width: 25%;"><a href="exponential_isotropic.html">d_matern25_isotropic</a></td>
+<td>Isotropic exponential covariance function</td></tr>
+<tr><td style="width: 25%;"><a href="matern25_scaledim.html">d_matern25_scaledim</a></td>
+<td>Matern covariance function, smoothess = 2.5, different range parameter for each dimension</td></tr>
+<tr><td style="width: 25%;"><a href="matern35_isotropic.html">d_matern35_isotropic</a></td>
+<td>Isotropic Matern covariance function, smoothness = 3.5</td></tr>
+<tr><td style="width: 25%;"><a href="matern35_scaledim.html">d_matern35_scaledim</a></td>
+<td>Matern covariance function, smoothess = 3.5, different range parameter for each dimension</td></tr>
+<tr><td style="width: 25%;"><a href="matern35_isotropic.html">d_matern45_isotropic</a></td>
+<td>Isotropic Matern covariance function, smoothness = 3.5</td></tr>
+<tr><td style="width: 25%;"><a href="matern35_scaledim.html">d_matern45_scaledim</a></td>
+<td>Matern covariance function, smoothess = 3.5, different range parameter for each dimension</td></tr>
+<tr><td style="width: 25%;"><a href="matern_anisotropic2D.html">d_matern_anisotropic2D</a></td>
+<td>Geometrically anisotropic Matern covariance function (two dimensions)</td></tr>
+<tr><td style="width: 25%;"><a href="matern_anisotropic3D.html">d_matern_anisotropic3D</a></td>
+<td>Geometrically anisotropic Matern covariance function (three dimensions)</td></tr>
+<tr><td style="width: 25%;"><a href="matern_anisotropic3D.html">d_matern_anisotropic3D_alt</a></td>
+<td>Geometrically anisotropic Matern covariance function (three dimensions)</td></tr>
+<tr><td style="width: 25%;"><a href="matern_categorical.html">d_matern_categorical</a></td>
+<td>Isotropic Matern covariance function with random effects for categories</td></tr>
+<tr><td style="width: 25%;"><a href="matern_isotropic.html">d_matern_isotropic</a></td>
+<td>Isotropic Matern covariance function</td></tr>
+<tr><td style="width: 25%;"><a href="matern_nonstat_var.html">d_matern_nonstat_var</a></td>
+<td>Isotropic Matern covariance function, nonstationary variances</td></tr>
+<tr><td style="width: 25%;"><a href="matern_scaledim.html">d_matern_scaledim</a></td>
+<td>Matern covariance function, different range parameter for each dimension</td></tr>
+<tr><td style="width: 25%;"><a href="matern_spacetime.html">d_matern_spacetime</a></td>
+<td>Spatial-Temporal Matern covariance function</td></tr>
+<tr><td style="width: 25%;"><a href="matern_spacetime_categorical.html">d_matern_spacetime_categorical</a></td>
+<td>Space-Time Matern covariance function with random effects for categories</td></tr>
+<tr><td style="width: 25%;"><a href="matern_spacetime_categorical_local.html">d_matern_spacetime_categorical_local</a></td>
+<td>Space-Time Matern covariance function with local random effects for categories</td></tr>
+<tr><td style="width: 25%;"><a href="matern_sphere.html">d_matern_sphere</a></td>
+<td>Isotropic Matern covariance function on sphere</td></tr>
+<tr><td style="width: 25%;"><a href="matern_spheretime.html">d_matern_spheretime</a></td>
+<td>Matern covariance function on sphere x time</td></tr>
+<tr><td style="width: 25%;"><a href="matern_spheretime_warp.html">d_matern_spheretime_warp</a></td>
+<td>Deformed Matern covariance function on sphere</td></tr>
+<tr><td style="width: 25%;"><a href="matern_sphere_warp.html">d_matern_sphere_warp</a></td>
+<td>Deformed Matern covariance function on sphere</td></tr>
+</table>
+
+<h2><a id="E">-- E --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="expit.html">expit</a></td>
+<td>expit function and integral of expit function</td></tr>
+<tr><td style="width: 25%;"><a href="exponential_anisotropic2D.html">exponential_anisotropic2D</a></td>
+<td>Geometrically anisotropic exponential covariance function (two dimensions)</td></tr>
+<tr><td style="width: 25%;"><a href="exponential_anisotropic3D.html">exponential_anisotropic3D</a></td>
+<td>Geometrically anisotropic exponential covariance function (three dimensions)</td></tr>
+<tr><td style="width: 25%;"><a href="exponential_anisotropic3D_alt.html">exponential_anisotropic3D_alt</a></td>
+<td>Geometrically anisotropic exponential covariance function (three dimensions, alternate parameterization)</td></tr>
+<tr><td style="width: 25%;"><a href="exponential_isotropic.html">exponential_isotropic</a></td>
+<td>Isotropic exponential covariance function</td></tr>
+<tr><td style="width: 25%;"><a href="exponential_nonstat_var.html">exponential_nonstat_var</a></td>
+<td>Isotropic exponential covariance function, nonstationary variances</td></tr>
+<tr><td style="width: 25%;"><a href="exponential_scaledim.html">exponential_scaledim</a></td>
+<td>Exponential covariance function, different range parameter for each dimension</td></tr>
+<tr><td style="width: 25%;"><a href="exponential_spacetime.html">exponential_spacetime</a></td>
+<td>Spatial-Temporal exponential covariance function</td></tr>
+<tr><td style="width: 25%;"><a href="exponential_sphere.html">exponential_sphere</a></td>
+<td>Isotropic exponential covariance function on sphere</td></tr>
+<tr><td style="width: 25%;"><a href="exponential_spheretime.html">exponential_spheretime</a></td>
+<td>Exponential covariance function on sphere x time</td></tr>
+<tr><td style="width: 25%;"><a href="exponential_spheretime_warp.html">exponential_spheretime_warp</a></td>
+<td>Deformed exponential covariance function on sphere</td></tr>
+<tr><td style="width: 25%;"><a href="exponential_sphere_warp.html">exponential_sphere_warp</a></td>
+<td>Deformed exponential covariance function on sphere</td></tr>
+</table>
+
+<h2><a id="F">-- F --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="fast_Gp_sim.html">fast_Gp_sim</a></td>
+<td>Approximate GP simulation</td></tr>
+<tr><td style="width: 25%;"><a href="fast_Gp_sim_Linv.html">fast_Gp_sim_Linv</a></td>
+<td>Approximate GP simulation with specified Linverse</td></tr>
+<tr><td style="width: 25%;"><a href="find_ordered_nn.html">find_ordered_nn</a></td>
+<td>Find ordered nearest neighbors.</td></tr>
+<tr><td style="width: 25%;"><a href="find_ordered_nn_brute.html">find_ordered_nn_brute</a></td>
+<td>Naive brute force nearest neighbor finder</td></tr>
+<tr><td style="width: 25%;"><a href="fisher_scoring.html">fisher_scoring</a></td>
+<td>Fisher scoring algorithm</td></tr>
+<tr><td style="width: 25%;"><a href="fit_model.html">fit_model</a></td>
+<td>Estimate mean and covariance parameters</td></tr>
+</table>
+
+<h2><a id="G">-- G --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="get_linkfun.html">get_linkfun</a></td>
+<td>get link function, whether locations are lonlat and space time</td></tr>
+<tr><td style="width: 25%;"><a href="get_penalty.html">get_penalty</a></td>
+<td>get penalty function</td></tr>
+<tr><td style="width: 25%;"><a href="get_start_parms.html">get_start_parms</a></td>
+<td>get default starting values of covariance parameters</td></tr>
+<tr><td style="width: 25%;"><a href="GpGp.html">GpGp</a></td>
+<td>GpGp: Fast Gaussian Process Computing.</td></tr>
+<tr><td style="width: 25%;"><a href="group_obs.html">group_obs</a></td>
+<td>Automatic grouping (partitioning) of locations</td></tr>
+</table>
+
+<h2><a id="I">-- I --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="expit.html">intexpit</a></td>
+<td>expit function and integral of expit function</td></tr>
+</table>
+
+<h2><a id="J">-- J --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="jason3.html">jason3</a></td>
+<td>Windspeed measurements from Jason-3 Satellite</td></tr>
+</table>
+
+<h2><a id="L">-- L --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="Linv_mult.html">Linv_mult</a></td>
+<td>Multiply approximate inverse Cholesky by a vector</td></tr>
+<tr><td style="width: 25%;"><a href="Linv_t_mult.html">Linv_t_mult</a></td>
+<td>Multiply transpose of approximate inverse Cholesky by a vector</td></tr>
+<tr><td style="width: 25%;"><a href="L_mult.html">L_mult</a></td>
+<td>Multiply approximate Cholesky by a vector</td></tr>
+<tr><td style="width: 25%;"><a href="L_t_mult.html">L_t_mult</a></td>
+<td>Multiply transpose of approximate Cholesky by a vector</td></tr>
+</table>
+
+<h2><a id="M">-- M --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="matern15_isotropic.html">matern15_isotropic</a></td>
+<td>Isotropic Matern covariance function, smoothness = 1.5</td></tr>
+<tr><td style="width: 25%;"><a href="matern15_scaledim.html">matern15_scaledim</a></td>
+<td>Matern covariance function, smoothess = 1.5, different range parameter for each dimension</td></tr>
+<tr><td style="width: 25%;"><a href="matern25_isotropic.html">matern25_isotropic</a></td>
+<td>Isotropic Matern covariance function, smoothness = 2.5</td></tr>
+<tr><td style="width: 25%;"><a href="matern25_scaledim.html">matern25_scaledim</a></td>
+<td>Matern covariance function, smoothess = 2.5, different range parameter for each dimension</td></tr>
+<tr><td style="width: 25%;"><a href="matern35_isotropic.html">matern35_isotropic</a></td>
+<td>Isotropic Matern covariance function, smoothness = 3.5</td></tr>
+<tr><td style="width: 25%;"><a href="matern35_scaledim.html">matern35_scaledim</a></td>
+<td>Matern covariance function, smoothess = 3.5, different range parameter for each dimension</td></tr>
+<tr><td style="width: 25%;"><a href="matern45_isotropic.html">matern45_isotropic</a></td>
+<td>Isotropic Matern covariance function, smoothness = 4.5</td></tr>
+<tr><td style="width: 25%;"><a href="matern45_scaledim.html">matern45_scaledim</a></td>
+<td>Matern covariance function, smoothess = 3.5, different range parameter for each dimension</td></tr>
+<tr><td style="width: 25%;"><a href="matern_anisotropic2D.html">matern_anisotropic2D</a></td>
+<td>Geometrically anisotropic Matern covariance function (two dimensions)</td></tr>
+<tr><td style="width: 25%;"><a href="matern_anisotropic3D.html">matern_anisotropic3D</a></td>
+<td>Geometrically anisotropic Matern covariance function (three dimensions)</td></tr>
+<tr><td style="width: 25%;"><a href="matern_anisotropic3D_alt.html">matern_anisotropic3D_alt</a></td>
+<td>Geometrically anisotropic Matern covariance function (three dimensions, alternate parameterization)</td></tr>
+<tr><td style="width: 25%;"><a href="matern_categorical.html">matern_categorical</a></td>
+<td>Isotropic Matern covariance function with random effects for categories</td></tr>
+<tr><td style="width: 25%;"><a href="matern_isotropic.html">matern_isotropic</a></td>
+<td>Isotropic Matern covariance function</td></tr>
+<tr><td style="width: 25%;"><a href="matern_nonstat_var.html">matern_nonstat_var</a></td>
+<td>Isotropic Matern covariance function, nonstationary variances</td></tr>
+<tr><td style="width: 25%;"><a href="matern_scaledim.html">matern_scaledim</a></td>
+<td>Matern covariance function, different range parameter for each dimension</td></tr>
+<tr><td style="width: 25%;"><a href="matern_spacetime.html">matern_spacetime</a></td>
+<td>Spatial-Temporal Matern covariance function</td></tr>
+<tr><td style="width: 25%;"><a href="matern_spacetime_categorical.html">matern_spacetime_categorical</a></td>
+<td>Space-Time Matern covariance function with random effects for categories</td></tr>
+<tr><td style="width: 25%;"><a href="matern_spacetime_categorical_local.html">matern_spacetime_categorical_local</a></td>
+<td>Space-Time Matern covariance function with local random effects for categories</td></tr>
+<tr><td style="width: 25%;"><a href="matern_sphere.html">matern_sphere</a></td>
+<td>Isotropic Matern covariance function on sphere</td></tr>
+<tr><td style="width: 25%;"><a href="matern_spheretime.html">matern_spheretime</a></td>
+<td>Matern covariance function on sphere x time</td></tr>
+<tr><td style="width: 25%;"><a href="matern_spheretime_warp.html">matern_spheretime_warp</a></td>
+<td>Deformed Matern covariance function on sphere</td></tr>
+<tr><td style="width: 25%;"><a href="matern_sphere_warp.html">matern_sphere_warp</a></td>
+<td>Deformed Matern covariance function on sphere</td></tr>
+</table>
+
+<h2><a id="O">-- O --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="order_coordinate.html">order_coordinate</a></td>
+<td>Sorted coordinate ordering</td></tr>
+<tr><td style="width: 25%;"><a href="order_dist_to_point.html">order_dist_to_point</a></td>
+<td>Distance to specified point ordering</td></tr>
+<tr><td style="width: 25%;"><a href="order_maxmin.html">order_maxmin</a></td>
+<td>Maximum minimum distance ordering</td></tr>
+<tr><td style="width: 25%;"><a href="order_middleout.html">order_middleout</a></td>
+<td>Middle-out ordering</td></tr>
+</table>
+
+<h2><a id="P">-- P --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="pen_hi.html">pen_hi</a></td>
+<td>penalize large values of parameter: penalty, 1st deriative, 2nd derivative</td></tr>
+<tr><td style="width: 25%;"><a href="pen_lo.html">pen_lo</a></td>
+<td>penalize small values of parameter: penalty, 1st deriative, 2nd derivative</td></tr>
+<tr><td style="width: 25%;"><a href="pen_loglo.html">pen_loglo</a></td>
+<td>penalize small values of log parameter: penalty, 1st deriative, 2nd derivative</td></tr>
+<tr><td style="width: 25%;"><a href="predictions.html">predictions</a></td>
+<td>Compute Gaussian process predictions using Vecchia's approximations</td></tr>
+</table>
+
+<h2><a id="S">-- S --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="sph_grad_xyz.html">sph_grad_xyz</a></td>
+<td>compute gradient of spherical harmonics functions</td></tr>
+<tr><td style="width: 25%;"><a href="summary.GpGp_fit.html">summary.GpGp_fit</a></td>
+<td>Print summary of GpGp fit</td></tr>
+</table>
+
+<h2><a id="T">-- T --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="test_likelihood_object.html">test_likelihood_object</a></td>
+<td>test likelihood object for NA or Inf values</td></tr>
+</table>
+
+<h2><a id="V">-- V --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="vecchia_grouped_meanzero_loglik.html">vecchia_grouped_meanzero_loglik</a></td>
+<td>Grouped Vecchia approximation to the Gaussian loglikelihood, zero mean</td></tr>
+<tr><td style="width: 25%;"><a href="vecchia_grouped_profbeta_loglik.html">vecchia_grouped_profbeta_loglik</a></td>
+<td>Grouped Vecchia approximation, profiled regression coefficients</td></tr>
+<tr><td style="width: 25%;"><a href="vecchia_grouped_profbeta_loglik_grad_info.html">vecchia_grouped_profbeta_loglik_grad_info</a></td>
+<td>Grouped Vecchia loglikelihood, gradient, Fisher information</td></tr>
+<tr><td style="width: 25%;"><a href="vecchia_Linv.html">vecchia_Linv</a></td>
+<td>Entries of inverse Cholesky approximation</td></tr>
+<tr><td style="width: 25%;"><a href="vecchia_meanzero_loglik.html">vecchia_meanzero_loglik</a></td>
+<td>Vecchia's approximation to the Gaussian loglikelihood, zero mean</td></tr>
+<tr><td style="width: 25%;"><a href="vecchia_profbeta_loglik.html">vecchia_profbeta_loglik</a></td>
+<td>Vecchia's approximation to the Gaussian loglikelihood, with profiled regression coefficients.</td></tr>
+<tr><td style="width: 25%;"><a href="vecchia_profbeta_loglik_grad_info.html">vecchia_profbeta_loglik_grad_info</a></td>
+<td>Vecchia's loglikelihood, gradient, and Fisher information</td></tr>
+</table>
+</div></body></html>
