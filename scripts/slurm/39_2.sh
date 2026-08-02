@@ -19,5 +19,5 @@ mkdir -p "$LOG_DIR"
 # Loop to run the Papermill notebook 10 times
 for i in {1..10}; do
   # Run Papermill with a unique output filename for each run
-python scripts/pipeline/legacy_runner.py --script scripts/legacy/39_cpu.py
+python -m scripts.pipeline.legacy_runner --script scripts/legacy/39_cpu.py
 done

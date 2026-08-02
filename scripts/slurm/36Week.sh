@@ -16,4 +16,4 @@ cd "$REPO_ROOT"
 LOG_DIR="${HDS_LOG_DIR:-data/processed/logs}"
 mkdir -p "$LOG_DIR"
 
-python scripts/pipeline/legacy_runner.py --script scripts/legacy/archived_code/36_SubsamplingwReplacementWeek.py
+python -m scripts.pipeline.legacy_runner --script scripts/legacy/archived_code/36_SubsamplingwReplacementWeek.py

@@ -18,5 +18,5 @@ mkdir -p "$LOG_DIR"
 
 
 # Run 43.ipynb and only proceed to 44.ipynb if it completes successfully
-python scripts/pipeline/legacy_runner.py --script scripts/legacy/43_randomly_subsampled_fitting_and_validation_metric.py
-python scripts/pipeline/legacy_runner.py --script scripts/legacy/44_randomply_subsampled_metric_calculation.py
+python -m scripts.pipeline.legacy_runner --script scripts/legacy/43_randomly_subsampled_fitting_and_validation_metric.py
+python -m scripts.pipeline.legacy_runner --script scripts/legacy/44_randomply_subsampled_metric_calculation.py

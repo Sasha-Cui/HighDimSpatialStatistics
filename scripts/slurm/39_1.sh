@@ -25,7 +25,7 @@ for i in {1..10}; do
   nvidia-smi --query-gpu=timestamp,name,utilization.gpu,utilization.memory,memory.used,memory.total --format=csv -l 600 > ${LOG_DIR}/39_gpu_log_${SLURM_JOB_ID}_${i}.txt &
 
   # Run Papermill with a unique output filename for each run
-python scripts/pipeline/legacy_runner.py --script scripts/legacy/39_gpu.py
+python -m scripts.pipeline.legacy_runner --script scripts/legacy/39_gpu.py
 
   # Stop the monitoring once the job is done
   kill %1

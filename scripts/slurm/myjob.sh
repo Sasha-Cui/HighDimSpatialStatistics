@@ -19,4 +19,4 @@ if [ -z "${HDS_LEGACY_SCRIPT:-}" ]; then
   echo "Set HDS_LEGACY_SCRIPT to a legacy script path (e.g., scripts/legacy/archived_code/23_SubmissionAttempt (nothing here).py)"
   exit 1
 fi
-python scripts/pipeline/legacy_runner.py --script "$HDS_LEGACY_SCRIPT"
+python -m scripts.pipeline.legacy_runner --script "$HDS_LEGACY_SCRIPT"

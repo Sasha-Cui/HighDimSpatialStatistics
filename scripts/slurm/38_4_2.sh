@@ -20,4 +20,4 @@ mkdir -p "$LOG_DIR"
 # Use the Slurm job ID and loop index to generate unique filenames
 slurm_job_id=${SLURM_JOB_ID}
 
-python scripts/pipeline/legacy_runner.py --script scripts/legacy/archived_code/38_MarginalFitting4_2.py
+python -m scripts.pipeline.legacy_runner --script scripts/legacy/archived_code/38_MarginalFitting4_2.py

@@ -18,6 +18,6 @@ mkdir -p "$LOG_DIR"
 
 N_LOCATIONS="${HDS_N_LOCATIONS:-500}"
 SYN_OUT="${HDS_SYN_OUT:-data/synthetic/genton_dataset.pt}"
-python scripts/pipeline/generate_synthetic.py --n-locations "$N_LOCATIONS" --output "$SYN_OUT"
+python -m scripts.pipeline.generate_synthetic --n-locations "$N_LOCATIONS" --output "$SYN_OUT"
 SMOOTH_OUT="${HDS_SMOOTH_OUT:-data/processed/kernel_smoothed.pt}"
-python scripts/pipeline/kernel_smoothing.py --input "$SYN_OUT" --output "$SMOOTH_OUT"
+python -m scripts.pipeline.kernel_smoothing --input "$SYN_OUT" --output "$SMOOTH_OUT"

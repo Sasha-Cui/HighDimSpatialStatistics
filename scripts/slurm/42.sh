@@ -18,4 +18,4 @@ mkdir -p "$LOG_DIR"
 
 INPUT="${HDS_INPUT:-data/synthetic/genton_dataset.pt}"
 OUTPUT="${HDS_OUTPUT:-data/processed/kernel_smoothed.pt}"
-python scripts/pipeline/kernel_smoothing.py --input "$INPUT" --output "$OUTPUT"
+python -m scripts.pipeline.kernel_smoothing --input "$INPUT" --output "$OUTPUT"

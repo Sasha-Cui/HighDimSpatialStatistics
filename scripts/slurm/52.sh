@@ -22,6 +22,6 @@ if [ -z "${HDS_GENES:-}" ]; then
 fi
 REAL_FILE="${HDS_REAL_FILE:-ovary_Puck_230517_39.h5ad}"
 REAL_OUT="${HDS_REAL_OUT:-data/processed/real_data.pt}"
-python scripts/pipeline/preprocess_real.py --filename "$REAL_FILE" --subdir raw --genes "$HDS_GENES" --output "$REAL_OUT"
+python -m scripts.pipeline.preprocess_real --filename "$REAL_FILE" --subdir raw --genes "$HDS_GENES" --output "$REAL_OUT"
 SMOOTH_OUT="${HDS_SMOOTH_OUT:-data/processed/kernel_smoothed_real.pt}"
-python scripts/pipeline/kernel_smoothing.py --input "$REAL_OUT" --output "$SMOOTH_OUT"
+python -m scripts.pipeline.kernel_smoothing --input "$REAL_OUT" --output "$SMOOTH_OUT"
