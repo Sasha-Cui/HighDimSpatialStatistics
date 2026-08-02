@@ -11,7 +11,7 @@ from scripts.pipeline._common import add_src_to_path, load_tensors, save_tensors
 
 def main() -> None:
     repo_root = add_src_to_path()
-    from HighDimSpatial.data.smoothing import kernel_smoothing
+    from HighDimSpatial.data.smoothing import kernel_smoothing_with_operators
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--input", default="data/processed/real_data.pt")
@@ -27,7 +27,7 @@ def main() -> None:
     X = payload["X"].to(torch.float64)
     Y = payload["Y"].to(torch.float64)
 
-    X_groups, Y_groups = kernel_smoothing(
+    X_groups, Y_groups, S_groups = kernel_smoothing_with_operators(
         X,
         Y,
         bandwidth=torch.tensor(args.bandwidth, dtype=torch.float64),
@@ -37,7 +37,10 @@ def main() -> None:
     )
 
     output_path = repo_root / args.output
-    save_tensors(output_path, {"X_groups": X_groups, "Y_groups": Y_groups})
+    save_tensors(
+        output_path,
+        {"X_groups": X_groups, "Y_groups": Y_groups, "S_groups": S_groups},
+    )
     print(f"Saved kernel-smoothed data to {output_path}")
 
 

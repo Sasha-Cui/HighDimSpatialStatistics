@@ -15,8 +15,8 @@ conda activate research
 2. Run a pipeline script:
 
 ```bash
-python scripts/pipeline/generate_synthetic.py --n-locations 500
-python scripts/pipeline/fit_marginals.py --input data/synthetic/genton_dataset.pt
+python -m scripts.pipeline.generate_synthetic --n-locations 500
+python -m scripts.pipeline.fit_marginals --input data/synthetic/genton_dataset.pt
 ```
 
 ## Repository Layout
@@ -45,7 +45,13 @@ These legacy scripts are for reference and reproducibility only; new development
 
 The primary environment spec is `environment.yml`.
 
-## Status
+## Research status
 
-The repository is in active cleanup. Core modules, conversion tooling, and initial pipeline scripts are in place.
-Next: broaden pipeline coverage and add higher-level documentation.
+The original numerical results are not scientifically valid after an August 2026
+audit found kernel-convention, cross-covariance-sign, vector-ordering, gradient,
+likelihood, and smoothing-covariance defects. Development continues on
+`research/paper-audit`; see `docs/research/ASSESSMENT.md` before using any result.
+
+The canonical smoother now saves its linear operators, but the ordinary marginal
+fitter is **not** a valid downstream fit for smoothed groups. Use the dedicated
+smoothing-bias research workflow until a corrected production fitter is added.
