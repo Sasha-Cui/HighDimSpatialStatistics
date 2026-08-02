@@ -3,8 +3,34 @@ from __future__ import annotations
 
 import torch
 
-from HighDimSpatial.kernels.matern import matern_kernel
+from HighDimSpatial.kernels.matern import matern_cross_kernel, matern_kernel
 from HighDimSpatial.utils.linalg import symmetrize
+
+
+def _distance_grid_and_indices(
+    X: torch.Tensor,
+    number_of_distances: int,
+) -> tuple[torch.Tensor, torch.Tensor]:
+    """Return a quantization grid and indices, including equal-distance cases."""
+    if number_of_distances < 1:
+        raise ValueError("number_of_distances must be positive")
+    distances = torch.pdist(X, p=2).detach()
+    if distances.numel() == 0:
+        return torch.empty(0, dtype=torch.float64, device=X.device), torch.empty(
+            0, dtype=torch.long, device=X.device
+        )
+
+    min_dist = distances.min()
+    max_dist = distances.max()
+    grid = torch.linspace(
+        min_dist, max_dist, number_of_distances, dtype=torch.float64, device=X.device
+    )
+    if torch.isclose(max_dist, min_dist):
+        indices = torch.zeros_like(distances, dtype=torch.long)
+    else:
+        normalized = (distances - min_dist) / (max_dist - min_dist)
+        indices = (normalized * (number_of_distances - 1)).round().long()
+    return grid, indices
 
 
 def adjust_matrix_with_nugget(K: torch.Tensor, nugget: float) -> torch.Tensor:
@@ -26,17 +52,13 @@ def approx_matern_kernel_marginal(
     number_of_distances: int = 500,
 ) -> torch.Tensor:
     """Approximate marginal Matérn kernel using precomputed distances."""
-    pairwise_distances_condensed = torch.pdist(X, p=2).detach()
-    max_dist = pairwise_distances_condensed.max().detach()
-    min_dist = pairwise_distances_condensed.min().detach()
+    if X.size(0) == 1:
+        return (sigma_i.square() + epsilon).reshape(1, 1)
 
-    distances_grid = torch.linspace(min_dist, max_dist, number_of_distances, dtype=torch.float64, device=X.device)
+    distances_grid, indices = _distance_grid_and_indices(X, number_of_distances)
     kernel_dict = torch.empty(number_of_distances, dtype=torch.float64, device=X.device)
     for i, dist in enumerate(distances_grid):
         kernel_dict[i] = matern_kernel(dist, alpha_i, nu_i, sigma_i)
-
-    normalized_distances = ((pairwise_distances_condensed - min_dist) / (max_dist - min_dist)).detach()
-    indices = (normalized_distances * (number_of_distances - 1)).round().long().detach()
 
     n = X.size(0)
     K = torch.zeros((n, n), dtype=torch.float64, device=X.device)
@@ -94,43 +116,50 @@ def approx_matern_kernel_cross(
     epsilon: float = 1e-9,
     number_of_distances: int = 500,
 ) -> torch.Tensor:
-    """Approximate cross-covariance Matérn kernel (correct parameter order)."""
+    """Approximate a signed, location-major cross-covariance Matérn kernel.
+
+    As in :func:`compute_matern_covariance`, ``sigma_matrix`` contains marginal
+    standard deviations on its diagonal and signed zero-lag covariances off
+    diagonal.  Distance quantization itself is retained for legacy
+    reproducibility; it is not guaranteed to preserve positive definiteness.
+    """
     device = X.device
     n_locations = X.size(0)
     p = alpha_matrix.size(0)
 
-    pairwise_distances_condensed = torch.pdist(X, p=2).detach()
-    max_dist = pairwise_distances_condensed.max().detach()
-    min_dist = pairwise_distances_condensed.min().detach()
+    zero_lag_covariance = sigma_matrix.clone()
+    diagonal = torch.arange(p, device=device)
+    zero_lag_covariance[diagonal, diagonal] = sigma_matrix.diagonal().square()
 
-    distances_grid = torch.linspace(min_dist, max_dist, number_of_distances, dtype=torch.float64, device=device)
+    if n_locations == 1:
+        return symmetrize(zero_lag_covariance) + epsilon * torch.eye(
+            p, dtype=zero_lag_covariance.dtype, device=device
+        )
+
+    distances_grid, indices = _distance_grid_and_indices(X, number_of_distances)
     kernel_dict = torch.empty((p, p, number_of_distances), dtype=torch.float64, device=device)
 
     for i in range(p):
         for j in range(p):
             for k, dist in enumerate(distances_grid):
-                kernel_dict[i, j, k] = matern_kernel(dist, alpha_matrix[i, j], nu_matrix[i, j], sigma_matrix[i, j])
-
-    normalized_distances = ((pairwise_distances_condensed - min_dist) / (max_dist - min_dist)).detach()
-    indices = (normalized_distances * (number_of_distances - 1)).round().long().detach()
+                kernel_dict[i, j, k] = matern_cross_kernel(
+                    dist, alpha_matrix[i, j], nu_matrix[i, j], zero_lag_covariance[i, j]
+                )
 
     K_blocks = torch.zeros((p, p, n_locations, n_locations), dtype=torch.float64, device=device)
     triu_indices = torch.triu_indices(n_locations, n_locations, 1, device=device)
 
     for idx, (i, j) in enumerate(zip(triu_indices[0], triu_indices[1])):
         index = indices[idx].item()
-        if index == -1:
-            K_blocks[:, :, i, j] = sigma_matrix ** 2
-        else:
-            K_blocks[:, :, i, j] = kernel_dict[:, :, index]
+        K_blocks[:, :, i, j] = kernel_dict[:, :, index]
 
     K_blocks += K_blocks.transpose(2, 3).clone()
     for i in range(n_locations):
-        K_blocks[:, :, i, i] = sigma_matrix ** 2
+        K_blocks[:, :, i, i] = zero_lag_covariance
 
-    K_blocks[:, :, range(n_locations), range(n_locations)] += epsilon
-    K_approx = K_blocks.permute(0, 2, 1, 3).reshape(p * n_locations, p * n_locations)
-    return symmetrize(K_approx)
+    K_approx = K_blocks.permute(2, 0, 3, 1).reshape(p * n_locations, p * n_locations)
+    K_approx = symmetrize(K_approx)
+    return K_approx + epsilon * torch.eye(p * n_locations, dtype=K_approx.dtype, device=device)
 
 
 def approx_matern_kernel_cross_legacy(
@@ -149,35 +178,36 @@ def approx_matern_kernel_cross_legacy(
     n_locations = X.size(0)
     p = alpha_matrix.size(0)
 
-    pairwise_distances_condensed = torch.pdist(X, p=2).detach()
-    max_dist = pairwise_distances_condensed.max().detach()
-    min_dist = pairwise_distances_condensed.min().detach()
+    zero_lag_covariance = sigma_matrix.clone()
+    diagonal = torch.arange(p, device=device)
+    zero_lag_covariance[diagonal, diagonal] = sigma_matrix.diagonal().square()
 
-    distances_grid = torch.linspace(min_dist, max_dist, number_of_distances, dtype=torch.float64, device=device)
+    if n_locations == 1:
+        return symmetrize(zero_lag_covariance) + epsilon * torch.eye(
+            p, dtype=zero_lag_covariance.dtype, device=device
+        )
+
+    distances_grid, indices = _distance_grid_and_indices(X, number_of_distances)
     kernel_dict = torch.empty((p, p, number_of_distances), dtype=torch.float64, device=device)
 
     for i in range(p):
         for j in range(p):
             for k, dist in enumerate(distances_grid):
-                kernel_dict[i, j, k] = matern_kernel(dist, nu_matrix[i, j], alpha_matrix[i, j], sigma_matrix[i, j])
-
-    normalized_distances = ((pairwise_distances_condensed - min_dist) / (max_dist - min_dist)).detach()
-    indices = (normalized_distances * (number_of_distances - 1)).round().long().detach()
+                kernel_dict[i, j, k] = matern_cross_kernel(
+                    dist, nu_matrix[i, j], alpha_matrix[i, j], zero_lag_covariance[i, j]
+                )
 
     K_blocks = torch.zeros((p, p, n_locations, n_locations), dtype=torch.float64, device=device)
     triu_indices = torch.triu_indices(n_locations, n_locations, 1, device=device)
 
     for idx, (i, j) in enumerate(zip(triu_indices[0], triu_indices[1])):
         index = indices[idx].item()
-        if index == -1:
-            K_blocks[:, :, i, j] = sigma_matrix ** 2
-        else:
-            K_blocks[:, :, i, j] = kernel_dict[:, :, index]
+        K_blocks[:, :, i, j] = kernel_dict[:, :, index]
 
     K_blocks += K_blocks.transpose(2, 3).clone()
     for i in range(n_locations):
-        K_blocks[:, :, i, i] = sigma_matrix ** 2
+        K_blocks[:, :, i, i] = zero_lag_covariance
 
-    K_blocks[:, :, range(n_locations), range(n_locations)] += epsilon
-    K_approx = K_blocks.permute(0, 2, 1, 3).reshape(p * n_locations, p * n_locations)
-    return symmetrize(K_approx)
+    K_approx = K_blocks.permute(2, 0, 3, 1).reshape(p * n_locations, p * n_locations)
+    K_approx = symmetrize(K_approx)
+    return K_approx + epsilon * torch.eye(p * n_locations, dtype=K_approx.dtype, device=device)

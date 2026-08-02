@@ -11,7 +11,10 @@ from scripts.pipeline._common import add_src_to_path, load_tensors
 
 def main() -> None:
     repo_root = add_src_to_path()
-    from HighDimSpatial.metrics.validation import validation_metric_marginal
+    from HighDimSpatial.metrics.validation import (
+        extract_location_major_marginal_covariance,
+        validation_metric_marginal,
+    )
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--input", default="data/synthetic/genton_dataset.pt")
@@ -33,10 +36,14 @@ def main() -> None:
         for row in df.itertuples(index=False)
     ]
 
-    n = X.size(0)
+    p = len(params)
+    if K.shape != (X.size(0) * p, X.size(0) * p):
+        raise ValueError(
+            "K shape is inconsistent with the number of locations and marginal parameter rows"
+        )
     metrics = []
     for i, param in enumerate(params):
-        K_test = K[i * n : (i + 1) * n, i * n : (i + 1) * n]
+        K_test = extract_location_major_marginal_covariance(K, i, p)
         metric = validation_metric_marginal(param, X, K_test)
         metrics.append({"feature": i, "metric": metric})
 

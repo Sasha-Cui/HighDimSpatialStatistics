@@ -21,8 +21,7 @@ def main() -> None:
     parser.add_argument("--output", type=str, default="data/synthetic/genton_dataset.pt")
     args = parser.parse_args()
 
-    if args.seed:
-        set_seed(args.seed)
+    set_seed(args.seed)
 
     result = generate_genton_synthetic(args.n_locations, args.dims)
     output_path = repo_root / args.output

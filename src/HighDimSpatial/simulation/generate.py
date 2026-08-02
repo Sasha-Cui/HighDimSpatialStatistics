@@ -14,11 +14,11 @@ def simulate_locations(
     range_max: float = 3.0,
 ) -> torch.Tensor:
     """Simulate random locations within a range."""
-    return torch.FloatTensor(number_of_locations, dimensions).uniform_(range_min, range_max)
+    return torch.empty(number_of_locations, dimensions, dtype=torch.float64).uniform_(range_min, range_max)
 
 
 def simulate_gp_data(X: torch.Tensor, K: torch.Tensor) -> torch.Tensor:
-    """Simulate Gaussian process data with covariance K."""
+    """Simulate ``(location, variable)`` data from a location-major covariance."""
     n_locations = X.size(0)
     p = K.size(0) // n_locations
     mean = torch.zeros(K.size(0), dtype=torch.float64, device=K.device)
