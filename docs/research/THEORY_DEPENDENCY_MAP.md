@@ -1,310 +1,318 @@
 # Theorem--lemma--proof dependency map
 
-## Scope
+## Current mathematical scope
 
-The proposed theory is fixed-\(p\) inference for a Matérn field observed after a
-known deterministic local smoother. It is not growing-dimensional theory. Results
-labelled **known** must be cited rather than claimed; results labelled **candidate
-novelty** must be proved before a paper is viable.
+The paper studies a univariate stationary Matérn Gaussian field observed after a
+known deterministic local averaging operation. Its primary analytic object is a
+fixed, nonzero-lag, normalized two-point Gaussian likelihood with known Matérn
+smoothness and unknown variance and inverse range. The paper does **not** claim a
+phase law for unrestricted full-grid maximum likelihood.
 
-## Canonical setup
+A separate finite-sample proposition treats (N) independent
+(p)-dimensional Gaussian spatial vectors and a deterministic finite covariance
+library. Dependence among the (p) coordinates is unrestricted. This is
+high-dimensional structured model selection, not unstructured covariance
+estimation.
 
-Let \(D_n\uparrow\mathbb R^d\), let \(s_{1,n},\ldots,s_{n,n}\in D_n\), and define
+## Canonical continuous-support model
 
-\[
-y_n=z_n+\varepsilon_n,
-\quad
-z_n\sim N(0,K_{\theta_0,n}),
-\quad
-\varepsilon_n\sim N(0,\tau_0^2I).
-\]
-
-A deterministic spatial smoother \(S_{n,h}\) gives
+Let
 
 \[
-\widetilde y_n=S_{n,h}y_n,
-\qquad
-\Sigma_{0,n,h}
-=S_{n,h}(K_{\theta_0,n}+\tau_0^2I)S_{n,h}^\top.
+  C(r)=v\mathcal M_\nu(\alpha\lVert r\rVert),\qquad
+  \mathcal M_\nu(x)=\frac{2^{1-\nu}}{\Gamma(\nu)}x^\nu K_\nu(x),
 \]
 
-For \(p>1\), replace \(S_{n,h}\) by \(A_{n,h}=S_{n,h}\otimes I_p\) under
-location-major stacking. The naive model treats \(\widetilde y_n\) as point data
-with covariance \(\Sigma_{\phi,n}^{\rm naive}\). The corrected model uses
-\(A_{n,h}K_{\theta,n}A_{n,h}^\top\), including transformed nugget
-\(\tau^2A_{n,h}A_{n,h}^\top\).
+and let (k) be a compactly supported symmetric probability density. For
+independent (U,V\sim k), set (D=U-V),
+(Sigma_k=\mathbb E(UU^\top)), and (T_k=\operatorname{tr}(Sigma_k)). The
+locally averaged field
 
-## Assumptions
+\[
+  Z_h(t)=\int h^{-d}k(u/h)Y(t-u)\,du
+\]
 
-**A1 (design).** Increasing domains have \(|D_n|\asymp n\), minimum location
-separation bounded below, sampling density bounded above and below, and boundary
-volume \(|\partial_hD_n|/|D_n|\to0\).
+has covariance
 
-**A2 (parameter space).** \(\Theta\) is compact, \(\theta_0\) is interior, decay
-scales, smoothnesses, variances, and nugget are bounded away from zero and infinity.
+\[
+  C_h(r)=v\mathbb E\mathcal M_\nu
+  \{\alpha\lVert r+hD\rVert\}.
+\]
 
-**A3 (valid covariance).** The exact AGS scale convention and a globally valid,
-identified multivariate parameterization are used. A finite-design Cholesky check
-is not a substitute.
+At a fixed lag (r=Re), (R>0), the exact point-support pairwise KL target is
 
-**A4 (spectral regularity).** The univariate spectral density or multivariate
-spectral matrix and required derivatives are continuous, integrably dominated,
-and uniformly bounded above and away from singularity after observation noise.
+\[
+  v_h^\dagger=C_h(0),\qquad
+  \mathcal M_\nu(\alpha_h^\dagger R)
+  =\rho_h(r):=C_h(r)/C_h(0).
+\]
 
-**A5 (smoother).** \(S_{n,h}\) depends on locations, not responses; rows have
-bounded support/\(\ell_1\)-norm; interior rows converge to a translation-invariant
-kernel with transfer function \(H_h(\omega)\). Boundary normalization is explicit.
+## Assumptions used by the phase theorem
 
-**A6 (identifiability).** The corrected population objective has unique minimizer
-\(\theta_0\). The naive objective has a locally unique pseudo-target \(\phi^*(h)\)
-with nonsingular Hessian.
+**P1 (field).** The latent field is mean-zero, stationary, Gaussian, and has the
+declared Matérn covariance convention. Gaussianity is needed for the likelihood
+interpretation, but the covariance expansion itself uses only second moments.
 
-**A7 (dependence).** The field is strongly mixing at a rate sufficient for a
-uniform law of large numbers and score CLT over local blocks. For Gaussian fields,
-derive the rate from covariance decay rather than merely assuming independence.
+**P2 (kernel).** The averaging density is nonnegative, symmetric, integrates to
+one, is supported on (B(0,L)), and is nondegenerate
+((T_k>0)). Compactness supplies uniform Taylor remainders and all required
+moments.
 
-**A8 (blocks).** Block diameters and gaps are declared; overlap degree is bounded;
-the effective number \(B_n\to\infty\). Whole-grid, heavily overlapping resolutions
-in the original repository do not meet this condition.
+**P3 (lag).** (R) lies in a compact annulus bounded away from zero and
+(h\le R/(4L)). The theorem does not cover a lag (R=O(h)).
 
-**A9 (moments and derivatives).** Scores have a uniformly bounded \(2+\delta\)
-moment and objective derivatives through order three are dominated in a
-neighborhood of the target.
+**P4 (parameters).** Smoothness is fixed and positive. Decay lies in a compact
+subset of ((0,\infty)). Remainders are not uniform as (\nu) approaches the
+transition values one or two.
 
-**A10 (fixed domain).** Any infill theorem fixes \(\nu\) or explicitly states the
-identifiable microergodic parameter; it does not claim separate consistency of
-variance and decay.
+**P5 (pair target).** Smoothness is known; pair variance and inverse range are
+free. Strict monotonicity of (\mathcal M_\nu) identifies the decay target once
+(0<\rho_h(r)<1).
+
+## Assumptions used by the high-dimensional proposition
+
+**H1 (replicates).** (X_1,\ldots,X_N\) are genuinely independent and each has
+law (N_p(0,\Sigma_0)). Spatial coordinates within a vector may be arbitrarily
+dependent.
+
+**H2 (library).** The (M) candidate covariances are deterministic, or are
+constructed independently of the (X_i), and all covariances are strictly
+positive definite. A grid tuned on the same samples is not covered.
+
+**H3 (normalization).** The likelihood contains the conventional factor
+(1/2) and is averaged over both (N) and (p).
+
+**H4 (high-dimensional corollary only).** Uniform relative spectral control is
+assumed when replacing candidate-specific matrix norms by an
+(O\{\sqrt{\log(M)/(Np)}\}) rate. It is not inferred from stationarity.
+
+**H5 (parameter conclusions only).** A separation or margin condition is an
+additional identifiability assumption. Likelihood concentration alone does not
+prove separate Matérn variance and range consistency, especially under
+fixed-domain infill.
 
 ## Dependency graph
 
 ```mermaid
 flowchart TD
-  A["A1--A10: design, covariance, smoother, identifiability"]
-  L0["L0: AGS validity (cited)"]
-  L1["L1: location-major permutation identity"]
-  L2["L2: exact transformed Gaussian law"]
-  L3["L3: interior spectral transfer"]
-  P1["P1: finite-n KL pseudo-target (known form)"]
-  L4["L4: bandwidth expansion of |H_h|^2"]
-  L5["L5: boundary/nonuniform-design remainder"]
-  T1["T1: explicit Matérn target shift / bias expansion (candidate novelty)"]
-  L6["L6: corrected block-score unbiasedness"]
-  L7["L7: uniform LLN and Hessian convergence"]
-  L8["L8: dependent block-score CLT"]
-  T2["T2: corrected composite estimator consistency/CLT"]
-  C1["C1: naive-versus-corrected asymptotic separation"]
-  P2["P2: fixed-domain nonidentifiability survives smoothing"]
-  M1["M1: multivariate cross-parameter extension (candidate novelty)"]
+  P["P1--P5: Matérn, support, fixed lag, identifiability"]
+  L0["L0: exact averaged covariance"]
+  L1["L1: pair KL target and uniqueness"]
+  L2["L2: uniform fixed-lag Taylor expansion"]
+  L3["L3: Matérn origin expansions"]
+  L4["L4: normalized-correlation expansion"]
+  L5["L5: inverse-map expansion"]
+  L6["L6: Bessel recurrence and sign"]
+  T1["T1: three-regime support phase law"]
+  C1["C1: directional h^2 contrast"]
+  F1["F1: exact finite-design support covariance"]
+  H["H1--H5: iid vectors, finite library, normalization"]
+  Q1["Q1: Gaussian quadratic-form tail"]
+  T2["T2: simultaneous likelihood concentration"]
+  C2["C2: ERM excess KL and selection"]
+  C3["C3: bounded-spectrum Np corollary"]
 
-  A --> L0
-  A --> L1
-  L0 --> L2
-  L1 --> L2
-  L2 --> P1
-  L2 --> L3
-  L3 --> L4
-  P1 --> T1
-  L4 --> T1
+  P --> L0 --> L1
+  P --> L2
+  P --> L3
+  L2 --> L4
+  L3 --> L4 --> L5
   L5 --> T1
-  L2 --> L6
-  L6 --> L7
-  L6 --> L8
-  L7 --> T2
-  L8 --> T2
-  T1 --> C1
-  T2 --> C1
-  T1 --> M1
-  T2 --> M1
-  L2 --> P2
+  L6 --> T1
+  L2 --> C1
+  L3 --> C1
+  L6 --> C1
+  L0 --> F1
+  H --> Q1 --> T2 --> C2
+  T2 --> C3
+  F1 --> T2
 ```
 
-## Proposed statements and proof obligations
+## Statements and proof status
 
-### L0. Valid multivariate Matérn covariance -- known
+### L0. Exact averaged covariance -- complete, classical
 
-State the AGS theorem exactly. Verify that the implementation uses
-\(M(h\mid\nu,\alpha)\propto(\alpha\lVert h\rVert)^\nu
-K_\nu(\alpha\lVert h\rVert)\), that \(R_A,R_B,R_V\) satisfy their matrix
-constraints, and that diagonal equations are not overwritten after construction.
-No novelty is claimed.
-
-### L1. Stacking/permutation identity -- routine
-
-If \(K_{ab,ij}=\operatorname{Cov}\{Y_a(s_i),Y_b(s_j)\}\), then
+Fubini's theorem and stationarity give
 
 \[
-K^{\rm loc}_{(i,a),(j,b)}=K_{ab,ij}
+  C_h(r)=v\mathbb E\mathcal M_\nu
+  \{\alpha\lVert r+hD\rVert\}.
 \]
 
-and \(K^{\rm loc}=P K^{\rm var}P^\top\) for an explicit perfect-shuffle
-permutation \(P\). This statement anchors every simulation and likelihood test.
+For a finite deterministic observation matrix (S_h), the exact covariance is
+(S_hKS_h^\top). This identity is cited as standard and is not claimed as
+novel.
 
-### L2. Exact transformed Gaussian law -- known/routine
+### L1. Pairwise KL target -- complete
 
-For deterministic \(A\),
+The smoothed two-by-two covariance belongs to the naive two-parameter pair
+family. Positivity of the smoothed spectral density gives
+(0<\rho_h(r)<1), and
 
 \[
-y\sim N(\mu,K)\quad\Longrightarrow\quad
-Ay\sim N(A\mu,AKA^\top).
+  \mathcal M_\nu'(x)
+  =-\frac{2^{1-\nu}}{\Gamma(\nu)}x^\nu K_{\nu-1}(x)<0
 \]
 
-For two smoothers, \(\operatorname{Cov}(A_gy,A_hy)=A_gKA_h^\top\). If noise
-occurs before smoothing, its covariance is \(\tau^2AA^\top\), not \(\tau^2I\).
+gives uniqueness.
 
-### L3. Interior spectral transfer -- known/routine
+### L2. Fixed nonzero-lag expansion -- complete
 
-For a translation-invariant smoother with transfer function \(H_h\), show
+For (f_\alpha(x)=\mathcal M_\nu(\alpha\lVert x\rVert)), a fourth-order Taylor
+expansion is uniform on the declared annulus. Kernel symmetry removes odd
+expectations and yields
 
 \[
-f_{0,h}(\omega)=|H_h(\omega)|^2
-\{f_{\theta_0}(\omega)+f_\varepsilon(\omega)\}.
+  C_h(r)/v
+  =\mathcal M_\nu(\alpha R)+h^2B_{\nu,k}(r)+O(h^4).
 \]
 
-For multivariate fields, the scalar multiplier becomes
-\(|H_h|^2F_{\theta_0}\) when all components use the same smoother, or
-\(H_hF_{\theta_0}H_h^*\) for component-specific filters.
+The proof requires (R) bounded away from zero. Applying it at the origin would
+be incorrect for rough Matérn fields.
 
-### P1. Naive KL pseudo-target -- known framework
+### L3. Origin expansions -- complete
 
-The finite-\(n\) population Gaussian criterion is
+The Bessel series at zero, integrated against bounded (D), yields
 
 \[
-Q_{n,h}(\phi)
-=\log\det\Sigma_{\phi,n}^{\rm naive}
-+\operatorname{tr}\{(\Sigma_{\phi,n}^{\rm naive})^{-1}
-\Sigma_{0,n,h}\}.
+  1-C_h(0)/v
+  \asymp
+  \begin{cases}
+  h^{2\nu}, & 0<\nu<1,\\
+  h^2\log(1/h), & \nu=1,\\
+  h^2, & \nu>1.
+  \end{cases}
 \]
 
-Its minimizer is the pseudo-target. The expected-score formula follows by matrix
-calculus. Cite misspecified GP asymptotics; do not claim this characterization as
-new.
+The explicit constants and the separate remainder transition at (\nu=2) are
+recorded in the manuscript. Dominated termwise expectation is justified by
+compact support; a formal, unbounded spectral Taylor expansion is not used.
 
-### L4. Small-bandwidth filter expansion -- technical
+### L4--L5. Normalization and inverse map -- complete
 
-For a symmetric order-\(q\) kernel, establish uniformly on the integrable spectral
-region
+Divide the fixed-lag expansion by the appropriate origin expansion. Then apply
+the local inverse of
+(alpha\mapsto\mathcal M_\nu(\alpha R)). The derivative is nonzero at every
+positive fixed lag. These steps produce the exact leading coefficients for the
+inverse-range displacement.
+
+### L6. Smooth-regime sign -- complete
+
+For (\nu>1), the Matérn differential equation and
 
 \[
-|H_h(\omega)|^2
-=1-h^q b(\omega)+r_h(\omega),
-\qquad
-\int |r_h(\omega)|w(\omega)d\omega=o(h^q).
+  K_\nu(z)=K_{\nu-2}(z)+2(\nu-1)K_{\nu-1}(z)/z
 \]
 
-The exponent depends on the smoother moments and on sampling/discretization. A
-formal Taylor series without a dominating envelope is insufficient for Matérn
-tails.
+reduce the normalized-correlation coefficient to a positive multiple of
+(K_{\nu-2}(z)). Since
+(mathcal M_\nu'(z)<0), ignored support decreases inverse range and inflates
+range for sufficiently small support.
 
-### L5. Boundary and irregular-design remainder -- technical
+### T1. Matérn support phase law -- complete, central contribution
 
-Show that the normalized objective/score difference between the actual
-row-normalized smoother and its stationary interior surrogate is negligible at
-the scale needed by T1 and T2. This requires a boundary-to-volume rate and bounded
-row influence. If the application has a highly perforated tissue boundary, the
-remainder may not vanish and must instead be modeled.
-
-### T1. Matérn-specific target shift -- candidate novelty and first stop gate
-
-Let \(G(\phi,h)=\nabla_\phi Q_h(\phi)\). If \(G(\theta_0,0)=0\) and
-\(H_0=\partial_\phi G(\theta_0,0)\) is nonsingular, use the implicit-function
-theorem to obtain
+For fixed (\nu>0),
 
 \[
-\phi^*(h)-\theta_0
-=-h^qH_0^{-1}g_q(\theta_0)+o(h^q).
-\tag{T1}
+  \alpha-\alpha_h^\dagger
+  \asymp
+  \begin{cases}
+  h^{2\nu}, & 0<\nu<1,\\
+  h^2\log(1/h), & \nu=1,\\
+  h^2, & \nu>1,
+  \end{cases}
 \]
 
-The publishable step is an explicit \(g_q\), a proof that a scientifically
-relevant component is nonzero, and the direction/magnitude of the shift for a
-Matérn family. Merely writing the implicit formula is not enough.
+with explicit positive coefficients. The theorem is a pairwise
+pseudo-parameter statement, not a universal full-likelihood theorem.
 
-For one rigorous starting example, let
-\(C(r)=\sigma_0^2e^{-\alpha_0|r|}\) and use the continuous Epanechnikov kernel.
-If \(U,V\) are independent Epanechnikov draws, then
-\(\mathbb E|U-V|=18/35\), hence
+### C1. Directional support contrast -- complete
+
+For the transformed product smoother
+(Z_{h,A}(t)=\int k(u)Y(t-hAu)\,du), let
+(Sigma_A=AA^\top/5). For unit directions (e_1,e_2),
 
 \[
-\operatorname{Var}\{Z_h(s)\}
-=\sigma_0^2\left[1-\frac{18}{35}\alpha_0h+O(h^2)\right].
+  \{\alpha-\alpha_h^\dagger(e_1)\}
+  -\{\alpha-\alpha_h^\dagger(e_2)\}
+  =\frac{\alpha^2\{e_1^\top\Sigma_Ae_1-e_2^\top\Sigma_Ae_2\}}R
+  \frac{K_{\nu-2}(\alpha R)}{K_{\nu-1}(\alpha R)}h^2+o(h^2).
 \]
 
-With known \(\alpha_0\), the naive one-point variance target has exactly this
-first-order bias. This is a counterexample to unbiased naive fitting, but a paper
-must go beyond the one-point variance calculation to the joint likelihood target.
+For (\nu\le1), this contrast is lower order than the common leading shift.
+The qualitative fact that convolution can look anisotropic is known; the paper
+claims only the explicit apparent-range coefficient.
 
-### L6. Correct composite-score unbiasedness -- routine but essential
+### F1. Finite-design support-aware containment -- complete
 
-For every local block \(b\), use its exact transformed marginal covariance and
-show
+If the true covariance is
+(\Sigma_0=S_hK_{\theta_0}S_h^\top), then the support-aware candidate at
+(\theta_0) equals the truth. The naive point-support family generally does
+not contain it. Boundary-normalized finite rows are treated exactly in the
+generator; no interior translation-invariance claim is made for them.
+
+### Q1--T2. Finite-library likelihood concentration -- complete, standard tool
+
+For
 
 \[
-\mathbb E_{\theta_0}\nabla\ell_b(\theta_0)=0.
+  \widehat L_N(\theta)=\frac1{2p}
+  \{\log\det\Sigma_\theta+
+  \operatorname{tr}(\Sigma_\theta^{-1}\widehat\Sigma_N)\},
+  \qquad
+  A_\theta=\Sigma_0^{1/2}\Sigma_\theta^{-1}\Sigma_0^{1/2},
 \]
 
-If several smoothing resolutions share observations, either stack them with their
-joint cross-covariance or use a declared composite objective and retain cross-term
-contributions in the variability matrix \(J\).
-
-### L7--L8. Uniform LLN, Hessian limit, and score CLT -- standard machinery
-
-Under A1--A9, prove normalized objective convergence, a unique population
-minimizer, sensitivity limit \(H\), and score CLT with variability \(J\). Imported
-mixing theorems must match the triangular array, block overlap, and parameter
-uniformity; an independent-block theorem cannot be cited for overlapping grids.
-
-### T2. Corrected composite M-estimator -- defensible but mainly standard
-
-For fixed \(p\),
+the Laurent--Massart Gaussian quadratic-form inequality and a union bound imply
+that, with (t=\log(2M/\delta)), simultaneously over the library,
 
 \[
-\widehat\theta_n\overset p\longrightarrow\theta_0,
-\qquad
-\sqrt{B_n}(\widehat\theta_n-\theta_0)
-\Rightarrow N(0,H^{-1}JH^{-1}).
-\tag{T2}
+  |\widehat L_N(\theta)-L(\theta)|
+  \le
+  \frac{\lVert A_\theta\rVert_F}{p}\sqrt{\frac tN}
+  +\frac{\lVert A_\theta\rVert_{\rm op}}p\frac tN
 \]
 
-The theorem becomes interesting only if the smoothing/block design creates a new
-rate, efficiency tradeoff, or estimator that is not a direct textbook M-estimator.
+with probability at least (1-\delta). All constants have been checked against
+the likelihood's (1/(2p)) normalization.
 
-For fixed bandwidth and valid local blocks, T2 can remain centered while the naive
-estimator converges to \(\theta^*(h)\ne\theta_0\). Under a mixed-domain design with
-enough observations inside a shrinking bandwidth, if
-\(\theta^*(h_n)-\theta_0=Bh_n^q+o(h_n^q)\), then the phase boundary is
-\(\sqrt{B_n}h_n^q\): it vanishes, produces a shifted normal limit, or dominates
-sampling error according as this quantity tends to 0, a finite nonzero constant,
-or infinity. This corollary is not available under pure increasing domain with a
-fixed minimum separation unless the design also has local infill.
+### C2. ERM and KL consequences -- complete
 
-### P2. Fixed-domain impossibility -- known consequence
+An exact empirical minimizer has population excess risk at most twice the
+maximum simultaneous radius. Because population risk differs from forward
+Gaussian KL divergence only by a candidate-independent constant, this gives a
+finite-sample KL-oracle inequality. Exact library selection additionally
+requires population separation; parameter error requires a margin.
 
-If two latent Matérn Gaussian measures are equivalent under infill, their
-pushforwards under any measurable deterministic smoother are also equivalent.
-Smoothing therefore cannot recover separate variance and decay parameters that
-were nonidentifiable before smoothing. State inference in terms of microergodic
-combinations.
+### C3. (Np) scaling -- conditional and stated as such
 
-### M1. Multivariate extension -- possible second novelty layer
+If
 
-Replace scalar spectra by \(p\times p\) spectral matrices and derive the bias of
-cross-correlation/cross-decay parameters. Prove identifiability after removing the
-current equicorrelation and \(W_i\) confoundings. Fixed \(p\) is acceptable; do not
-call this high-dimensional.
+\[
+  c\Sigma_0\preceq\Sigma_\theta\preceq C\Sigma_0
+\]
 
-## Proof work plan and stop rules
+uniformly over the library, then the radius is at most
 
-1. **Week 1:** Prove T1 for exponential/Matérn-\(1/2\) covariance and one
-   symmetric smoother on an infinite regular lattice or continuum surrogate.
-2. **Week 2:** Generalize the differentiability/dominance step to a compact
-   Matérn parameter set and compute \(g_q\).
-3. **Week 3:** Establish boundary/discretization remainder L5 and reproduce the
-   coefficient numerically.
-4. **Week 4 gate:** stop Direction A if no explicit nonzero coefficient or strict
-   displacement theorem survives exact calculation.
-5. **Weeks 5--7:** prove T2 for a newly specified local-block objective; do not
-   attempt to justify the current ten whole-grid batches.
-6. **Weeks 8--10:** multivariate extension M1 and fixed-domain proposition P2.
+\[
+  c^{-1}\left\{
+  \sqrt{\frac{\log(2M/\delta)}{Np}}
+  +\frac{\log(2M/\delta)}{Np}
+  \right\}.
+\]
 
-Counterexamples, singular smoothers, failed domination arguments, and parameter
-nonidentifiability must be recorded in `RESEARCH_LOG.md`, not silently removed.
+The benchmark reports the actual relative operator and Frobenius norms rather
+than assuming they remain bounded.
+
+## Explicit nonclaims and stop conditions
+
+- No theorem asserts a phase law for arbitrary full-grid maximum likelihood.
+- No independent-pair likelihood is substituted for overlapping spatial pairs.
+- No (Np) rate is claimed for correlated replicates.
+- No finite-grid union bound is applied to a candidate set learned from the same
+  data.
+- No separate fixed-domain consistency claim is made for Matérn variance and
+  range.
+- No adaptive diagonal jitter is permitted in theorem-facing experiments.
+- If the directional or phase coefficient fails its quadrature refinement gate,
+  the corresponding claim is removed rather than explained away post hoc.
