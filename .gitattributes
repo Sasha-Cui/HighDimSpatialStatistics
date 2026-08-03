@@ -1,0 +1,3 @@
+# Promoted Monte Carlo CSVs retain their generator's byte representation so
+# recorded SHA-256 hashes remain stable across clones.
+outputs/smoothing_bias/*.csv binary

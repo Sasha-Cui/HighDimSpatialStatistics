@@ -71,20 +71,22 @@ free. Strict monotonicity of (\mathcal M_\nu) identifies the decay target once
 
 ## Assumptions used by the high-dimensional proposition
 
-**H1 (replicates).** (X_1,\ldots,X_N\) are genuinely independent and each has
-law (N_p(0,\Sigma_0)). Spatial coordinates within a vector may be arbitrarily
+**H1 (replicates).** For \(0<\delta<1\),
+\(\Sigma_0\in\mathbb S_{++}^p\), and
+\(X_1,\ldots,X_N\) are genuinely independent with law
+\(N_p(0,\Sigma_0)\). Spatial coordinates within a vector may be arbitrarily
 dependent.
 
-**H2 (library).** The (M) candidate covariances are deterministic, or are
-constructed independently of the (X_i), and all covariances are strictly
-positive definite. A grid tuned on the same samples is not covered.
+**H2 (library).** The \(M\) candidate covariances are deterministic and strictly
+positive definite. A grid tuned on the observed samples is not covered.
 
 **H3 (normalization).** The likelihood contains the conventional factor
 (1/2) and is averaged over both (N) and (p).
 
 **H4 (high-dimensional corollary only).** Uniform relative spectral control is
 assumed when replacing candidate-specific matrix norms by an
-(O\{\sqrt{\log(M)/(Np)}\}) rate. It is not inferred from stationarity.
+\(O\{\sqrt{\log(M)/(Np)}+\log(M)/(Np)\}\) rate. It is not inferred from
+stationarity.
 
 **H5 (parameter conclusions only).** A separation or margin condition is an
 additional identifiability assumption. Likelihood concentration alone does not
@@ -109,7 +111,7 @@ flowchart TD
   H["H1--H5: iid vectors, finite library, normalization"]
   Q1["Q1: Gaussian quadratic-form tail"]
   T2["T2: simultaneous likelihood concentration"]
-  C2["C2: ERM excess KL and selection"]
+  C2["C2: ERM excess KL; selection under a gap"]
   C3["C3: bounded-spectrum Np corollary"]
 
   P --> L0 --> L1
@@ -276,7 +278,7 @@ that, with (t=\log(2M/\delta)), simultaneously over the library,
 with probability at least (1-\delta). All constants have been checked against
 the likelihood's (1/(2p)) normalization.
 
-### C2. ERM and KL consequences -- complete
+### C2. ERM and KL consequences; selection under a gap -- complete
 
 An exact empirical minimizer has population excess risk at most twice the
 maximum simultaneous radius. Because population risk differs from forward

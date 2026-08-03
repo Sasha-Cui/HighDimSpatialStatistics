@@ -150,10 +150,11 @@ The final benchmark run is accepted only if all of the following hold:
 ## Synthetic data products
 
 The artifact contains both aggregate benchmark tables and a small raw example.
-The raw table uses one row per `(configuration, replicate, output_index)` and
-stores output coordinates, the locally averaged value, support bandwidth,
-smoothness, variance, decay, and seed. It is intended for inspection and method
-development, not as an additional independent experiment.
+The raw table has 2,516 rows: 2,116 `latent_input` records and 400
+`averaged_output` records. Rows are keyed by configuration, replicate,
+`field_stage`, and `location_index`; they store coordinates, field value,
+support bandwidth, smoothness, variance, decay, and seed. It is intended for
+inspection and method development, not as an additional independent experiment.
 
 Aggregate tables contain one row per Monte Carlo fit or one row per validated
 configuration summary. Raw latent grids from large runs are not duplicated when

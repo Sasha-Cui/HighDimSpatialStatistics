@@ -1,0 +1,112 @@
+{
+  "arguments": {
+    "angle_step": 5.0,
+    "aspect_ratios": [
+      1.0,
+      4.0
+    ],
+    "bandwidth_count": 14,
+    "decay": 1.0,
+    "lag": 1.0,
+    "maximum_bandwidth": 0.15,
+    "minimum_bandwidth": 0.003,
+    "output": "outputs/smoothing_bias/supportshift_anisotropic_final_20260803.csv",
+    "quadrature_order": 96,
+    "refinement_orders": [
+      64,
+      128
+    ],
+    "smoothness": [
+      0.5,
+      1.0,
+      1.5,
+      2.5
+    ]
+  },
+  "created_utc": "2026-08-03T01:45:12.731178+00:00",
+  "directional_contrast_checks": [
+    {
+      "aspect_ratio": 1.0,
+      "contrast_coefficient": 0.0,
+      "smallest_bandwidth_ratio": null,
+      "smoothness": 0.5
+    },
+    {
+      "aspect_ratio": 1.0,
+      "contrast_coefficient": 0.0,
+      "smallest_bandwidth_ratio": null,
+      "smoothness": 1.0
+    },
+    {
+      "aspect_ratio": 1.0,
+      "contrast_coefficient": 0.0,
+      "smallest_bandwidth_ratio": null,
+      "smoothness": 1.5
+    },
+    {
+      "aspect_ratio": 1.0,
+      "contrast_coefficient": 0.0,
+      "smallest_bandwidth_ratio": null,
+      "smoothness": 2.5
+    },
+    {
+      "aspect_ratio": 4.0,
+      "contrast_coefficient": 0.7058823529411765,
+      "smallest_bandwidth_ratio": 0.9999961428939794,
+      "smoothness": 0.5
+    },
+    {
+      "aspect_ratio": 4.0,
+      "contrast_coefficient": 0.5045736699742595,
+      "smallest_bandwidth_ratio": 1.0000023347490195,
+      "smoothness": 1.0
+    },
+    {
+      "aspect_ratio": 4.0,
+      "contrast_coefficient": 0.35294117647058826,
+      "smallest_bandwidth_ratio": 0.9999958760395397,
+      "smoothness": 1.5
+    },
+    {
+      "aspect_ratio": 4.0,
+      "contrast_coefficient": 0.17647058823529413,
+      "smallest_bandwidth_ratio": 0.9999957783851448,
+      "smoothness": 2.5
+    }
+  ],
+  "git_commit": "d5207fb43cf63f5dfd68a443853a209e303f9aa2",
+  "git_dirty": false,
+  "numpy": "2.3.5",
+  "python": "3.12.8",
+  "quadrature_refinement": {
+    "128": {
+      "max_abs_pseudo_decay_difference": 1.0747691625567768e-10,
+      "max_relative_decay_shift_difference": 3.3029590596809e-09,
+      "max_relative_directional_contrast_difference": 4.1941931674929326e-10
+    },
+    "64": {
+      "max_abs_pseudo_decay_difference": 1.3203654836146939e-09,
+      "max_relative_decay_shift_difference": 1.2829837143416058e-08,
+      "max_relative_directional_contrast_difference": 7.689354891306105e-10
+    }
+  },
+  "rows": 2128,
+  "scipy": "1.17.1",
+  "validation_diagnostics": {
+    "maximum_absolute_quadrature_difference": 1.3203654836146939e-09,
+    "maximum_equal_axis_direction_spread": 1.887379141862766e-15,
+    "maximum_relative_contrast_quadrature_difference": 7.689354891306105e-10,
+    "maximum_relative_shift_quadrature_difference": 1.2829837143416058e-08,
+    "smallest_bandwidth_contrast_error": 4.221614855248745e-06,
+    "smallest_bandwidth_phase_error": 0.11749959601390136
+  },
+  "validation_gates": {
+    "all_decay_shifts_positive": true,
+    "equal_axis_direction_spread_at_most_1e-10": true,
+    "quadrature_absolute_difference_at_most_1e-7": true,
+    "quadrature_relative_contrast_difference_at_most_0.02": true,
+    "quadrature_relative_shift_difference_at_most_0.01": true,
+    "smallest_bandwidth_contrast_error_at_most_0.10": true,
+    "smallest_bandwidth_phase_error_at_most_0.15": true
+  }
+}
