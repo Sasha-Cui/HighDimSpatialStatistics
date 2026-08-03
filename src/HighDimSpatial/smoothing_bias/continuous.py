@@ -13,6 +13,7 @@ from dataclasses import dataclass
 import numpy as np
 from numpy.polynomial.legendre import leggauss
 from scipy.optimize import brentq
+from scipy.special import gamma, kv
 
 from HighDimSpatial.smoothing_bias.kl import matern_correlation
 from HighDimSpatial.smoothing_bias.theory import epanechnikov_difference_density
@@ -74,6 +75,73 @@ def epanechnikov_difference_radial_moment(
         raise ValueError("power must be positive and finite")
     nodes, weights = product_epanechnikov_difference_quadrature(dimension, order)
     return float(weights @ np.linalg.norm(nodes, axis=1) ** power)
+
+
+def product_epanechnikov_decay_shift_coefficient(
+    *,
+    dimension: int,
+    smoothness: float,
+    decay: float,
+    lag: float,
+    quadrature_order: int = 96,
+) -> float:
+    """Return the positive leading coefficient of decay minus pseudo-decay.
+
+    The associated bandwidth scale is h to 2 nu for nu below one,
+    h squared times log(1/h) at nu equal to one, and h squared above one.
+    The product Epanechnikov kernel has coordinate variance one fifth.
+    """
+    if dimension not in (1, 2):
+        raise ValueError("dimension must be one or two")
+    if smoothness <= 0 or decay <= 0 or lag <= 0:
+        raise ValueError("smoothness, decay, and lag must be positive")
+    z = decay * lag
+    matern_value = float(matern_correlation(np.asarray(lag), decay, smoothness))
+    normalizer = 2.0 ** (1.0 - smoothness) / gamma(smoothness)
+    matern_derivative = -normalizer * z**smoothness * kv(smoothness - 1.0, z)
+    if smoothness < 1.0:
+        c_nu = gamma(1.0 - smoothness) / (
+            smoothness * 2.0 ** (2.0 * smoothness) * gamma(smoothness)
+        )
+        radial_moment = epanechnikov_difference_radial_moment(
+            2.0 * smoothness,
+            dimension,
+            quadrature_order,
+        )
+        signed_coefficient = (
+            matern_value
+            * c_nu
+            * radial_moment
+            * decay ** (2.0 * smoothness)
+            / (lag * matern_derivative)
+        )
+    elif smoothness == 1.0:
+        m2 = 2.0 * dimension / 5.0
+        signed_coefficient = (
+            m2
+            * matern_value
+            * decay**2
+            / (2.0 * lag * matern_derivative)
+        )
+    else:
+        kernel_coordinate_variance = 1.0 / 5.0
+        g_nu = (
+            normalizer
+            * z**smoothness
+            * kv(smoothness - 2.0, z)
+            / (2.0 * smoothness - 2.0)
+        )
+        a_nu = (
+            kernel_coordinate_variance
+            * decay**2
+            * (2.0 * smoothness + dimension - 2.0)
+            * g_nu
+        )
+        signed_coefficient = a_nu / (lag * matern_derivative)
+    coefficient = -float(signed_coefficient)
+    if not np.isfinite(coefficient) or coefficient <= 0:
+        raise ValueError("the leading decay-shift coefficient must be positive")
+    return coefficient
 
 
 def continuous_matern_pair_target(

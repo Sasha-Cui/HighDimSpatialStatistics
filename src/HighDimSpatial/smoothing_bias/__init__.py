@@ -3,6 +3,7 @@
 from HighDimSpatial.smoothing_bias.continuous import (
     continuous_matern_pair_target,
     epanechnikov_difference_radial_moment,
+    product_epanechnikov_decay_shift_coefficient,
 )
 from HighDimSpatial.smoothing_bias.design import (
     epanechnikov_smoothing_matrix,
@@ -44,6 +45,7 @@ __all__ = [
     "naive_pair_estimate",
     "naive_point_covariance",
     "naive_separable_axis_pseudo_target",
+    "product_epanechnikov_decay_shift_coefficient",
     "regular_grid_1d",
     "regular_grid_2d",
     "select_rectangular_centers",

@@ -50,13 +50,23 @@ def asymptotic_scale(bandwidth: float, smoothness: float) -> float:
 
 def main() -> None:
     repo_root = add_src_to_path()
-    from HighDimSpatial.smoothing_bias.continuous import continuous_matern_pair_target
+    from HighDimSpatial.smoothing_bias.continuous import (
+        continuous_matern_pair_target,
+        product_epanechnikov_decay_shift_coefficient,
+    )
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--dimension", type=int, default=2, choices=[1, 2])
     parser.add_argument("--decay", type=float, default=1.0)
     parser.add_argument("--lag", type=float, default=1.0)
     parser.add_argument("--quadrature-order", type=int, default=96)
+    parser.add_argument(
+        "--refinement-orders",
+        type=int,
+        nargs="*",
+        default=[64, 128],
+        help="Additional quadrature orders used only for a deterministic error audit.",
+    )
     parser.add_argument("--minimum-bandwidth", type=float, default=0.003)
     parser.add_argument("--maximum-bandwidth", type=float, default=0.3)
     parser.add_argument("--bandwidth-count", type=int, default=18)
@@ -91,6 +101,15 @@ def main() -> None:
                 quadrature_order=args.quadrature_order,
             )
             decay_shift = args.decay - target.pseudo_decay
+            scale = asymptotic_scale(bandwidth, smoothness)
+            leading_coefficient = product_epanechnikov_decay_shift_coefficient(
+                dimension=args.dimension,
+                smoothness=smoothness,
+                decay=args.decay,
+                lag=args.lag,
+                quadrature_order=args.quadrature_order,
+            )
+            leading_shift = leading_coefficient * scale
             records.append(
                 {
                     "dimension": args.dimension,
@@ -104,12 +123,38 @@ def main() -> None:
                     "variance_loss": 1.0 - target.variance_factor,
                     "covariance_factor": target.covariance_factor,
                     "smoothed_correlation": target.correlation,
-                    "asymptotic_scale": asymptotic_scale(bandwidth, smoothness),
-                    "scaled_decay_shift": decay_shift
-                    / asymptotic_scale(bandwidth, smoothness),
+                    "asymptotic_scale": scale,
+                    "scaled_decay_shift": decay_shift / scale,
+                    "leading_coefficient": leading_coefficient,
+                    "leading_shift": leading_shift,
+                    "coefficient_ratio": decay_shift / leading_shift,
                     "quadrature_order": args.quadrature_order,
                 }
             )
+    refinement: dict[str, dict[str, float]] = {}
+    for order in args.refinement_orders:
+        if order == args.quadrature_order:
+            continue
+        absolute_differences: list[float] = []
+        relative_shift_differences: list[float] = []
+        for record in records:
+            refined = continuous_matern_pair_target(
+                dimension=args.dimension,
+                smoothness=float(record["smoothness"]),
+                decay=args.decay,
+                bandwidth=float(record["bandwidth"]),
+                lag=args.lag,
+                quadrature_order=order,
+            )
+            difference = abs(refined.pseudo_decay - float(record["decay_pseudo"]))
+            absolute_differences.append(difference)
+            relative_shift_differences.append(
+                difference / abs(float(record["decay_shift"]))
+            )
+        refinement[str(order)] = {
+            "max_abs_pseudo_decay_difference": max(absolute_differences),
+            "max_relative_decay_shift_difference": max(relative_shift_differences),
+        }
     write_csv_atomic(args.output, records)
     commit = subprocess.run(
         ["git", "rev-parse", "HEAD"],
@@ -134,6 +179,7 @@ def main() -> None:
         "python": platform.python_version(),
         "numpy": np.__version__,
         "scipy": scipy.__version__,
+        "quadrature_refinement": refinement,
     }
     write_json_atomic(args.output.with_suffix(".metadata.json"), metadata)
     print(f"Wrote {len(records)} quadrature rows to {args.output}")

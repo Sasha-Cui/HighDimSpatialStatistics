@@ -4,6 +4,7 @@ import pytest
 from HighDimSpatial.smoothing_bias.continuous import (
     continuous_matern_pair_target,
     epanechnikov_difference_radial_moment,
+    product_epanechnikov_decay_shift_coefficient,
     product_epanechnikov_difference_quadrature,
 )
 from HighDimSpatial.smoothing_bias.theory import naive_exponential_pseudo_target
@@ -59,6 +60,37 @@ def test_two_dimensional_rough_matern_has_predicted_bandwidth_order() -> None:
     observed_power = np.log(shifts[1] / shifts[0]) / np.log(2.0)
     assert np.all(shifts > 0.0)
     assert observed_power == pytest.approx(2.0 * smoothness, abs=0.08)
+
+
+@pytest.mark.parametrize("smoothness", [0.5, 1.0, 1.5, 2.5])
+def test_leading_decay_shift_coefficient_is_positive_and_predictive(
+    smoothness: float,
+) -> None:
+    bandwidth = 0.002
+    target = continuous_matern_pair_target(
+        dimension=2,
+        smoothness=smoothness,
+        decay=1.0,
+        bandwidth=bandwidth,
+        lag=1.0,
+        quadrature_order=96,
+    )
+    coefficient = product_epanechnikov_decay_shift_coefficient(
+        dimension=2,
+        smoothness=smoothness,
+        decay=1.0,
+        lag=1.0,
+        quadrature_order=96,
+    )
+    if smoothness < 1.0:
+        scale = bandwidth ** (2.0 * smoothness)
+    elif smoothness == 1.0:
+        scale = bandwidth**2 * np.log(1.0 / bandwidth)
+    else:
+        scale = bandwidth**2
+    ratio = (1.0 - target.pseudo_decay) / (coefficient * scale)
+    assert coefficient > 0.0
+    assert ratio == pytest.approx(1.0, rel=0.12)
 
 
 def test_zero_bandwidth_is_an_exact_no_shift_control() -> None:
