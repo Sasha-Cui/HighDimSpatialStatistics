@@ -392,6 +392,16 @@ def _evaluate_candidate_model(
             + scaled_operator / dimension * log_factor / sample_size
         )
         worst_indices[sample_index] = int(np.argmax(bounds[sample_index]))
+    candidate_bounds = bounds.reshape(n_sample_sizes, candidate_count).T[:, :, None]
+    candidatewise_bound_ratios = np.abs(deviation_flat) / candidate_bounds
+    maximum_candidatewise_bound_ratios = np.max(
+        candidatewise_bound_ratios,
+        axis=0,
+    )
+    simultaneous_candidatewise_bound_holds = np.all(
+        np.abs(deviation_flat) <= candidate_bounds + 1e-12,
+        axis=0,
+    )
 
     continuous_target = _profiled_population_target(
         true_covariance,
@@ -505,6 +515,12 @@ def _evaluate_candidate_model(
                     "erm_inequality_holds": bool(excess <= 2.0 * maximum_deviation + 1e-12),
                     "uniform_likelihood_bound": bound,
                     "uniform_excess_bound": 2.0 * bound,
+                    "max_candidatewise_deviation_to_bound_ratio": float(
+                        maximum_candidatewise_bound_ratios[sample_index, trial]
+                    ),
+                    "simultaneous_candidatewise_bound_holds": bool(
+                        simultaneous_candidatewise_bound_holds[sample_index, trial]
+                    ),
                     "uniform_bound_holds": bool(maximum_deviation <= bound + 1e-12),
                     "population_excess_within_uniform_bound": bool(
                         excess <= 2.0 * bound + 1e-12
@@ -579,6 +595,12 @@ def _evaluate_candidate_model(
         "minimum_relative_stable_rank": float(np.min(stable_ranks)),
         "maximum_relative_stable_rank": float(np.max(stable_ranks)),
         "coverage_by_sample_size": {
+            str(sample_size): float(
+                np.mean(simultaneous_candidatewise_bound_holds[index])
+            )
+            for index, sample_size in enumerate(sample_sizes)
+        },
+        "worst_envelope_coverage_by_sample_size": {
             str(sample_size): float(
                 np.mean(max_deviations[index] <= np.max(bounds[index]) + 1e-12)
             )
@@ -771,7 +793,9 @@ def _validation_gates(
     coverage_cells: dict[tuple[str, str, int], list[bool]] = {}
     for record in records:
         key = (record["config_id"], record["model"], int(record["sample_size"]))
-        coverage_cells.setdefault(key, []).append(bool(record["uniform_bound_holds"]))
+        coverage_cells.setdefault(key, []).append(
+            bool(record["simultaneous_candidatewise_bound_holds"])
+        )
     coverage_rates = {
         f"{config_id}:{model}:N={sample_size}": float(np.mean(values))
         for (config_id, model, sample_size), values in sorted(coverage_cells.items())
@@ -813,6 +837,7 @@ def _validation_gates(
             "predeclared_floor": settings["coverage_floor"],
             "cell_coverage": coverage_rates,
             "failures": coverage_failures,
+            "event": "all candidates satisfy their own theorem radius",
         },
         "public_likelihood_api_algebra": {
             "passed": not api_failures,

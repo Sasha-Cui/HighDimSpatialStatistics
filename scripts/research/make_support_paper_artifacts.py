@@ -365,6 +365,7 @@ def highdim_figure(data: pd.DataFrame, output: Path) -> pd.DataFrame:
         "max_abs_criterion_deviation",
         "uniform_likelihood_bound",
         "uniform_bound_holds",
+        "simultaneous_candidatewise_bound_holds",
     }
     missing = required.difference(data.columns)
     if missing:
@@ -391,7 +392,12 @@ def highdim_figure(data: pd.DataFrame, output: Path) -> pd.DataFrame:
                 "uniform_likelihood_bound": float(
                     group["uniform_likelihood_bound"].iloc[0]
                 ),
-                "uniform_bound_coverage": float(group["uniform_bound_holds"].mean()),
+                "worst_envelope_coverage": float(
+                    group["uniform_bound_holds"].mean()
+                ),
+                "candidatewise_simultaneous_coverage": float(
+                    group["simultaneous_candidatewise_bound_holds"].mean()
+                ),
                 "decay_rmse_to_grid_target": float(np.sqrt(np.mean(errors**2))),
                 "decay_mean": float(group["decay_estimate"].mean()),
                 "decay_q10": float(group["decay_estimate"].quantile(0.10)),

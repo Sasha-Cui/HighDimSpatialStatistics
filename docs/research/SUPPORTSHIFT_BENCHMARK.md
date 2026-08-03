@@ -77,7 +77,10 @@ bandwidth are varied. For every library and design, the benchmark records:
 - total error to the physical parameter and stochastic error to the KL oracle;
 - the maximum empirical-to-population criterion deviation;
 - the exact finite-library Gaussian concentration radius; and
-- whether the simultaneous certificate and its ERM excess-risk consequence hold.
+- whether every candidate satisfies its own simultaneous certificate and
+  whether the ERM excess-risk consequence holds. The output separately records
+  the weaker worst-envelope comparison
+  \(\max_\theta|\widehat L-L|\leq\max_\theta u_\theta\).
 
 This track tests the high-dimensional probability statement directly. Under
 uniform relative spectral control, criterion noise is of order
