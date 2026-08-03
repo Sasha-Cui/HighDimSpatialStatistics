@@ -7,8 +7,12 @@ Development branch: `research/paper-audit`
 This directory separates claims that are already established, claims invalidated
 by the original implementation, and hypotheses that still require research.
 
+- [PUBLISHABLE_PAPER_DECISION.md](PUBLISHABLE_PAPER_DECISION.md): current
+  synthetic-only paper decision, reconstructed model, theorem audit, novelty
+  map, candidate papers, promoted experiment results, and submission roadmap.
 - [ASSESSMENT.md](ASSESSMENT.md): formal reconstruction, theorem/code audit,
-  literature map, three candidate papers, primary recommendation, and decision.
+  literature map, three candidate papers, primary recommendation, and original
+  audit-stage decision.
 - [THEORY_DEPENDENCY_MAP.md](THEORY_DEPENDENCY_MAP.md): explicit assumptions,
   theorem/lemma dependencies, proof obligations, and stop conditions.
 - [SIMULATION_PROTOCOL.md](SIMULATION_PROTOCOL.md): claim-linked simulation and
@@ -20,6 +24,10 @@ by the original implementation, and hypotheses that still require research.
   packaging, and artifact-release plan.
 - [RESEARCH_LOG.md](RESEARCH_LOG.md): dated findings, repairs, negative results,
   open questions, and a template for future entries.
+
+The manuscript source is in paper/manuscript.tex. The current decision memo
+supersedes the application-dependent recommendations in the earlier outline,
+simulation protocol, and venue roadmap.
 
 The old result files are retained for forensic provenance only. They must not be
 used as paper evidence after the kernel convention, sign, ordering, gradient,

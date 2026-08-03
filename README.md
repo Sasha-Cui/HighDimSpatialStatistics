@@ -50,8 +50,40 @@ The primary environment spec is `environment.yml`.
 The original numerical results are not scientifically valid after an August 2026
 audit found kernel-convention, cross-covariance-sign, vector-ordering, gradient,
 likelihood, and smoothing-covariance defects. Development continues on
-`research/paper-audit`; see `docs/research/ASSESSMENT.md` before using any result.
+`research/paper-audit`; see `docs/research/PUBLISHABLE_PAPER_DECISION.md` before
+using any result.
 
 The canonical smoother now saves its linear operators, but the ordinary marginal
 fitter is **not** a valid downstream fit for smoothed groups. Use the dedicated
 smoothing-bias research workflow until a corrected production fitter is added.
+
+The salvageable paper is no longer framed as high-dimensional statistics. It
+studies the Matérn pseudo-range induced by ignoring local observation support,
+with a synthetic-only theorem and validation workflow. The manuscript lives in
+`paper/manuscript.tex`.
+
+## Smoothing-bias reproduction
+
+Run the deterministic theorem oracle:
+
+```bash
+python scripts/research/run_matern_phase_oracle.py \
+  --output outputs/smoothing_bias/phase_oracle_d2_v2.csv
+```
+
+Submit the promoted finite-grid study on Slurm:
+
+```bash
+bash scripts/slurm/submit_smoothing_bias.sh \
+  configs/smoothing_bias/support_only_20260802.json
+```
+
+After reduction, regenerate every paper figure, table, and compact source-data
+extract:
+
+```bash
+python scripts/research/make_support_paper_artifacts.py \
+  --phase outputs/smoothing_bias/phase_oracle_d2_v2.csv \
+  --finite-summary outputs/smoothing_bias/support_only_final_20260802_v2/summary.csv \
+  --paper-directory paper
+```

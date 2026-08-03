@@ -19,6 +19,7 @@ venv/
 
 # Generated research artifacts and optimizer state
 outputs/
+tmp/
 data/processed/checkpoints/
 *.pth
 *.pt.tmp
