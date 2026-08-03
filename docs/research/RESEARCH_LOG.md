@@ -180,6 +180,19 @@ retained.
 only to document why noise timing must be propagated through the observation
 operator.
 
+## 2026-08-02 -- final reproducibility and release audit
+
+- Reran the 108-row deterministic phase oracle from clean commit `36cdec8`;
+  its metadata records `git_dirty=false` and the committed source identifier.
+- Made generated figure PDFs deterministic by removing volatile creation and
+  modification timestamps; two consecutive regenerations had identical
+  SHA-256 hashes.
+- Compiled both the 13-page technical manuscript and the 5-page ACM GeoSim
+  draft and visually inspected every rendered page. The pass found and fixed
+  one missing LaTeX command escape in a displayed conclusion.
+- The declared Bouchet environment passed all 62 tests. Ruff, Slurm shell
+  syntax, and the support-only JSON manifest also passed validation.
+
 ## Entry template
 
 ```text

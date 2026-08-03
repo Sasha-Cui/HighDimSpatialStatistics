@@ -230,7 +230,8 @@ Completed:
 - closed-form OU/Epanechnikov software oracle;
 - rectangular smoothing and transformed-noise likelihood;
 - manifests, CPU arrays, atomic shards, reducer, central environment, and logs;
-- 56 passing tests on Bouchet before the promoted run;
+- 62 passing tests in the final Bouchet environment, with Ruff, shell syntax,
+  and manifest validation also clean;
 - LaTeX manuscript source, checked bibliography, generated tables, and
   publication-resolution figures;
 - deterministic phase oracle with 108 positive shifts and the predicted three
