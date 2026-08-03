@@ -48,7 +48,11 @@ def asymptotic_scale(bandwidth: np.ndarray, smoothness: float) -> np.ndarray:
 
 
 def save_figure(figure: plt.Figure, stem: Path) -> None:
-    figure.savefig(stem.with_suffix(".pdf"), bbox_inches="tight")
+    figure.savefig(
+        stem.with_suffix(".pdf"),
+        bbox_inches="tight",
+        metadata={"CreationDate": None, "ModDate": None},
+    )
     figure.savefig(stem.with_suffix(".png"), dpi=220, bbox_inches="tight")
     plt.close(figure)
 
