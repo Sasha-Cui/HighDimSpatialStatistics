@@ -95,8 +95,11 @@ d5207fb43cf63f5dfd68a443853a209e303f9aa2. The final schema-1.1 run records:
 - exact SHA-256 hashes for the result and raw-example files; and
 - all predeclared validation gates passing.
 
-The audited manuscript, compact source data, figures, and release checks are
-frozen together under tag `supportshift-geosim-v1.0.0`.
+The audited numerical release was frozen under tag
+`supportshift-geosim-v1.0.0`. Documentation, artifact metadata, the explicit
+benchmark-consumer contract, and the more precise Fuentes comparison were added
+without changing promoted numerical inputs in patch release
+`supportshift-geosim-v1.0.1`.
 
 The pre-audit history consisted of four bulk commits made on one day and did not
 record a theorem or experiment-development trail. The research branch now has
@@ -832,9 +835,11 @@ The cleanest novelty claim that may survive review is:
 > one, has a universal range-inflation direction for sufficiently small
 > support, and admits an explicit order-\(h^2\) directional contrast.
 
-Targeted searches did not locate this exact conjunction of rate transition,
-coefficient, sign, and directional contrast. That is not an exhaustive proof of
-priority. A human reviewer should search older change-of-support monographs,
+The dated screening protocol and source-by-source comparisons are recorded in
+`docs/research/PRIOR_ART_SEARCH.md`. Targeted searches did not locate this exact
+conjunction of rate transition, coefficient, sign, and directional contrast.
+That is not an exhaustive proof of priority. A human reviewer should still
+search older change-of-support monographs,
 block-variogram expansions, image-resolution geostatistics, and nonstandard
 Matérn parameter-estimation papers before the manuscript uses “first” or
 “previously unknown.” The recommended wording is “we derive,” not “we are the
@@ -1212,8 +1217,9 @@ should be reserved for a future workload that demonstrably uses them.
 
 ### 10.2 Release state and submission blockers
 
-The internal artifact gates are complete: the GeoSim paper is eight pages, the
-technical manuscript is 20 pages, every page has been rendered and inspected,
+The internal artifact gates are complete: the GeoSim paper is within the
+10-page main-text limit, the technical manuscript is 20 pages, every page has
+been rendered and inspected,
 the 87-test suite passes, scoped Ruff is clean, and the release verifier checks
 12,800 rows, 64 coverage cells, and 18 hashed paper artifacts. The remaining
 tasks are proof, priority, publication, and release chores rather than further
@@ -1221,13 +1227,15 @@ statistical computation:
 
 1. Obtain an independent human review of the Bessel expansions, threshold
    remainder, sign, and directional corollary.
-2. Complete a manual priority search in older change-of-support and regularized-
-   variogram monographs before strengthening novelty language.
+2. Have a human expert complete the residual manual priority check in older
+   change-of-support and regularized-variogram monographs. The dated electronic
+   screening and closest-source comparison are complete.
 3. Confirm that one author can register for GeoSim and the main SIGSPATIAL
    conference and present in person.
 4. Perform the final ACM submission-system validation and disclosure review.
-5. Add a repository license, `CITATION.cff`, artifact data card, and archival
-   DOI if the code is to be distributed beyond the tagged repository snapshot.
+5. Create an archival DOI and insert it in the camera-ready artifact. The scoped
+   license, `CITATION.cff`, synthetic-data card, and submission checklist are
+   complete.
 
 Any change resulting from external proof review should receive a new patch
 release and a repeated PDF/artifact verification, rather than mutating the

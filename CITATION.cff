@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use SupportShift, please cite this artifact and the accompanying paper."
+title: "SupportShift: A Theory-Linked Spatial Simulation Benchmark for Ignored Matérn Observation Support"
+type: software
+authors:
+  - family-names: Cui
+    given-names: Sasha
+repository-code: "https://github.com/Sasha-Cui/HighDimSpatialStatistics"
+url: "https://github.com/Sasha-Cui/HighDimSpatialStatistics/tree/supportshift-geosim-v1.0.1"
+version: 1.0.1
+date-released: 2026-08-03
+keywords:
+  - Matérn covariance
+  - change of support
+  - spatial simulation
+  - high-dimensional probability
+  - covariance misspecification
+preferred-citation:
+  type: generic
+  title: "SupportShift: A Theory-Linked Spatial Simulation Benchmark for Ignored Matérn Observation Support"
+  authors:
+    - family-names: Cui
+      given-names: Sasha
+  year: 2026
+  notes: "Manuscript prepared for submission to GeoSim 2026; this is not an acceptance record."

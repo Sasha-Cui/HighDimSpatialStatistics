@@ -118,7 +118,7 @@ $N\in\{1,4,16,64\}$, 200 trials per design, and a fixed
 $161\times101=16{,}261$-candidate variance--decay library. The clean final
 run is Slurm job `21081491`, generated at commit `d5207fb` with all validation
 gates passing. The audited paper package is frozen at tag
-`supportshift-geosim-v1.0.0`.
+`supportshift-geosim-v1.0.1`.
 
 Verify the promoted run and every paper-artifact hash in one command:
 
@@ -129,3 +129,13 @@ python scripts/research/verify_supportshift_release.py \
   --repository-root . \
   --require-full
 ```
+
+## Artifact use and citation
+
+The [synthetic-data card](docs/research/ARTIFACT_DATA_CARD.md) defines the
+benchmark factors, files, dependence structure, validation contract, intended
+uses, and limitations. The dated [prior-art search](docs/research/PRIOR_ART_SEARCH.md)
+records the closest literature comparison without treating a negative search
+as proof of priority. Original SupportShift code and generated synthetic data
+use the scoped terms in `LICENSE-SUPPORTSHIFT`; preserved legacy and third-party
+material is excluded. Citation metadata are in `CITATION.cff`.

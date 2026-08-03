@@ -285,6 +285,26 @@ The technical manuscript now labels increasing-domain pair consistency as an
 unproved standard route rather than a completed theorem. Both PDFs were rebuilt
 and visually rechecked after these changes.
 
+## 2026-08-03 -- acceptance-risk and public-artifact hardening
+
+A dated priority screen searched the Matérn, block-support, regularized-
+variogram, aggregated-GP, and misspecified-likelihood literature for the exact
+all-smoothness pseudo-range phase law. The closest analytic setup located was
+Fuentes (2007), which explicitly gives the filtered spectrum of rectangular
+block averages and a small-pixel approximation but does not derive the
+next-order point-fit parameter displacement. The paper now states this precise
+boundary and explicitly says the search is not proof of priority.
+
+The release now supplies a consumer-facing benchmark contract, synthetic-data
+card, `CITATION.cff`, scoped MIT terms that exclude legacy and third-party
+content, and a GeoSim submission checklist. The promoted simulations and their
+hashes are unchanged. Ruff's intended correctness-only rule set is now explicit
+in `pyproject.toml`, avoiding version-dependent expansion of the default lint
+scope. The intended patch tag is
+`supportshift-geosim-v1.0.1`; it must be created only after manuscript rebuild,
+visual inspection, clean-clone verification, local tests, and Bouchet
+verification all pass.
+
 ## Entry template
 
 ```text
