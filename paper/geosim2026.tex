@@ -2,6 +2,7 @@
 
 \usepackage{mathtools}
 \usepackage{booktabs}
+\usepackage{placeins}
 
 \setcopyright{none}
 \settopmatter{printacmref=true}
@@ -119,12 +120,11 @@ change-of-support method:
 \begin{itemize}
   \item We derive an all-smoothness, \(d\)-dimensional fixed-lag phase law
   with explicit coefficients and a universal small-support range direction.
-  \item We derive a directional \(h^2\) apparent-range contrast for linearly
-  transformed support. The qualitative convolution--anisotropy link is not
-  claimed as new.
-  \item We certify finite-library likelihood selection for \(N\) independent
-  \(p\)-dimensional Gaussian fields without assuming independent spatial
-  coordinates.
+  \item We derive a directional \(h^2\) apparent-range contrast for elongated
+  support. The qualitative link between convolution and anisotropy is known.
+  \item We certify finite-library likelihood concentration and ERM excess risk
+  for \(N\) independent \(p\)-dimensional Gaussian fields without assuming
+  independent spatial coordinates.
   \item SupportShift turns the theorem into four reusable synthetic tracks:
   a continuous phase oracle, finite-grid likelihoods, directional support, and
   growing-\(p\) replicated fields, with deterministic seeds and numerical gates.
@@ -307,9 +307,11 @@ The formula holds for every \(\nu>0\). When \(\nu\leq1\), it is lower
 order than the direction-independent leading shift in the phase theorem.
 \end{proposition}
 
-For the benchmark's transformed product Epanechnikov smoother
-\(Z_{h,A}(t)=\int k(u)Y(t-hAu)\,du\),
-\(\Sigma_k=AA^\top/5\). We parameterize its principal singular-value aspect
+For the benchmark, let
+\[
+Z_{h,A}(t)=\int k(u)Y(t-hAu)\,du.
+\]
+Then \(\Sigma_k=AA^\top/5\). We vary the principal singular-value aspect
 ratio \(\varrho\geq1\) while holding \(\tr(\Sigma_k)\) fixed using
 \begin{equation}
  A_\varrho=\sqrt{\frac{2}{\varrho+\varrho^{-1}}}
@@ -322,8 +324,8 @@ coefficients is
  \frac{(2\nu-1)\varrho^2+1}{\varrho^2+2\nu-1}.
  \label{eq:aspectratio}
 \end{equation}
-Thus elongated measurement support alone can induce directional apparent
-range, even though the latent Matérn covariance is isotropic.
+Thus elongated support can induce direction-dependent inferred range even for
+an isotropic latent covariance.
 
 \begin{remark}
 The fitted lag \(R\) is fixed and bounded away from zero. If \(R=ch\), the
@@ -367,6 +369,14 @@ K_\nu(z)=K_{\nu-2}(z)+2(\nu-1)K_{\nu-1}(z)/z
 reduce the normalized-correlation coefficient to \(A_{\nu,k}(r)\), proving its
 sign. Full transition constants and an exact exponential benchmark are in the
 reproducible technical manuscript.
+
+For \eqref{eq:direction}, subtract the two directional fixed-lag expansions;
+the common zero-lag normalization and all direction-free terms cancel. Using
+\[
+\Matern_\nu''(z)-\Matern_\nu'(z)/z
+=\frac{2^{1-\nu}}{\Gamma(\nu)}z^\nu K_{\nu-2}(z)
+\]
+and dividing by \(-R\Matern_\nu'(z)\) gives the displayed coefficient.
 
 At the remaining integer transition,
 \[
@@ -440,9 +450,11 @@ part of its error can shrink with information; it is supporting machinery, not
 a new concentration inequality.
 
 \begin{proposition}[Gaussian finite-library certificate]
-Let \(X_1,\ldots,X_N\overset{\mathrm{iid}}\sim N_p(0,\Sigma_0)\), and let
+Let \(0<\delta<1\),
+\(\Sigma_0\in\mathbb S_{++}^p\), and
+\(X_1,\ldots,X_N\overset{\mathrm{iid}}\sim N_p(0,\Sigma_0)\). Let
 \(\{\Sigma_\theta:\theta\in\mathcal G\}\) be a deterministic library of
-\(M\) positive-definite covariances. Define
+\(M\) covariances in \(\mathbb S_{++}^p\). Define
 \begin{align}
  \widehat\Sigma_N&=N^{-1}\sum_{i=1}^NX_iX_i^\top,\\
  \widehat L_N(\theta)&=\frac1{2p}\left\{\log\det\Sigma_\theta+
@@ -467,9 +479,11 @@ population criteria, respectively, then
  \leq2\max_{\theta\in\mathcal G}u_\theta.
  \label{eq:erm}
 \end{equation}
-Moreover, \(L(\theta)\) differs from
-\(p^{-1}D_{\rm KL}\{N(0,\Sigma_0)\Vert N(0,\Sigma_\theta)\}\) by a
-candidate-independent constant.
+Moreover, \(L(\theta)\) differs by a candidate-independent constant from
+\begin{equation}
+ p^{-1}D_{\rm KL}\!\left\{N(0,\Sigma_0)\,\middle\|\,
+ N(0,\Sigma_\theta)\right\}.
+\end{equation}
 \end{proposition}
 
 To prove \eqref{eq:certificate}, write \(X_i=\Sigma_0^{1/2}Z_i\), stack the
@@ -482,7 +496,18 @@ The ERM result is the usual three-term comparison through
 \(\widehat L_N\).
 
 No coordinate independence is used: all within-field spatial dependence is in
-\(\Sigma_0\). If
+\(\Sigma_0\). Writing
+\[
+ r_2(A_\theta)=
+ \frac{\lVert A_\theta\rVert_F^2}{\lVert A_\theta\rVert_{\rm op}^2},
+\]
+the radius in \eqref{eq:certificate} is
+\[
+ \frac{\lVert A_\theta\rVert_{\rm op}}p
+ \left\{\sqrt{\frac{r_2(A_\theta)t}{N}}+\frac tN\right\}.
+\]
+Thus the relevant dimension is spectral: increasing \(p\) helps only when
+the operator norm and effective-rank geometry remain controlled. If
 \(c\Sigma_0\preceq\Sigma_\theta\preceq C\Sigma_0\) uniformly, then
 \begin{equation}
  \max_\theta u_\theta\leq c^{-1}\left\{
@@ -504,6 +529,10 @@ tensor Gauss--Legendre order 96, 18 bandwidths from 0.003 to 0.3, and
 \(\nu\in\{0.25,0.5,0.75,1,1.5,2.5\}\). The density of each coordinate of
 \(D\) is available in closed form, so \eqref{eq:smoothcov} is evaluated by
 deterministic quadrature. We solved \eqref{eq:target} by monotone root finding.
+For this kernel \(L=\sqrt2\), so the two largest displayed bandwidths, 0.229
+and 0.3, are stress points outside the sufficient Taylor neighborhood
+\(h\leq R/(4L)\). All slope and coefficient checks use the six smallest
+bandwidths, which are inside that neighborhood.
 Repeating at orders 64 and 128 changed pseudo-decay by at most
 \(4.4\times10^{-8}\) and \(5.2\times10^{-9}\), respectively, relative to
 order 96.
@@ -525,6 +554,37 @@ leading asymptotic terms over smoothing bandwidth on logarithmic axes.}
 (solid) and theorem leading terms with explicit coefficients (dashed). Right:
 their ratio, which approaches one as \(h\downarrow0\).}
 \label{fig:phase}
+\end{figure*}
+
+\subsection{Directional support oracle}
+
+The directional track uses \eqref{eq:transform} with
+\(\varrho\in\{1,4\}\), 19 lag angles from zero to 90 degrees,
+\(\nu\in\{0.5,1,1.5,2.5\}\), and 14 bandwidths from 0.003 to 0.15.
+All 2,128 inverse-range shifts were positive. At \(\varrho=4\), the
+major/minor smooth-regime coefficient ratios were 1.833 for \(\nu=1.5\) and
+3.250 for \(\nu=2.5\), exactly as predicted by
+\eqref{eq:aspectratio}. At \(h=0.15\), the inferred range inflation along the
+major and minor axes was 13.46\% and 11.47\% for \(\nu=0.5\), and 1.56\% and
+0.76\% for \(\nu=1.5\).
+
+The major-minus-minor shift divided by its \(D_\nu h^2\) term differed from
+one by at most \(4.3\times10^{-6}\) at the smallest bandwidth over all four
+smoothnesses. Relative to order 96, orders 64 and 128 changed any individual
+shift by at most \(1.3\times10^{-8}\) of that shift and changed a directional
+contrast by at most \(1.2\times10^{-9}\) of that contrast.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.88\textwidth]{figures/anisotropic_support.pdf}
+\Description{The left panel shows inferred range inflation decreasing as the
+lag turns from the major to the minor support axis. The right panel shows exact
+directional contrasts converging to the theorem coefficient.}
+\caption{An isotropic latent field observed through elongated support.
+Left: apparent range inflation versus lag angle at support aspect four and
+\(h=0.15\). Right: exact major--minor inverse-range contrast divided by
+\(D_\nu h^2\).}
+\label{fig:anisotropy}
 \end{figure*}
 
 \subsection{Finite-grid full likelihood}
@@ -582,6 +642,78 @@ and naive-estimator standard deviation from 0.151 to 0.068, while at
 \input{tables/finite_summary.tex}
 \end{table}
 
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.64\textwidth]{figures/supportshift_raw_example.pdf}
+\Description{A twenty-three by twenty-three latent Matérn field and its ten by
+ten locally averaged observations, displayed with a common color scale.}
+\caption{One synthetic field before and after the benchmark's known
+rectangular support operator.}
+\label{fig:raw}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/supportshift_highdim.pdf}
+\Description{Three panels compare empirical criterion deviations to a theorem
+envelope, decay RMSE to each model's KL target, and concentration around the
+correct versus misspecified target as independent fields increase.}
+\caption{High-dimensional SupportShift likelihood benchmark. Left: the weaker
+worst-radius envelope; exact candidatewise coverage is reported in text.
+Center: decay RMSE to each model's finite-grid KL target versus \(Np\).
+Right: increasing \(N\) makes both estimators more precise, but the
+point-support fit concentrates near its displaced target.}
+\label{fig:highdim}
+\end{figure*}
+
+\subsection{Replicated-field high-dimensional track}
+
+For \(q\in\{4,6,8,10\}\), a padded latent lattice with spacing 0.25 was mapped
+by a full-row-rank radial Epanechnikov operator with \(h=0.5\) to a
+\(q\times q\) output lattice, giving
+\(p\in\{16,36,64,100\}\). We used \(\nu\in\{0.5,1.5\}\),
+\(v=\alpha=1\), and \(N\in\{1,4,16,64\}\) independent fields. Corrected
+candidates were \(vS_hR_\alpha S_h^\top\); naive candidates were
+\(vR_\alpha\) at output centers. The deterministic
+\(101\times161=16{,}261\) variance--decay library spans
+\([0.35,2.5]\times[0.15,1.6]\) and contains \((1,1)\). This truth anchoring
+is an oracle benchmark control, not a deployable grid-selection rule; the
+complete library was fixed before the final Monte Carlo run.
+
+Each \((p,\nu)\) cell used 200 nested replicate-field sequences, giving 64
+model--design--sample-size cells and 12,800 exact finite-library fits. The
+discrete population objective was within \(2.63\times10^{-5}\) per coordinate
+of the continuously profiled objective in all 16 design--model cases, below
+the \(5\times10^{-5}\) tolerance fixed before simulation. No adaptive jitter
+or coordinate-independence approximation was used. Figure~\ref{fig:raw}
+shows the exact observation map for the largest design.
+
+With \(\delta=0.05\), every trial in every cell satisfied the actual
+candidatewise simultaneous event \eqref{eq:certificate}. Across all fits,
+\[
+ \max_\theta
+ \frac{|\widehat L_N(\theta)-L(\theta)|}{u_\theta}\leq 0.789.
+\]
+Each certificate applies separately to its fixed cell, not jointly across all
+64. The deterministic ERM inequality \eqref{eq:erm} also held for every fit.
+Across cells, the 95th percentile of the worst criterion deviation was at most
+0.402 times the worst-candidate radius, with median ratio 0.298.
+For each fixed model, \(p\), and \(\nu\), its log--log slope against \(N\)
+ranged from \(-0.528\) to \(-0.454\), with median \(-0.505\), matching the
+leading \(N^{-1/2}\) dependence.
+
+At \(p=100,\nu=1.5\), the naive finite-grid decay target was 0.594
+(continuous target 0.589), versus the physical value one. From \(N=1\) to 64,
+naive RMSE to its own target fell from 0.124 to 0.015, while its RMSE to the
+physical value was 0.409 at \(N=64\); the support-aware RMSE fell from 0.206
+to 0.024. At \(\nu=0.5,N=64\), naive RMSE was 0.015 to its target but 0.681
+to the physical value. Thus increasing information reduced sampling error
+without repairing support misspecification. These parameter summaries are
+empirical; the proposition controls criterion error and excess risk unless a
+curvature condition is added.
+
+\FloatBarrier
+
 \section{Discussion}
 
 The theorem separates a standard operation from a less-studied inferential
@@ -596,19 +728,25 @@ computes nonrandom finite-design KL targets, and distinguishes misspecification
 from finite-sample error. It is not a substitute for the proof. The zero-support
 case verifies exact agreement, the corrected target verifies model containment,
 and the boundary and irregular panels expose where the interior theorem stops.
+The replicated-field track checks the candidatewise probability event and
+shows that stochastic concentration does not erase KL approximation error.
 
-The scope is narrow. Smoothness and support are known; nuisance parameters are
-fixed in the finite study. The closed target is for a two-point criterion, while
-full-grid targets are numerical. Fixed-resolution discrete smoothing does not
-converge to continuous convolution merely because the domain grows. Boundary
-normalization can introduce first-order terms. Joint support, smoothness,
-variance, and range estimation may be weakly identified. These are future
-problems, not implicit claims.
+The scope is narrow. Smoothness and support are known. The original finite-grid
+track fixes nuisance parameters; the replicated track jointly selects variance
+and decay only over a declared finite library. The closed target is for a
+two-point criterion, while full-grid targets are numerical. Fixed-resolution
+discrete smoothing does not converge to continuous convolution merely because
+the domain grows. Boundary normalization can introduce first-order terms.
+Joint support, smoothness, variance, and range estimation may be weakly
+identified. The exact probability radius uses the generating \(\Sigma_0\), so
+it is an oracle benchmark certificate rather than a plug-in interval for an
+unknown real-data covariance. These are future problems, not implicit claims.
 
 Recent finite-grid Matérn work studies discretization and edge effects without
 deriving this preprocessing-support pseudo-target phase law
-\cite{simons2026finite}. The defensible novelty claim is therefore limited to
-the explicit all-\(\nu\) expansion and universal small-support range direction.
+\cite{simons2026finite}. The defensible novelty claim is therefore the explicit
+all-\(\nu\) expansion, its directional coefficient, and their synthesis with a
+parameterized theorem-linked benchmark.
 
 \section{Conclusion}
 
@@ -619,13 +757,15 @@ and its leading sign is negative across fixed smoothness values, dimensions,
 and compact symmetric kernels. A support-aware covariance removes the
 finite-design population shift when the known operator and fixed nuisance
 parameters are correctly specified and decay is identifiable. The result
-supplies a theorem-level diagnostic and a reproducible simulation protocol; it
-does not assert a universal sign for boundary supports or arbitrary
-full-likelihood fits.
+supplies a theorem-level diagnostic and a reproducible simulation protocol.
+For replicated fields, high-dimensional probability explains how likelihood
+noise can contract around either the physical covariance or a misspecified KL
+target. The paper does not assert a universal sign for boundary supports,
+arbitrary full-likelihood fits, or continuous-parameter estimation.
 
 Code, manifests, and audited aggregate results are available at
 \url{https://github.com/Sasha-Cui/HighDimSpatialStatistics} under the immutable
-tag \texttt{paper-draft-v0.1.0}.
+tag \texttt{supportshift-geosim-v1.0.0}.
 
 \bibliographystyle{ACM-Reference-Format}
 \bibliography{references}

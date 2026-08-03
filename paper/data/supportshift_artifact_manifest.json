@@ -1,0 +1,55 @@
+{
+  "input_output_aliases": {
+    "finite_summary": "data/finite_summary.csv",
+    "phase": "data/phase_oracle_d2.csv"
+  },
+  "inputs": {
+    "anisotropy": {
+      "path": "outputs/smoothing_bias/supportshift_anisotropic_final_20260803.csv",
+      "sha256": "cdd7b0fdb760c8e3178c4b573b6f6d776ce2a13569cb0249cab8d06cf4e9f1e9"
+    },
+    "finite_summary": {
+      "path": "paper/data/finite_summary.csv",
+      "sha256": "15f535aeb85c5fbb160430da761ef75b710e3b6a8894c7a261131d9d6ca38b53"
+    },
+    "highdim": {
+      "path": "outputs/smoothing_bias/supportshift_highdim_final_v2_20260803.csv",
+      "sha256": "247db5e6f09f95f303195d813dbdc60cbf164c1abc4e1da09634d5630e8a6856"
+    },
+    "phase": {
+      "path": "paper/data/phase_oracle_d2.csv",
+      "sha256": "900d028eadaf67d5d9daced382f2c3cd63d382724d88adae4594e8a9f1ba3329"
+    },
+    "raw_example": {
+      "path": "outputs/smoothing_bias/supportshift_raw_final_v2_20260803.csv",
+      "sha256": "ac5cd1543a77766789b1f4768185aa63aae0d6ae5c61f81a0fa6363139965c18"
+    }
+  },
+  "outputs": {
+    "data/anisotropic_phase.csv": "40ed12305947cd86b081fbe3999440b0ab63f9db58e8dd3a957c5ba1654548a7",
+    "data/finite_summary.csv": "15f535aeb85c5fbb160430da761ef75b710e3b6a8894c7a261131d9d6ca38b53",
+    "data/phase_oracle_d2.csv": "900d028eadaf67d5d9daced382f2c3cd63d382724d88adae4594e8a9f1ba3329",
+    "data/supportshift_highdim_summary.csv": "6f8fa4eb22cf98a8fa750772f620a77000bd9eab73b134d8532dc35a23bed681",
+    "data/supportshift_raw_example.csv": "f7a6512234c4264ffb82c8f501773a738e8d999fb166a1b083a182785e760b53",
+    "figures/anisotropic_support.pdf": "13d26c45ff6f22ebe8d966287f739d447c86a396150767b70273bb2777521c2f",
+    "figures/anisotropic_support.png": "fe66b720e4c50aada6ebc23350170a042e7eecdc8d6dad1844386691f3a3a04e",
+    "figures/finite_convergence.pdf": "dc1595fc561cf1f9a3ce944233ccaaf1c694d7a5c9e02b5f8c44b3c88b0ff3a2",
+    "figures/finite_convergence.png": "d0aa66d6e0967f54a9c46b5995608082eef7df79866321346e8c4bc578a01ce6",
+    "figures/finite_targets.pdf": "1e2d69f5b9d20c644a043942ff82212be3fb007084cb93435235f5a343b6ccc5",
+    "figures/finite_targets.png": "e438e6de39f383df6c499d83673985cb8641633515ee67d9793734a0aa2775ae",
+    "figures/phase_law.pdf": "cccacd04a834da32af89546cd52d40c3b9f436476a2e46a694421e2b8821d014",
+    "figures/phase_law.png": "0f51fe3e5dd8ca27955fa1efc641d94ca784ab967c73b1a526f478a3486b7537",
+    "figures/supportshift_highdim.pdf": "b4b74e79bce8521eec279bd133986897c076f7431225b10e01388862db5db030",
+    "figures/supportshift_highdim.png": "e61226c7cb24aa65742362c71b482c3e58c7cc10f7c265a2e699c482b6e7e037",
+    "figures/supportshift_raw_example.pdf": "e9e712d617095b9f3a99b4837c3bac78701061a09dc329b71873307bbbd9cf57",
+    "figures/supportshift_raw_example.png": "3e048ac929bcc180c830cd82246af1a9cc3edbed77fe445410a9f4dcc5b85720",
+    "tables/finite_summary.tex": "8ec55b77cc723148af27cbe6b79e4fd91327f52745f758f049833dd0079bee45"
+  },
+  "runtime": {
+    "matplotlib": "3.10.9",
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "python": "3.12.8"
+  },
+  "schema_version": "1.1"
+}

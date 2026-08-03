@@ -29,8 +29,8 @@
 \newcommand{\tr}{\operatorname{tr}}
 \newcommand{\KL}{D_{\mathrm{KL}}}
 
-\title{How Local Averaging Moves Mat\'ern Pairwise Range Targets:\\
-A Smoothness-Dependent Phase Law}
+\title{SupportShift: Mat\'ern Range Distortion under Local Averaging\\
+with Directional and Finite-Library Guarantees}
 \author{Sasha Cui\\Independent researcher}
 \date{Draft of \today}
 
@@ -38,27 +38,30 @@ A Smoothness-Dependent Phase Law}
 \maketitle
 
 \begin{abstract}
-Spatial measurements often represent local averages, but are subsequently fitted
-as if they were point observations.  This changes the population target of
-covariance estimation, not merely its finite-sample bias.  We study a stationary
-Mat\'ern Gaussian field in \(\R^d\), observed through a known compact symmetric
-averaging kernel of bandwidth \(h\).  For a fixed nonzero-lag Gaussian two-point
-likelihood with fixed known smoothness \(\nu\), we characterize the exact
-pseudo-variance and pseudo-decay and derive their small-support expansions.  The
-naive decay shift is
-of order \(h^{2\nu}\) for \(0<\nu<1\), \(h^2\log(1/h)\) at \(\nu=1\), and
-\(h^2\) for \(\nu>1\).  Explicit coefficients show that, for every \(\nu>0\)
-and any nondegenerate compact symmetric kernel, naive point-support fitting
-underestimates inverse range---and therefore overestimates spatial range---for
-all sufficiently small \(h\).  The coefficient for \(\nu>1\) remains positive
-for anisotropic averaging kernels.  A support-aware covariance propagates both
-the field and measurement noise through the observation operator and removes
-the population shift when the operator and fixed nuisance parameters are
-correctly specified.  Deterministic two-dimensional quadrature verifies the
-three rate regimes, while synthetic finite-grid likelihood experiments
-illustrate discrete, irregular, and boundary behavior.  The result isolates a
-concrete inferential cost of ignored spatial support while making no novelty
-claim for the standard change-of-support covariance formula itself.
+Spatial measurements often represent local averages, but are subsequently
+fitted as if they were point observations.  This changes the population target
+of covariance estimation, not merely its finite-sample bias.  We study a
+stationary Mat\'ern Gaussian field in \(\R^d\), observed through a known compact
+symmetric averaging kernel of bandwidth \(h\).  For a fixed nonzero-lag
+Gaussian two-point likelihood with known smoothness \(\nu\), we characterize the
+exact pseudo-variance and pseudo-decay and derive their small-support
+expansions.  The naive inverse-range shift is of order \(h^{2\nu}\) for
+\(0<\nu<1\), \(h^2\log(1/h)\) at \(\nu=1\), and \(h^2\) for \(\nu>1\).
+Explicit coefficients show that naive point-support fitting underestimates
+inverse range---and therefore overestimates spatial range---for every fixed
+\(\nu>0\) and all sufficiently small \(h\).  For anisotropic support, an
+all-smoothness directional contrast isolates the order-\(h^2\) difference
+between lag directions.  We also give an explicit finite-library Gaussian
+likelihood certificate based on standard quadratic-form concentration.  It
+allows arbitrary dependence among the \(p\) coordinates of each spatial field;
+under uniform relative spectral control its radius is
+\(O\{\sqrt{\log(M)/(Np)}+\log(M)/(Np)\}\) for \(N\) independent fields and
+\(M\) covariance candidates.  Deterministic quadrature verifies the phase law
+and directional coefficient.  Replicated-field simulations verify the
+likelihood certificate and show that increasing information can concentrate a
+naive estimator around a wrong KL target.  The covariance transformation and
+concentration inequality are established tools; the narrower contribution is
+their theorem-linked use with the explicit Mat\'ern support-distortion law.
 \end{abstract}
 
 \section{Introduction}
@@ -95,9 +98,12 @@ terms of an underlying point covariance and studies a Mat\'ern example.  That
 work correctly models the support; it does not derive the pseudo-range selected
 when block averages are instead treated as points.  Generic misspecified-GP KL
 theory \citep{bachoc2018misspecified} supplies the projection framework but not
-the support-specific coefficient or sign.  Our contribution is the explicit
-all-smoothness, \(d\)-dimensional fixed-lag pseudo-parameter expansion.  In
-particular:
+the support-specific coefficient or sign.  Gaussian quadratic-form
+concentration and finite-class union bounds are also standard
+\citep{laurent2000quadratic,hsu2012quadratic}; we use them to make the
+simulation certificate match the fitted covariance library exactly.  Our
+principal mathematical contribution is the explicit all-smoothness,
+\(d\)-dimensional fixed-lag pseudo-parameter expansion.  In particular:
 
 \begin{enumerate}
   \item We derive a phase law for the naive Mat\'ern decay target: orders
@@ -107,18 +113,28 @@ particular:
   Bessel-function identity in the smooth regime, prove that normalized
   correlation increases, hence inverse range decreases, for every \(\nu>0\)
   and any compact symmetric kernel when \(h\) is sufficiently small.
+  \item We isolate the order-\(h^2\) contrast between two lag directions under
+  anisotropic support.  The contrast holds for every \(\nu>0\), even when it is
+  lower order than the direction-independent rough-field shift.
   \item We distinguish the continuous interior theorem from discrete,
   row-normalized, and boundary-truncated smoothing.  We then compute finite-grid
   full-likelihood KL targets and compare naive and support-aware fits using only
   synthetic data.
+  \item For a deterministic finite covariance library, we state a simultaneous
+  normalized-likelihood certificate and its empirical-risk consequence.  This
+  supporting result uses independent replicated fields, not independent spatial
+  coordinates.
 \end{enumerate}
 
 The covariance transformation \(S K S^\top\), block kriging, generic KL
-projection under misspecification, and temporal aggregation are prior work; they
-are not claimed as contributions.  Recent finite-grid Mat\'ern likelihood work
-also treats discretization and edge effects without studying the target induced
-by a preprocessing smoother \citep{simons2026finite}.  Our narrower focus is the
-smoothness-dependent target displacement caused by ignoring observation support.
+projection under misspecification, temporal aggregation, and the concentration
+machinery are prior work; they are not claimed as contributions.  Recent
+finite-grid Mat\'ern likelihood work also treats discretization and edge effects
+without studying the target induced by a preprocessing smoother
+\citep{simons2026finite}.  Our narrower focus is the smoothness-dependent target
+displacement caused by ignoring observation support, its directional
+coefficient, and a benchmark in which the probability guarantee and fitted
+library are the same mathematical objects.
 
 \section{Model and pseudo-target}
 
@@ -335,6 +351,50 @@ in \eqref{eq:G-positive} remains positive.  For an isotropic kernel with
   A_{\nu,k}(r)=\sigma_k^2\alpha^2(2\nu+d-2)G_\nu(z).
 \end{equation}
 
+The qualitative fact that convolution can induce covariance anisotropy is
+known \citep{clifford2006yield,paciorek2006nonstationary}.  The next corollary
+identifies the support-induced directional difference in the pairwise
+pseudo-inverse-range, including in the rough regimes where the leading common
+shift is not quadratic.
+
+\begin{corollary}[Directional support contrast]
+For a unit vector \(e\), let
+\(\Delta_e(h)=\alpha-\alpha_h^\dagger(e)\), where the pair lag is \(r=Re\)
+with the same fixed \(R>0\) in every direction.  For two unit vectors
+\(e_1,e_2\), under the assumptions of the phase theorem,
+\begin{equation}
+  \Delta_{e_1}(h)-\Delta_{e_2}(h)
+  =\frac{\alpha^2\{a_k(e_1)-a_k(e_2)\}}{R}
+   \frac{K_{\nu-2}(z)}{K_{\nu-1}(z)}h^2+o(h^2).
+  \label{eq:directional-contrast}
+\end{equation}
+This formula holds for every fixed \(\nu>0\).  For \(0<\nu<1\) it is lower
+order than the common order-\(h^{2\nu}\) range shift, and at \(\nu=1\) it is
+lower order than the common \(h^2\log(1/h)\) shift.
+\end{corollary}
+
+For a concrete two-dimensional family, let the base product Epanechnikov
+kernel be transformed according to
+\begin{equation}
+  Z_{h,A}(t)=\int_{\R^2}k(u)Y(t-hAu)\,du,
+  \qquad
+  A_\varrho=\sqrt{\frac{2}{\varrho+\varrho^{-1}}}
+  \operatorname{diag}(\sqrt\varrho,\varrho^{-1/2}),
+  \label{eq:anisotropic-transform}
+\end{equation}
+where \(\varrho\geq1\).  Then \(\Sigma_k=A_\varrho A_\varrho^\top/5\), its
+trace is fixed as \(\varrho\) varies, and its principal-variance ratio is
+\(\varrho^2\).  For \(\nu>1\), the ratio of the major- to minor-axis leading
+shift coefficients in \eqref{eq:decay-smooth} is
+\begin{equation}
+  \frac{(2\nu-1)\varrho^2+1}{\varrho^2+2\nu-1}.
+  \label{eq:anisotropic-coefficient-ratio}
+\end{equation}
+Thus elongated observation support can yield direction-dependent inferred
+range even though the latent covariance is isotropic.  Equation
+\eqref{eq:directional-contrast}, rather than this qualitative phenomenon, is
+the theorem-level statement used by the directional benchmark.
+
 \begin{remark}[Why symmetry does not imply an \(h^2\) bias]
 Symmetry removes the order-\(h\) term at a fixed nonzero lag.  When
 \(0<\nu<1\), however, the origin expansion contains \(\lVert r\rVert^{2\nu}\),
@@ -418,6 +478,90 @@ stationarity.  The interior theorem provides no universal boundary sign.  We
 report one boundary-retaining and one fixed jittered design as illustrations,
 not as a boundary scaling study.
 
+\subsection{Finite-library high-dimensional certificate}
+
+The replicated-field benchmark jointly varies variance and decay on a
+deterministic finite grid.  The next proposition is a direct consequence of
+standard Gaussian quadratic-form concentration.  It is included to state
+precisely what the benchmark certifies; it is not presented as a new
+concentration inequality.
+
+\begin{proposition}[Gaussian finite-library certificate]
+\label{prop:finite-library}
+Let \(X_1,\ldots,X_N\overset{\mathrm{iid}}{\sim}N_p(0,\Sigma_0)\), where
+\(\Sigma_0\) is positive definite, and let
+\(\{\Sigma_\theta:\theta\in\mathcal G\}\) be a deterministic library of
+\(M<\infty\) positive-definite covariance matrices.  Define
+\begin{align}
+  \widehat\Sigma_N&=\frac1N\sum_{i=1}^NX_iX_i^\top,\nonumber\\
+  \widehat L_N(\theta)
+  &=\frac1{2p}\left\{\log\det\Sigma_\theta
+    +\tr(\Sigma_\theta^{-1}\widehat\Sigma_N)\right\},
+    \label{eq:empirical-library-risk}\\
+  L(\theta)&=\E\widehat L_N(\theta),\qquad
+  A_\theta=\Sigma_0^{1/2}\Sigma_\theta^{-1}\Sigma_0^{1/2}.
+  \nonumber
+\end{align}
+For any \(\delta\in(0,1)\), put \(t=\log(2M/\delta)\).  With probability at
+least \(1-\delta\), simultaneously for all \(\theta\in\mathcal G\),
+\begin{equation}
+  \left|\widehat L_N(\theta)-L(\theta)\right|
+  \leq
+  \frac{\lVert A_\theta\rVert_{\mathrm F}}p\sqrt{\frac tN}
+  +\frac{\lVert A_\theta\rVert_{\mathrm{op}}}p\frac tN
+  =:u_\theta.
+  \label{eq:finite-library-certificate}
+\end{equation}
+If \(\widehat\theta\) and \(\theta^\star\) minimize \(\widehat L_N\) and
+\(L\), respectively, over \(\mathcal G\), then on the same event
+\begin{equation}
+  L(\widehat\theta)-L(\theta^\star)
+  \leq 2\max_{\theta\in\mathcal G}u_\theta.
+  \label{eq:finite-library-erm}
+\end{equation}
+Moreover, \(L(\theta)\) differs by a constant independent of \(\theta\) from
+\begin{equation}
+  \frac1p\KL\!\left\{N_p(0,\Sigma_0)\,\middle\|\,
+  N_p(0,\Sigma_\theta)\right\}.
+  \label{eq:library-kl-relation}
+\end{equation}
+\end{proposition}
+
+No coordinate independence is assumed: all spatial dependence within one
+field is contained in \(\Sigma_0\).  Independence is required only across the
+\(N\) replicated fields.  With quadratic effective rank
+\[
+  r_2(A_\theta)=
+  \frac{\lVert A_\theta\rVert_{\mathrm F}^2}
+       {\lVert A_\theta\rVert_{\mathrm{op}}^2},
+\]
+the candidate radius is
+\[
+  \frac{\lVert A_\theta\rVert_{\mathrm{op}}}{p}
+  \left\{\sqrt{\frac{r_2(A_\theta)t}{N}}+\frac{t}{N}\right\}.
+\]
+Thus \(p\) helps only through controlled relative spectral geometry, not by
+itself.  If constants \(0<c\leq C<\infty\) satisfy
+\begin{equation}
+  c\Sigma_0\preceq\Sigma_\theta\preceq C\Sigma_0
+  \qquad\text{for every }\theta\in\mathcal G,
+  \label{eq:relative-spectral-control}
+\end{equation}
+then \(\lVert A_\theta\rVert_{\mathrm{op}}\leq c^{-1}\) and
+\(\lVert A_\theta\rVert_{\mathrm F}\leq\sqrt p/c\), so
+\begin{equation}
+  \max_\theta u_\theta\leq \frac1c\left\{
+  \sqrt{\frac{\log(2M/\delta)}{Np}}
+  +\frac{\log(2M/\delta)}{Np}\right\}.
+  \label{eq:finite-library-np-rate}
+\end{equation}
+This is a conditional information rate, not a claim of separate fixed-domain
+consistency for Mat\'ern variance and range.  Relative spectral constants and
+criterion curvature can deteriorate with the design.  The benchmark therefore
+records the actual Frobenius and operator norms and uses the exact radius in
+\eqref{eq:finite-library-certificate}.  A proof is given in
+Appendix~\ref{app:finite-library-proof}.
+
 \section{Synthetic validation}
 
 \subsection{Continuous two-dimensional quadrature}
@@ -437,6 +581,10 @@ coordinate, 18 geometrically spaced bandwidths from 0.003 to 0.3, and
 grid at quadrature orders 64 and 128 changed pseudo-decay by at most
 \(4.4\times10^{-8}\) and \(5.2\times10^{-9}\), respectively, relative to
 order 96.
+For this kernel \(L=\sqrt2\), so the two largest displayed bandwidths, 0.229
+and 0.3, are stress points outside the sufficient Taylor neighborhood
+\(h\leq R/(4L)\).  All slope and coefficient checks below use the six smallest
+bandwidths, which are inside that neighborhood.
 
 All 108 computed decay shifts \(\alpha-\alpha_h^\dagger\) were positive.  An
 ordinary least-squares slope over the six smallest bandwidths on log--log axes
@@ -461,6 +609,41 @@ bandwidth, exact-shift to leading-term ratios were 1.021, 1.000, 0.958, 1.059,
   with their explicit coefficients (dashed).  Right: their ratio, which
   approaches one as \(h\downarrow0\).}
   \label{fig:phase}
+\end{figure}
+
+\subsection{Directional support oracle}
+
+The directional track used \eqref{eq:anisotropic-transform} with
+\(\varrho\in\{1,4\}\), 19 lag angles from zero to 90 degrees,
+\(\nu\in\{0.5,1,1.5,2.5\}\), and 14 bandwidths from 0.003 to 0.15.  All
+2,128 computed inverse-range shifts were positive.  At \(\varrho=4\), the
+major/minor smooth-regime coefficient ratios were 1.833 for \(\nu=1.5\) and
+3.250 for \(\nu=2.5\), agreeing with
+\eqref{eq:anisotropic-coefficient-ratio}.  At \(h=0.15\), apparent range
+inflation along the major and minor support axes was 13.46\% and 11.47\% for
+\(\nu=0.5\), and 1.56\% and 0.76\% for \(\nu=1.5\).
+
+Let \(D_\nu\) denote the coefficient multiplying \(h^2\) on the right side of
+\eqref{eq:directional-contrast} for the major-minus-minor comparison.  At the
+smallest bandwidth, the absolute error in the ratio of the exact directional
+contrast to \(D_\nu h^2\) was at most \(4.3\times10^{-6}\) over all four
+smoothnesses.  Relative to quadrature order 96, orders 64 and 128 changed an
+individual shift by at most \(1.3\times10^{-8}\) of that shift and changed a
+directional contrast by at most \(1.2\times10^{-9}\) of that contrast.
+
+\begin{figure}[t]
+  \centering
+  \IfFileExists{figures/anisotropic_support.pdf}{
+    \includegraphics[width=0.94\linewidth]{figures/anisotropic_support.pdf}
+  }{
+    \fcolorbox{black}{panelgray}{\parbox[c][2.0in][c]{0.88\linewidth}{
+      \centering Figure generated after the reproducible analysis step.}}
+  }
+  \caption{An isotropic latent field observed through elongated support.
+  Left: inferred range inflation versus lag angle for aspect parameter
+  \(\varrho=4\) and \(h=0.15\).  Right: the exact major--minor inverse-range
+  contrast divided by its theorem term \(D_\nu h^2\).}
+  \label{fig:anisotropic-support}
 \end{figure}
 
 \subsection{Finite-grid full likelihood}
@@ -563,6 +746,119 @@ respectively, of their population targets
   }
 \end{table}
 
+\clearpage
+\subsection{Replicated-field finite-library experiment}
+
+To connect the probability statement to an estimator, we generated independent
+replicated spatial fields on increasing-domain two-dimensional designs at fixed
+lattice spacing.  For
+\(q\in\{4,6,8,10\}\), a padded \((2q+3)\times(2q+3)\) latent lattice with
+spacing 0.25 was mapped by a full-row-rank radial Epanechnikov operator of
+bandwidth 0.5 to a \(q\times q\) output lattice, giving
+\(p=q^2\in\{16,36,64,100\}\).  The mean was known to be zero.  We used
+\(\nu\in\{0.5,1.5\}\), \(v=\alpha=1\), and
+\(N\in\{1,4,16,64\}\) independent fields.  The candidate set was an explicit
+deterministic \(101\times161=16{,}261\) Cartesian library of variance and
+inverse-range values spanning
+\([0.35,2.5]\times[0.15,1.6]\) and containing the generating parameter pair
+\((1,1)\) exactly.  This truth anchoring is an oracle benchmark control, not a
+deployable rule for choosing a data-analysis grid.  The complete library was
+fixed before the final Monte Carlo run.  Corrected candidates were
+\(vS_hR_\alpha S_h^\top\); naive candidates were \(vR_\alpha\) at the declared
+output centers.  Thus only the corrected covariance library contained the data
+law.  Every empirical minimizer was obtained by exact finite-library
+enumeration, without continuous interpolation.
+
+For each \((p,\nu)\) cell, 200 nested replicate-field sequences were generated
+from the support-aware truth.  Thus there were 64 distinct
+model--\(p\)--\(\nu\)--\(N\) certificate cells and 12,800 fitted estimates.
+The confidence parameter was \(\delta=0.05\), and the theorem radius was
+computed from the actual candidate-specific Frobenius and operator norms.  No
+independence approximation was made for coordinates within a field.  The
+certificate was applied separately to each fixed design, model, smoothness, and
+sample size; a joint 95\% statement over all 64 reported cells is not claimed.
+The raw illustration in Figure~\ref{fig:raw-supportshift} shows the observation
+map used for the largest design.
+
+\begin{figure}[t]
+  \centering
+  \IfFileExists{figures/supportshift_raw_example.pdf}{
+    \includegraphics[width=0.91\linewidth]{figures/supportshift_raw_example.pdf}
+  }{
+    \fcolorbox{black}{panelgray}{\parbox[c][2.0in][c]{0.85\linewidth}{
+      \centering Figure generated after the reproducible analysis step.}}
+  }
+  \caption{One synthetic field before and after the known rectangular
+  observation operator: a \(23\times23\) latent realization (left) and its
+  \(10\times10\) locally averaged observations (right).  This illustration is
+  generated from the same covariance and operator implementation as the
+  likelihood benchmark.}
+  \label{fig:raw-supportshift}
+\end{figure}
+
+% HIGHDIM_RESULTS_START
+The discrete population objective was within \(2.63\times10^{-5}\) per
+coordinate of the continuously profiled objective in all 16 design--model
+cases, below the \(5\times10^{-5}\) tolerance fixed before the final Monte
+Carlo run.  In every one of the 64 model--\(p\)--\(\nu\)--\(N\) cells, all
+200 trials satisfied the actual simultaneous candidatewise event
+\[
+  |\widehat L_N(\theta)-L(\theta)|\leq u_\theta
+  \quad\text{for every }\theta\in\mathcal G.
+\]
+Over all 12,800 fits, the largest value of
+\(\max_\theta|\widehat L_N(\theta)-L(\theta)|/u_\theta\) was 0.789.  The
+weaker worst-radius envelope displayed in
+Figure~\ref{fig:highdim-supportshift} also held throughout: across cells, the
+95th percentile of \(\max_\theta|\widehat L_N-L|\) was at most 0.402 times
+\(\max_\theta u_\theta\), with median ratio 0.298.  These 100\% empirical
+coverages show that the finite-library union bound was conservative here; each
+95\% certificate applies to its own fixed cell, not jointly across all 64.
+
+For each fixed model, dimension, and smoothness, a log--log regression of the
+95th percentile criterion deviation on \(N\) produced slopes from \(-0.528\)
+to \(-0.454\), with median \(-0.505\), matching the \(N^{-1/2}\) leading
+dependence in \eqref{eq:finite-library-certificate}.  The exact deterministic
+ERM inequality
+\(L(\widehat\theta)-L(\theta^\star)\leq
+2\max_\theta|\widehat L_N(\theta)-L(\theta)|\) held for every fitted trial.
+
+The support-aware library had population target \((v,\alpha)=(1,1)\) in every
+design.  In contrast, at \(p=100\) the naive finite-grid inverse-range targets
+were 0.320 for \(\nu=0.5\) and 0.594 for \(\nu=1.5\), close to continuously
+profiled targets 0.318 and 0.589.  For \(p=100,\nu=1.5\), increasing \(N\)
+from 1 to 64 reduced support-aware decay RMSE from 0.206 to 0.024 and naive
+RMSE to its own KL target from 0.124 to 0.015.  Yet the naive RMSE to the
+physical inverse range was 0.409 at \(N=64\), and its mean estimate was 0.591.
+The rough case was more pronounced: at \(p=100,\nu=0.5,N=64\), naive RMSE was
+0.015 to its target but 0.681 to the physical value.  Thus sampling spread
+decreased while support misspecification remained.
+Figure~\ref{fig:highdim-supportshift}
+visualizes this ``more information, more confidently wrong'' distinction.  The
+parameter-error panels are empirical summaries, not consequences of
+Proposition~\ref{prop:finite-library}, which controls criterion deviation and
+excess risk unless additional curvature is imposed.
+% HIGHDIM_RESULTS_END
+
+\begin{figure}[t]
+  \centering
+  \IfFileExists{figures/supportshift_highdim.pdf}{
+    \includegraphics[width=0.98\linewidth]{figures/supportshift_highdim.pdf}
+  }{
+    \fcolorbox{black}{panelgray}{\parbox[c][2.2in][c]{0.92\linewidth}{
+      \centering Figure generated after the reproducible analysis step.}}
+  }
+  \caption{The replicated-field finite-library benchmark.  Left: empirical
+  95th percentiles of the worst likelihood deviation versus the
+  worst-candidate theorem radius; exact candidatewise coverage is reported in
+  the text.  Center: inverse-range RMSE to each model's finite-grid
+  KL target versus \(Np\).  Right: for \(p=100\) and \(\nu=1.5\), increasing
+  \(N\) concentrates the corrected estimator near the physical truth and the
+  naive estimator near its displaced target.}
+  \label{fig:highdim-supportshift}
+\end{figure}
+
+\clearpage
 \section{Discussion}
 
 The theorem separates two effects that are often conflated.  Linear propagation
@@ -573,36 +869,58 @@ bandwidth.  For smooth fields, a Bessel recurrence shows that the combined
 variance and nonzero-lag correction still increases normalized correlation,
 including under anisotropic smoothing.
 
-Several limitations define the scope of the result.  First, \(\nu\) and the
-support are treated as known.  Jointly estimating smoothness, bandwidth, variance,
-and range may be weakly identified.  Second, the closed target is for a
-two-point composite fit.  A full likelihood cannot generally match every
-smoothed lag; its KL target is computed numerically in our finite designs.
-Third, fixed-resolution discrete averaging does not converge to continuous
-convolution merely because the spatial domain grows.  A mixed-domain quadrature
-limit or an exact discrete-weight theorem is required.  Fourth, boundary
-normalization creates location-dependent supports and can introduce first-order
-terms.  Fifth, the synthetic study fixes nuisance parameters so that it tests the
-central target-shift mechanism rather than a larger optimization problem.
+The simulations have a deliberate role: they validate theorem-linked
+generators, compute nonrandom finite-design KL targets, and distinguish
+misspecification from finite-sample error.  They are not substitutes for the
+phase-law proof.  The zero-support case verifies exact agreement, the corrected
+target verifies model containment, and the boundary and irregular panels expose
+where the interior theorem stops.  The directional oracle checks a coefficient
+rather than only a sign.  The replicated-field experiment separately checks
+the finite-library probability event and demonstrates why shrinking sampling
+error does not repair a displaced population target.
+
+Several limitations define the scope of the result.  First, \(\nu\), the
+support, and the noise timing are treated as known.  Jointly estimating
+smoothness, bandwidth, variance, and range may be weakly identified.  Second,
+the closed target is for a two-point composite fit.  A full likelihood cannot
+generally match every smoothed lag; its KL target is computed numerically in our
+finite designs.  Third, fixed-resolution discrete averaging does not converge
+to continuous convolution merely because the spatial domain grows.  A
+mixed-domain quadrature limit or an exact discrete-weight theorem is required.
+Fourth, boundary normalization creates location-dependent supports and can
+introduce first-order terms.  Fifth, the original finite-design validation
+fixes nuisance parameters to isolate the target shift.  The replicated-field
+track jointly varies variance and decay, but only over a declared finite
+library; it does not establish a continuous-parameter rate.  Sixth, the exact
+certificate radius uses the generating \(\Sigma_0\).  It is an oracle
+simulation certificate, not a plug-in confidence procedure for unknown
+real-data covariance.
 
 These restrictions are preferable to an unsupported broad claim.  They also
 suggest direct extensions: a uniform discrete-to-continuous approximation,
-joint nuisance profiling, spectral full-likelihood expansions, and explicit
-boundary counterexamples.  Without such extensions, the present contribution is
-best viewed as a focused methodological paper rather than a high-dimensional
-statistics result.
+continuous joint nuisance profiling, spectral full-likelihood expansions,
+curvature conditions translating likelihood error into parameter error, and
+explicit boundary counterexamples.  The finite-library result gives a useful
+high-dimensional probability framing, but the concentration step itself is
+standard supporting machinery.  The paper's novelty rests on the explicit
+support-distortion phase law and directional coefficient, not on a new
+quadratic-form inequality.
 
 \section{Conclusion}
 
 For a fixed nonzero-lag pair fit under translation-invariant interior
 averaging, ignored support makes a Mat\'ern field look more persistent than it
 is.  The magnitude is controlled by smoothness: \(h^{2\nu}\),
-\(h^2\log(1/h)\), or \(h^2\).  A support-aware observation covariance removes
-the finite-design population shift when the operator is known, nuisance
-parameters are correctly specified, and decay is identifiable.  The result
-provides a theorem-level diagnostic for when preprocessing is negligible and
-when it changes the pairwise range estimand; it makes no universal claim for
-boundary supports or arbitrary full-likelihood fits.
+\(h^2\log(1/h)\), or \(h^2\), while anisotropic support produces an explicit
+order-\(h^2\) contrast between lag directions.  A support-aware observation
+covariance removes the finite-design population shift when the operator is
+known, nuisance parameters are correctly specified, and decay is identifiable.
+For a deterministic covariance library fitted to independent replicated
+fields, a simultaneous Gaussian likelihood certificate quantifies the
+sampling-error component without assuming independent spatial coordinates.
+Together, these results diagnose both the population displacement and the
+finite-sample concentration around it; they make no universal claim for
+boundary supports or arbitrary continuous full-likelihood fits.
 
 \appendix
 \section{Proof of the phase theorem}
@@ -704,6 +1022,108 @@ implies \eqref{eq:G-positive}.  Positivity of \(K_\eta(z)\) for real \(\eta\)
 and \(z>0\), together with \eqref{eq:matern-derivative}, proves the sign.
 \end{proof}
 
+\section{Proof of the directional support contrast}
+
+\begin{proof}
+For brevity, write \(B_e=B_{\nu,k}(Re)\).  The fixed-lag expansion gives
+\begin{equation}
+  \frac{C_h(Re)}v=\Matern_\nu(z)+h^2B_e+O(h^4).
+\end{equation}
+The zero-lag denominator \(d_h=C_h(0)/v\) is common to all lag directions and
+satisfies \(d_h\to1\).  Consequently,
+\begin{equation}
+  \rho_h(Re_1)-\rho_h(Re_2)
+  =h^2\{B_{e_1}-B_{e_2}\}+o(h^2).
+  \label{eq:direction-proof-correlation}
+\end{equation}
+This cancellation is why the statement remains order \(h^2\) when the common
+rough-field shift contains lower powers of \(h\).
+
+Let \(g(s)=\Matern_\nu^{-1}(s)/R\) on a neighborhood of
+\(\Matern_\nu(z)\).  Since \(\Matern_\nu'(z)<0\), the inverse-function theorem
+gives \(g'\{\Matern_\nu(z)\}=1/\{R\Matern_\nu'(z)\}\).  Also
+\(\rho_h(Re_j)\to\Matern_\nu(z)\), so the mean-value theorem and
+\eqref{eq:direction-proof-correlation} imply
+\begin{equation}
+  \Delta_{e_1}(h)-\Delta_{e_2}(h)
+  =-\frac{B_{e_1}-B_{e_2}}{R\Matern_\nu'(z)}h^2+o(h^2).
+  \label{eq:direction-proof-inverse}
+\end{equation}
+From \eqref{eq:B-definition},
+\begin{equation}
+  B_{e_1}-B_{e_2}
+  =\alpha^2\{a_k(e_1)-a_k(e_2)\}
+  \left\{\Matern_\nu''(z)-\frac{\Matern_\nu'(z)}z\right\}.
+\end{equation}
+If \(c=2^{1-\nu}/\Gamma(\nu)\), the Bessel derivative identity yields
+\begin{equation}
+  \Matern_\nu'(z)=-cz^\nu K_{\nu-1}(z),\qquad
+  \Matern_\nu''(z)-\frac{\Matern_\nu'(z)}z
+  =cz^\nu K_{\nu-2}(z).
+\end{equation}
+Substitution into \eqref{eq:direction-proof-inverse} proves
+\eqref{eq:directional-contrast}.  The identities and positivity of
+\(K_\eta(z)\) hold for every real order \(\eta\) and \(z>0\), so no condition
+\(\nu>1\) is needed for the directional contrast.
+\end{proof}
+
+\section{Proof of the finite-library certificate}
+\label{app:finite-library-proof}
+
+\begin{proof}
+Write \(X_i=\Sigma_0^{1/2}Z_i\), where the \(Z_i\) are independent
+\(N_p(0,I_p)\) vectors, and stack them into
+\(Z=(Z_1^\top,\ldots,Z_N^\top)^\top\).  For a fixed candidate \(\theta\),
+\begin{equation}
+  \sum_{i=1}^N X_i^\top\Sigma_\theta^{-1}X_i
+  =Z^\top(I_N\otimes A_\theta)Z,
+  \qquad
+  \E Z^\top(I_N\otimes A_\theta)Z=N\tr(A_\theta).
+\end{equation}
+The two-sided Gaussian quadratic-form inequality gives, for every \(t>0\),
+\begin{equation}
+  \Pr\left[
+  \left|Z^\top(I_N\otimes A_\theta)Z-N\tr(A_\theta)\right|
+  >2\sqrt N\lVert A_\theta\rVert_{\mathrm F}\sqrt t
+   +2\lVert A_\theta\rVert_{\mathrm{op}}t
+  \right]\leq2e^{-t}.
+  \label{eq:quadratic-form-tail}
+\end{equation}
+Here
+\(\lVert I_N\otimes A_\theta\rVert_{\mathrm F}
+=\sqrt N\lVert A_\theta\rVert_{\mathrm F}\) and
+\(\lVert I_N\otimes A_\theta\rVert_{\mathrm{op}}
+=\lVert A_\theta\rVert_{\mathrm{op}}\).  The log-determinant term in
+\(\widehat L_N(\theta)-L(\theta)\) is deterministic.  Dividing
+\eqref{eq:quadratic-form-tail} by \(2Np\), setting
+\(t=\log(2M/\delta)\), and applying a union bound over the deterministic
+library proves \eqref{eq:finite-library-certificate}
+\citep{laurent2000quadratic,hsu2012quadratic}.
+
+On the simultaneous event,
+\begin{align}
+  L(\widehat\theta)-L(\theta^\star)
+  &=[L-\widehat L_N](\widehat\theta)
+    +[\widehat L_N(\widehat\theta)-\widehat L_N(\theta^\star)]
+    +[\widehat L_N-L](\theta^\star)\nonumber\\
+  &\leq u_{\widehat\theta}+u_{\theta^\star}
+  \leq2\max_{\theta\in\mathcal G}u_\theta,
+\end{align}
+which proves \eqref{eq:finite-library-erm}.  Finally,
+\begin{equation}
+  \KL\!\left\{N_p(0,\Sigma_0)\,\middle\|\,
+  N_p(0,\Sigma_\theta)\right\}
+  =\frac12\left[
+  \tr(\Sigma_\theta^{-1}\Sigma_0)-p
+  +\log\frac{\det\Sigma_\theta}{\det\Sigma_0}
+  \right],
+\end{equation}
+which proves \eqref{eq:library-kl-relation}.  Under
+\eqref{eq:relative-spectral-control}, inversion and congruence give
+\(0\prec A_\theta\preceq c^{-1}I_p\); hence the stated operator- and
+Frobenius-norm bounds and \eqref{eq:finite-library-np-rate} follow.
+\end{proof}
+
 \section{Exact exponential benchmark}
 
 For \(d=1\), \(\nu=1/2\), and the Epanechnikov density
@@ -766,15 +1186,25 @@ novelty claim.
 \section{Reproducibility contract}
 
 The public code at
-\url{https://github.com/Sasha-Cui/HighDimSpatialStatistics} is archived for
-this draft under the immutable tag \texttt{paper-draft-v0.1.0}.  It uses an
-immutable JSON manifest, SHA-256 configuration hashes,
-deterministic seed derivation, one task-local atomic shard, and an
-\texttt{afterany} reducer that refuses to mark a run complete when a shard is
-missing or invalid.  The zero-bandwidth selector, row sums, row rank, corrected
-population target, grid interpolation, and closed exponential formulas are unit
-tested.  The reported implementation adds no adaptive diagonal jitter.  All
-paper figures and tables are regenerated from audited aggregate CSV files.
+\url{https://github.com/Sasha-Cui/HighDimSpatialStatistics} records the exact
+configuration and commit identifier in each promoted run's metadata; the
+frozen paper artifact is tagged
+\texttt{supportshift-geosim-v1.0.0}.  The
+finite-grid full-likelihood track uses an immutable JSON manifest, SHA-256
+configuration hashes, deterministic seed derivation, one task-local atomic
+shard, and an \texttt{afterany} reducer that refuses to mark a run complete
+when a shard is missing or invalid.  The replicated-field track records its
+complete candidate grids, matrix-norm radii, derived seeds, dependency
+versions, result hashes, and validation gates.  Those gates check the exact
+finite-grid ERM inequality, agreement with a public likelihood implementation,
+population-target interiority, finite-to-continuous objective resolution, the
+candidatewise simultaneous event, and exact reapplication of the saved
+observation operator.  The promoted batch aborts unless the Git worktree is
+clean.  The zero-bandwidth selector, row sums, row rank, corrected population
+target, grid interpolation, Gaussian certificate, driver shakedown, artifact
+hash manifest, and closed exponential formulas are tested.  The reported
+implementation adds no adaptive diagonal jitter.  All paper figures and tables
+are regenerated from audited aggregate CSV files.
 
 \bibliographystyle{plainnat}
 \bibliography{references}
