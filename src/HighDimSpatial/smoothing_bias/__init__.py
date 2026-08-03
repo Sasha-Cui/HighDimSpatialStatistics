@@ -4,6 +4,16 @@ from HighDimSpatial.smoothing_bias.continuous import (
     continuous_matern_pair_target,
     epanechnikov_difference_radial_moment,
     product_epanechnikov_decay_shift_coefficient,
+    product_epanechnikov_direction_contrast_coefficient,
+    transformed_epanechnikov_difference_radial_moment,
+)
+from HighDimSpatial.smoothing_bias.high_dimensional import (
+    CandidateLikelihoodBound,
+    UniformLikelihoodBound,
+    gaussian_likelihood_uniform_bound,
+    normalized_gaussian_population_objectives,
+    normalized_gaussian_sample_objectives,
+    relative_precision_matrix,
 )
 from HighDimSpatial.smoothing_bias.design import (
     epanechnikov_smoothing_matrix,
@@ -46,6 +56,14 @@ __all__ = [
     "naive_point_covariance",
     "naive_separable_axis_pseudo_target",
     "product_epanechnikov_decay_shift_coefficient",
+    "product_epanechnikov_direction_contrast_coefficient",
+    "transformed_epanechnikov_difference_radial_moment",
+    "CandidateLikelihoodBound",
+    "UniformLikelihoodBound",
+    "gaussian_likelihood_uniform_bound",
+    "normalized_gaussian_population_objectives",
+    "normalized_gaussian_sample_objectives",
+    "relative_precision_matrix",
     "regular_grid_1d",
     "regular_grid_2d",
     "select_rectangular_centers",
