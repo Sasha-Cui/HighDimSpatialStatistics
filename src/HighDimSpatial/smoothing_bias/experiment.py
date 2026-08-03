@@ -22,6 +22,7 @@ from HighDimSpatial.smoothing_bias.design import (
 )
 from HighDimSpatial.smoothing_bias.kl import (
     exact_smoothed_covariance,
+    fit_population_log_decay,
     gaussian_population_criterion,
     matern_covariance,
     naive_point_covariance,
@@ -125,17 +126,22 @@ def profile_log_decay_grid(
         )
         population_objectives[index] = gaussian_population_criterion(covariance, truth)
 
-    population_log_decay, population_objective, population_at_boundary = (
-        _quadratic_grid_minima(log_grid, population_objectives)
+    population_fit = fit_population_log_decay(
+        truth,
+        covariance_builder,
+        (lower, upper),
+        xatol=1e-10,
     )
-    if population_at_boundary:
+    if not population_fit.success:
+        raise ValueError(f"population target optimization failed: {population_fit.message}")
+    if population_fit.at_lower_bound or population_fit.at_upper_bound:
         raise ValueError("population target lies on the declared decay bounds")
     sample_log_decays, minimum_objectives, sample_at_boundary = _quadratic_grid_minima(
         log_grid, sample_objectives
     )
     return DecayProfile(
-        population_decay=float(np.exp(population_log_decay)),
-        population_objective=float(population_objective),
+        population_decay=population_fit.decay,
+        population_objective=population_fit.objective,
         sample_decays=np.exp(sample_log_decays),
         sample_objectives=minimum_objectives,
         sample_at_boundary=sample_at_boundary,
