@@ -105,6 +105,10 @@ origin as smoothness crosses one.
 
 Block covariance and regularized variograms are classical
 \cite{chiles2012geostatistics,gelfand2001support,gotway2002incompatible}.
+Fuentes explicitly represents rectangular block averages in the spectral
+likelihood and invokes a small-pixel approximation
+\cite{fuentes2007approximate}; the next-order point-fit parameter displacement
+is not part of that approximation.
 Modern aggregated-GP and INLA--SPDE methods likewise put the support operator
 inside the observation model \cite{tanaka2019aggregated,zheng2026fusion}.
 Convolution and covariance anisotropy can also be confounded
@@ -523,6 +527,17 @@ candidate-specific radius.
 
 \section{Synthetic validation}
 
+The public benchmark contract has four components in every track: declared
+generating factors, a nonrandom oracle or population target, stochastic or
+quadrature output, and a numerical pass/fail gate. A method can therefore be
+evaluated against the physical parameter and its own support-specific KL target
+rather than against one ambiguous ``truth.'' The generator exposes bandwidth,
+smoothness, support geometry, lattice size, replication, and candidate-grid
+resolution; saved metadata records their resolved values, seeds, environment,
+and hashes. The release verifier rejects incomplete factor grids, failed gates,
+or altered paper inputs. This contract makes the data reusable for alternative
+estimators while keeping comparisons inside the declared model and target.
+
 \subsection{Continuous phase oracle}
 
 We used a two-dimensional product Epanechnikov density, \(\alpha=R=1\),
@@ -714,6 +729,7 @@ empirical; the proposition controls criterion error and excess risk unless a
 curvature condition is added.
 
 \FloatBarrier
+\balance
 
 \section{Discussion}
 
@@ -750,6 +766,13 @@ deriving this preprocessing-support pseudo-target phase law
 all-\(\nu\) expansion, its directional coefficient, and their synthesis with a
 parameterized theorem-linked benchmark.
 
+The closest analytic setup located in our search is Fuentes's block-average
+spectral representation and small-pixel approximation
+\cite{fuentes2007approximate}. The distinction is that our estimand is the
+next-order point-support KL parameter after the support transform is omitted.
+This comparison is a scoped literature conclusion, not a claim of exhaustive
+priority.
+
 \section{Conclusion}
 
 For a fixed nonzero-lag pair fit under translation-invariant interior
@@ -767,8 +790,11 @@ arbitrary full-likelihood fits, or continuous-parameter estimation.
 
 Code, manifests, and audited aggregate results are available at
 \url{https://github.com/Sasha-Cui/HighDimSpatialStatistics} under the immutable
-tag \texttt{supportshift-geosim-v1.0.0}.
+tag \texttt{supportshift-geosim-v1.0.1}. The release includes a synthetic-data
+card, scoped reuse terms, a citation file, and a one-command verifier for the
+promoted inputs and all paper artifacts.
 
+\clearpage
 \bibliographystyle{ACM-Reference-Format}
 \bibliography{references}
 
