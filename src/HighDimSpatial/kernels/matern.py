@@ -166,8 +166,6 @@ def compute_parameter_matrices(
     dim: int = 2,
 ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
     """Compute alpha/nu/sigma matrices from cross parameters."""
-    p = W.size(0)
-
     alpha_i_squared = (alpha.unsqueeze(1) ** 2)
     alpha_j_squared = (alpha.unsqueeze(0) ** 2)
     alpha_matrix = torch.sqrt((alpha_i_squared + alpha_j_squared) / 2 + Delta_B * (1 - rho_B))
