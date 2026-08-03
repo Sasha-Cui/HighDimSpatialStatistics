@@ -17,8 +17,8 @@
 \newcommand{\R}{\mathbb R}
 \newcommand{\tr}{\operatorname{tr}}
 
-\title{How Local Averaging Moves Matérn Pairwise Range Targets:
-A Smoothness-Dependent Phase Law}
+\title{SupportShift: A Theory-Linked Spatial Simulation Benchmark
+for Ignored Matérn Observation Support}
 
 \author{Sasha Cui}
 \affiliation{%
@@ -35,24 +35,26 @@ Geospatial Simulation}{November 3, 2026}{Riverside, California, USA}
 \acmISBN{}
 
 \begin{abstract}
-Spatial measurements often represent local averages but are fitted as point
-observations. This changes the population target of covariance estimation, not
-merely its finite-sample bias. We study a stationary Matérn Gaussian field in
-\(\R^d\), observed through a known compact symmetric averaging kernel of
-bandwidth \(h\). For a fixed nonzero-lag Gaussian two-point likelihood with
-fixed known smoothness \(\nu\), we characterize the exact variance and decay
-targets. The naive
-decay shift is of order \(h^{2\nu}\) for \(0<\nu<1\),
+Spatial measurements often represent pixels, footprints, or local averages but
+are fitted as point observations. We introduce \emph{SupportShift}, a
+parameterized synthetic benchmark that separates the physical covariance
+parameter, the population Kullback--Leibler (KL) target, and finite-sample
+estimation error under this support misspecification. Its analytic anchor is a
+stationary Matérn Gaussian field in \(\R^d\) observed through a compact
+symmetric averaging kernel of bandwidth \(h\). For a fixed nonzero-lag
+two-point likelihood with known smoothness \(\nu\), the naive inverse-range
+shift has order \(h^{2\nu}\) for \(0<\nu<1\),
 \(h^2\log(1/h)\) at \(\nu=1\), and \(h^2\) for \(\nu>1\). Explicit
-coefficients show that naive point-support fitting underestimates inverse
-range---and thus overestimates spatial range---for every \(\nu>0\) and any
-nondegenerate compact symmetric kernel when \(h\) is sufficiently small. The
-smooth-regime sign remains valid for anisotropic averaging. Deterministic
-two-dimensional quadrature verifies the three rate regimes. A 200-replicate
-finite-grid study then compares naive and support-aware full likelihoods,
-including boundary and irregular-design stress tests. The result isolates an
-inferential failure mode that geospatial simulation studies can reproduce and
-diagnose without an empirical dataset.
+coefficients prove range inflation for every fixed \(\nu>0\) at sufficiently
+small support and yield a directional \(h^2\) contrast for elongated support.
+For \(N\) independent \(p\)-dimensional Gaussian fields and a deterministic
+finite covariance library, a simultaneous likelihood certificate scales as
+\(\sqrt{\log(M)/(Np)}+\log(M)/(Np)\) under relative spectral control; spatial
+dependence within each field is unrestricted. Four reproducible tracks pair
+these statements with deterministic quadrature, finite-grid likelihoods,
+directional support, and growing-\(p\) replicated fields. The benchmark exposes
+a sharp failure mode: likelihood noise can vanish while a point-support fit
+concentrates around the wrong range target.
 \end{abstract}
 
 \begin{CCSXML}
@@ -74,7 +76,7 @@ diagnose without an empirical dataset.
 \ccsdesc[300]{Mathematics of computing~Probabilistic representations}
 
 \keywords{Matérn covariance, change of support, Gaussian random field,
-misspecified likelihood, spatial simulation, range estimation}
+high-dimensional probability, spatial simulation benchmark, misspecified likelihood}
 
 \begin{document}
 \maketitle
@@ -84,47 +86,84 @@ misspecified likelihood, spatial simulation, range estimation}
 Values recorded on pixels, grid cells, or after kernel preprocessing are local
 aggregates of an underlying spatial field. Change-of-support models account for
 this by integrating the latent process over the measurement support
-\cite{gelfand2001support,chacon2024change}. A common shortcut instead assigns
-each aggregate to a declared center and fits a point-support covariance.
-Relative to the latent parameters, the support is then misinterpreted. A single
-two-point covariance can still be matched exactly by different variance and
-decay parameters; a multi-lag likelihood is genuinely misspecified and selects
-a Kullback--Leibler (KL) projection \cite{bachoc2018misspecified}.
+\cite{gelfand2001support,chacon2024change,tanaka2019aggregated,zheng2026fusion}.
+A common shortcut instead assigns each aggregate to a declared center and fits a
+point-support covariance. Relative to the latent parameters, the support is then
+misinterpreted. A single two-point covariance can still be matched exactly by
+different variance and decay parameters; a multi-lag likelihood is genuinely
+misspecified and selects a Kullback--Leibler (KL) projection
+\cite{bachoc2018misspecified}.
 
-This qualitative fact leaves three quantitative questions. How quickly does the
-pseudo-parameter move as support shrinks? Does the rate depend on Matérn
-smoothness? Is the direction of range error stable across dimensions and
-averaging kernels? The answer is not an ordinary second-order Taylor expansion:
-the Matérn covariance changes regularity at the origin as smoothness crosses
-one.
+This qualitative fact leaves quantitative and experimental questions. How
+quickly does the pseudo-parameter move as support shrinks? Does the rate depend
+on Matérn smoothness? Can directional support masquerade as directional range?
+Finally, does increasing dimension or replication remove the error, or merely
+make a wrong population target more precise? The first answer is not an ordinary
+second-order Taylor expansion: the Matérn covariance changes regularity at the
+origin as smoothness crosses one.
 
-Temporal aggregation of autoregressive and Ornstein--Uhlenbeck processes is
-classical \cite{amemiya1972aggregation,stram1986aggregation,folia2018aggregated}.
-Change-of-support reviews and area-to-point methods establish block covariance
-and prediction \cite{gotway2002incompatible,kyriakidis2005areal}. Most closely,
-\cite{fuentes2007approximate} builds a likelihood for block averages from an
-underlying point covariance and includes a Matérn example, but does not derive
-the parameter selected when those averages are instead treated as points.
-Generic misspecified-GP theory gives the KL framework but not this coefficient
-or sign \cite{bachoc2018misspecified}. We make no novelty claim for a
-one-dimensional exponential calculation or for \(SKS^\top\). Our contribution
-is an all-smoothness, \(d\)-dimensional fixed-lag expansion of the naive Matérn
-pair-likelihood target:
+Block covariance and regularized variograms are classical
+\cite{chiles2012geostatistics,gelfand2001support,gotway2002incompatible}.
+Modern aggregated-GP and INLA--SPDE methods likewise put the support operator
+inside the observation model \cite{tanaka2019aggregated,zheng2026fusion}.
+Convolution and covariance anisotropy can also be confounded
+\cite{clifford2006yield,paciorek2006nonstationary}. Generic misspecified-GP
+theory supplies the KL framework \cite{bachoc2018misspecified}, while Gaussian
+quadratic-form concentration is standard
+\cite{laurent2000quadratic,hsu2012quadratic}. Table~\ref{tab:literature}
+separates these known ingredients from our claims.
+
+We contribute a theorem-linked benchmark rather than a new generic
+change-of-support method:
 
 \begin{itemize}
-  \item The leading inverse-range shift has order \(h^{2\nu}\),
-  \(h^2\log(1/h)\), or \(h^2\), depending on whether \(\nu<1\),
-  \(\nu=1\), or \(\nu>1\).
-  \item Explicit coefficients and a Bessel-function identity prove that the
-  shift is negative for every \(\nu>0\), including under anisotropic symmetric
-  averaging.
-  \item A reproducible geospatial simulation protocol validates the continuous
-  phase law and compares naive and support-aware full-grid likelihoods.
+  \item We derive an all-smoothness, \(d\)-dimensional fixed-lag phase law
+  with explicit coefficients and a universal small-support range direction.
+  \item We derive a directional \(h^2\) apparent-range contrast for linearly
+  transformed support. The qualitative convolution--anisotropy link is not
+  claimed as new.
+  \item We certify finite-library likelihood selection for \(N\) independent
+  \(p\)-dimensional Gaussian fields without assuming independent spatial
+  coordinates.
+  \item SupportShift turns the theorem into four reusable synthetic tracks:
+  a continuous phase oracle, finite-grid likelihoods, directional support, and
+  growing-\(p\) replicated fields, with deterministic seeds and numerical gates.
 \end{itemize}
 
-We use increasing-domain language only for repeated pair criteria. We do not
-claim separate fixed-domain consistency of Matérn variance and range, which
-would conflict with microergodicity results \cite{zhang2004inconsistent}.
+The phase theorem is pairwise; full-grid targets are computed, not asserted to
+share its coefficient. The high-dimensional experiment grows domain at fixed
+lattice spacing and uses independent replicated fields. We do not claim
+separate fixed-domain consistency of Matérn variance and range, which would
+conflict with microergodicity results
+\cite{zhang2004inconsistent,kaufman2013range}.
+
+\begin{table*}[t]
+\centering
+\caption{Nearest known ingredients and the narrower SupportShift addition.}
+\label{tab:literature}
+\begin{tabular}{p{0.28\textwidth}p{0.29\textwidth}p{0.35\textwidth}}
+\toprule
+Literature & Established result & Addition studied here \\
+\midrule
+Change of support and block covariance
+\cite{chiles2012geostatistics,gelfand2001support,tanaka2019aggregated}
+& Integrate the latent covariance over known observation supports
+& Explicit small-support Matérn \emph{point-fit pseudo-range} phase law \\
+Misspecified GP likelihood \cite{bachoc2018misspecified}
+& Population KL pseudo-target under covariance misspecification
+& Closed direction, rate, and coefficient for ignored support \\
+Convolution and anisotropy \cite{clifford2006yield,paciorek2006nonstationary}
+& Support/convolution can create anisotropic covariance
+& Leading directional apparent-range contrast \\
+Gaussian quadratic forms \cite{laurent2000quadratic,hsu2012quadratic}
+& Nonasymptotic concentration of Gaussian quadratic forms
+& Direct certificate for the benchmark's structured covariance library \\
+Spatial benchmarks \cite{heaton2019competition}
+& Shared synthetic data and auditable method comparisons
+& Support-specific generator with analytic targets and pass/fail gates \\
+\bottomrule
+\end{tabular}
+\end{table*}
 
 \section{Model and exact pair target}
 
@@ -255,6 +294,37 @@ v_h^\dagger<v,\qquad \rho_h(r)>\Matern_\nu(\alpha R),\qquad
 \]
 \end{theorem}
 
+\begin{proposition}[Directional support contrast]
+Let \(\Delta_e(h)=\alpha-\alpha_h^\dagger(e)\). For two unit lag
+directions \(e_1,e_2\), under the theorem assumptions,
+\begin{equation}
+ \Delta_{e_1}(h)-\Delta_{e_2}(h)
+ =\frac{\alpha^2\{a_k(e_1)-a_k(e_2)\}}R
+  \frac{K_{\nu-2}(z)}{K_{\nu-1}(z)}h^2+o(h^2).
+ \label{eq:direction}
+\end{equation}
+The formula holds for every \(\nu>0\). When \(\nu\leq1\), it is lower
+order than the direction-independent leading shift in the phase theorem.
+\end{proposition}
+
+For the benchmark's transformed product Epanechnikov smoother
+\(Z_{h,A}(t)=\int k(u)Y(t-hAu)\,du\),
+\(\Sigma_k=AA^\top/5\). We parameterize its principal singular-value aspect
+ratio \(\varrho\geq1\) while holding \(\tr(\Sigma_k)\) fixed using
+\begin{equation}
+ A_\varrho=\sqrt{\frac{2}{\varrho+\varrho^{-1}}}
+ \operatorname{diag}(\sqrt\varrho,\varrho^{-1/2}).
+ \label{eq:transform}
+\end{equation}
+For \(\nu>1\), the ratio of the major- to minor-axis leading shift
+coefficients is
+\begin{equation}
+ \frac{(2\nu-1)\varrho^2+1}{\varrho^2+2\nu-1}.
+ \label{eq:aspectratio}
+\end{equation}
+Thus elongated measurement support alone can induce directional apparent
+range, even though the latent Matérn covariance is isotropic.
+
 \begin{remark}
 The fitted lag \(R\) is fixed and bounded away from zero. If \(R=ch\), the
 nonzero-lag expansion is no longer uniform and the relative displacement need
@@ -361,6 +431,69 @@ A truncated kernel can therefore create a first-order term and destroy
 stationarity; the interior theorem gives no boundary sign guarantee. We include
 one boundary and one fixed irregular design as illustrations, not as a boundary
 scaling study.
+
+\subsection{Finite-library high-dimensional certificate}
+
+The growing-\(p\) benchmark jointly varies variance and decay on a deterministic
+finite grid. The following standard quadratic-form consequence explains which
+part of its error can shrink with information; it is supporting machinery, not
+a new concentration inequality.
+
+\begin{proposition}[Gaussian finite-library certificate]
+Let \(X_1,\ldots,X_N\overset{\mathrm{iid}}\sim N_p(0,\Sigma_0)\), and let
+\(\{\Sigma_\theta:\theta\in\mathcal G\}\) be a deterministic library of
+\(M\) positive-definite covariances. Define
+\begin{align}
+ \widehat\Sigma_N&=N^{-1}\sum_{i=1}^NX_iX_i^\top,\\
+ \widehat L_N(\theta)&=\frac1{2p}\left\{\log\det\Sigma_\theta+
+ \tr(\Sigma_\theta^{-1}\widehat\Sigma_N)\right\},
+ \label{eq:empiricalrisk}\\
+ L(\theta)&=\E\widehat L_N(\theta),\qquad
+ A_\theta=\Sigma_0^{1/2}\Sigma_\theta^{-1}\Sigma_0^{1/2}.
+\end{align}
+For \(t=\log(2M/\delta)\), with probability at least \(1-\delta\),
+simultaneously for every \(\theta\in\mathcal G\),
+\begin{equation}
+ |\widehat L_N(\theta)-L(\theta)|\leq
+ \frac{\lVert A_\theta\rVert_F}{p}\sqrt{\frac tN}
+ +\frac{\lVert A_\theta\rVert_{\rm op}}p\frac tN
+ =:u_\theta.
+ \label{eq:certificate}
+\end{equation}
+If \(\widehat\theta\) and \(\theta^\star\) minimize the empirical and
+population criteria, respectively, then
+\begin{equation}
+ L(\widehat\theta)-L(\theta^\star)
+ \leq2\max_{\theta\in\mathcal G}u_\theta.
+ \label{eq:erm}
+\end{equation}
+Moreover, \(L(\theta)\) differs from
+\(p^{-1}D_{\rm KL}\{N(0,\Sigma_0)\Vert N(0,\Sigma_\theta)\}\) by a
+candidate-independent constant.
+\end{proposition}
+
+To prove \eqref{eq:certificate}, write \(X_i=\Sigma_0^{1/2}Z_i\), stack the
+standard Gaussian vectors, and apply the Gaussian quadratic-form inequality to
+\(I_N\otimes A_\theta\). Its Frobenius and operator norms are
+\(\sqrt N\lVert A_\theta\rVert_F\) and
+\(\lVert A_\theta\rVert_{\rm op}\); division by \(2Np\) and a union bound
+give the displayed constants \cite{laurent2000quadratic,hsu2012quadratic}.
+The ERM result is the usual three-term comparison through
+\(\widehat L_N\).
+
+No coordinate independence is used: all within-field spatial dependence is in
+\(\Sigma_0\). If
+\(c\Sigma_0\preceq\Sigma_\theta\preceq C\Sigma_0\) uniformly, then
+\begin{equation}
+ \max_\theta u_\theta\leq c^{-1}\left\{
+ \sqrt{\frac{\log(2M/\delta)}{Np}}
+ +\frac{\log(2M/\delta)}{Np}\right\}.
+ \label{eq:np-rate}
+\end{equation}
+This conditional rate does not imply separate fixed-domain range and variance
+consistency: relative spectra or parameter curvature may deteriorate with
+\(p\). The benchmark therefore reports the actual matrix norms and the exact
+candidate-specific radius.
 
 \section{Synthetic validation}
 
