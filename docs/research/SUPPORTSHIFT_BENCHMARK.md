@@ -1,5 +1,9 @@
 # SupportShift synthetic benchmark
 
+Promoted schema: **1.1**. Version 1.1 adds the resolution-certified
+\(161\times101\) library and exact candidatewise simultaneous-coverage fields;
+earlier 1.0 files are pre-release artifacts.
+
 ## Purpose
 
 SupportShift is a theorem-linked synthetic benchmark for covariance inference
@@ -43,6 +47,9 @@ The support-aware library contains the truth when its variance and decay grids
 contain ((v_0,\alpha_0)). The naive library generally has a nonzero KL
 approximation error. Both grids are fixed before seeing the simulated fields;
 this is necessary for the finite-library concentration theorem.
+For benchmark validation the Cartesian grid is deliberately anchored at the
+known generating pair \((v_0,\alpha_0)\). This oracle-informed control verifies
+model containment; it is not proposed as a deployable data-analysis recipe.
 
 ## Four benchmark tracks
 
@@ -68,8 +75,9 @@ unproved universal statement about every full-grid likelihood.
 
 ### C. High-dimensional replicated fields
 
-The output dimension (p), replicate count (N), Matérn smoothness, and support
-bandwidth are varied. For every library and design, the benchmark records:
+The output dimension \(p\), replicate count \(N\), and Matérn smoothness are
+varied while support bandwidth is fixed at 0.5. Tracks A and B vary bandwidth.
+For every library and design, the benchmark records:
 
 - the physical parameter;
 - the exact finite-design KL oracle;
@@ -158,7 +166,7 @@ the seed and exact covariance generator reproduce them.
 | Three-regime pairwise phase law | Track A exact oracle and coefficient ratio | wrong slope, sign, or nonconvergent quadrature |
 | Support anisotropy creates directional range inflation | Track D angular oracle and contrast ratio | wrong contrast sign or coefficient |
 | Support-aware finite library contains the physical covariance | Tracks B and C population KL oracle | corrected oracle misses an on-grid truth |
-| Likelihood concentration scales through (N,p,M) and relative spectra | Track C empirical deviations and theorem radius | certificate undercoverage or uncontrolled spectra |
+| Likelihood concentration depends on \(N,p,M\) and relative spectra | Track C varies \(N,p\) at fixed \(M\), reports matrix geometry, and compares deviations with the theorem radius | certificate undercoverage or uncontrolled spectra |
 | Naive precision can increase around a wrong target | Track C stochastic error to oracle versus total error to truth | pseudo-target gap vanishes or stochastic error does not shrink |
 
 ## Nonclaims

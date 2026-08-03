@@ -2,6 +2,9 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
+import json
+import platform
 from pathlib import Path
 
 import matplotlib as mpl
@@ -16,6 +19,14 @@ GRID = "#D1D5DB"
 CORRECTED = "#0072B2"
 NAIVE = "#D55E00"
 NU_COLORS = ["#332288", "#117733", "#44AA99", "#DDCC77", "#CC6677", "#882255"]
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for block in iter(lambda: handle.read(1 << 20), b""):
+            digest.update(block)
+    return digest.hexdigest()
 
 
 def configure_matplotlib() -> None:
@@ -457,7 +468,7 @@ def highdim_figure(data: pd.DataFrame, output: Path) -> pd.DataFrame:
     certificate_axis.set_yscale("log")
     certificate_axis.set_xlabel("Theorem radius")
     certificate_axis.set_ylabel("95th percentile max deviation")
-    certificate_axis.set_title("Finite-library certificate")
+    certificate_axis.set_title("Worst-radius envelope")
     certificate_axis.grid(True, which="both", color=GRID, linewidth=0.6, alpha=0.75)
 
     rmse_axis.set_xscale("log")
@@ -561,6 +572,21 @@ def main() -> None:
     parser.add_argument("--highdim", type=Path)
     parser.add_argument("--paper-directory", type=Path, required=True)
     args = parser.parse_args()
+    input_paths = {
+        name: path
+        for name, path in {
+            "phase": args.phase,
+            "finite_summary": args.finite_summary,
+            "anisotropy": args.anisotropy,
+            "raw_example": args.raw_example,
+            "highdim": args.highdim,
+        }.items()
+        if path is not None
+    }
+    input_manifest = {
+        name: {"path": str(path), "sha256": sha256_file(path)}
+        for name, path in input_paths.items()
+    }
     configure_matplotlib()
     figures = args.paper_directory / "figures"
     tables = args.paper_directory / "tables"
@@ -591,6 +617,63 @@ def main() -> None:
         )
     phase.to_csv(data_directory / "phase_oracle_d2.csv", index=False)
     summary.to_csv(data_directory / "finite_summary.csv", index=False)
+    artifact_paths = [
+        figures / "phase_law.pdf",
+        figures / "phase_law.png",
+        figures / "finite_targets.pdf",
+        figures / "finite_targets.png",
+        figures / "finite_convergence.pdf",
+        figures / "finite_convergence.png",
+        tables / "finite_summary.tex",
+        data_directory / "phase_oracle_d2.csv",
+        data_directory / "finite_summary.csv",
+    ]
+    if args.anisotropy is not None:
+        artifact_paths.extend(
+            [
+                figures / "anisotropic_support.pdf",
+                figures / "anisotropic_support.png",
+                data_directory / "anisotropic_phase.csv",
+            ]
+        )
+    if args.raw_example is not None:
+        artifact_paths.extend(
+            [
+                figures / "supportshift_raw_example.pdf",
+                figures / "supportshift_raw_example.png",
+                data_directory / "supportshift_raw_example.csv",
+            ]
+        )
+    if args.highdim is not None:
+        artifact_paths.extend(
+            [
+                figures / "supportshift_highdim.pdf",
+                figures / "supportshift_highdim.png",
+                data_directory / "supportshift_highdim_summary.csv",
+            ]
+        )
+    missing_artifacts = [str(path) for path in artifact_paths if not path.is_file()]
+    if missing_artifacts:
+        raise RuntimeError(f"artifact generation omitted expected files: {missing_artifacts}")
+    manifest = {
+        "schema_version": "1.0",
+        "inputs": input_manifest,
+        "outputs": {
+            str(path.relative_to(args.paper_directory)): sha256_file(path)
+            for path in artifact_paths
+        },
+        "runtime": {
+            "python": platform.python_version(),
+            "numpy": np.__version__,
+            "pandas": pd.__version__,
+            "matplotlib": mpl.__version__,
+        },
+    }
+    manifest_path = data_directory / "supportshift_artifact_manifest.json"
+    manifest_path.write_text(
+        json.dumps(manifest, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
     print(f"Generated figures, table, and source-data extracts under {args.paper_directory}")
 
 

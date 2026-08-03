@@ -21,6 +21,12 @@ export OPENBLAS_NUM_THREADS=1
 cd "$REPO_ROOT"
 mkdir -p outputs/slurm outputs/smoothing_bias
 
+if [[ -n "$(git status --porcelain)" ]]; then
+  echo "Refusing promoted run: the Git worktree is not clean." >&2
+  git status --short >&2
+  exit 2
+fi
+
 "$HDS_PYTHON" scripts/research/run_anisotropic_phase_oracle.py \
   --output outputs/smoothing_bias/supportshift_anisotropic_final_20260803.csv
 

@@ -711,7 +711,7 @@ def _resolved_settings(args: argparse.Namespace) -> dict[str, Any]:
     variance_grid_size = 1 if args.fit_mode == "fixed" else int(args.variance_grid_size)
     settings = {
         "benchmark": "SupportShift",
-        "benchmark_version": "1.0",
+        "benchmark_version": "1.1",
         "preset": args.preset,
         "grid_sides": grid_sides,
         "sample_sizes": sample_sizes,
