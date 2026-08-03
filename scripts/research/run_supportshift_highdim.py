@@ -50,8 +50,9 @@ PRESETS: dict[str, dict[str, Any]] = {
         "sample_sizes": [1, 4, 16, 64],
         "trials": 200,
         "smoothness": [0.5, 1.5],
-        "decay_grid_size": 41,
-        "variance_grid_size": 21,
+        "decay_grid_size": 161,
+        "variance_grid_size": 101,
+        "grid_objective_gap_tolerance": 5e-5,
     },
     "shakedown": {
         "grid_sides": [2],
@@ -60,6 +61,7 @@ PRESETS: dict[str, dict[str, Any]] = {
         "smoothness": [0.5],
         "decay_grid_size": 5,
         "variance_grid_size": 3,
+        "grid_objective_gap_tolerance": 0.1,
     },
 }
 
@@ -529,6 +531,9 @@ def _evaluate_candidate_model(
         "population_grid_decay_target": float(decay_grid[population_decay_index]),
         "population_grid_variance_target": float(variance_grid[population_variance_index]),
         "population_grid_objective": float(population_flat[population_index]),
+        "population_grid_objective_gap": float(
+            population_flat[population_index] - continuous_target["objective"]
+        ),
         "population_grid_at_decay_bound": bool(
             population_decay_index in {0, n_decays - 1}
         ),
@@ -605,6 +610,7 @@ def parse_arguments(repo_root: Path) -> argparse.Namespace:
     parser.add_argument("--variance-minimum", type=float, default=0.35)
     parser.add_argument("--variance-maximum", type=float, default=2.5)
     parser.add_argument("--variance-grid-size", type=int)
+    parser.add_argument("--grid-objective-gap-tolerance", type=float)
     parser.add_argument("--input-spacing", type=float, default=0.25)
     parser.add_argument("--bandwidth", type=float, default=0.5)
     parser.add_argument("--delta", type=float, default=0.05)
@@ -628,6 +634,7 @@ def parse_arguments(repo_root: Path) -> argparse.Namespace:
         "smoothness",
         "decay_grid_size",
         "variance_grid_size",
+        "grid_objective_gap_tolerance",
     ):
         if getattr(args, name) is None:
             setattr(args, name, preset[name])
@@ -663,6 +670,11 @@ def _resolved_settings(args: argparse.Namespace) -> dict[str, Any]:
         raise ValueError("delta must lie strictly between zero and one")
     if not np.isfinite(args.coverage_floor) or not 0.0 <= args.coverage_floor <= 1.0:
         raise ValueError("coverage_floor must lie between zero and one")
+    if (
+        not np.isfinite(args.grid_objective_gap_tolerance)
+        or args.grid_objective_gap_tolerance < 0.0
+    ):
+        raise ValueError("grid_objective_gap_tolerance must be finite and nonnegative")
     if args.true_variance <= 0.0 or args.true_decay <= 0.0:
         raise ValueError("true variance and decay must be positive")
     if args.raw_example_replicates <= 0:
@@ -696,6 +708,7 @@ def _resolved_settings(args: argparse.Namespace) -> dict[str, Any]:
         "bandwidth": float(args.bandwidth),
         "delta": float(args.delta),
         "coverage_floor": float(args.coverage_floor),
+        "grid_objective_gap_tolerance": float(args.grid_objective_gap_tolerance),
         "root_seed": int(args.root_seed),
         "raw_example_grid_side": raw_example_grid_side,
     }
@@ -727,6 +740,7 @@ def _validation_gates(
     corrected_oracle_failures: list[str] = []
     boundary_failures: list[str] = []
     api_failures: list[str] = []
+    grid_approximation_failures: dict[str, float] = {}
     for configuration in configuration_diagnostics:
         for model in configuration["models"]:
             label = f"{configuration['config_id']}:{model['model']}"
@@ -750,6 +764,9 @@ def _validation_gates(
                 boundary_failures.append(label)
             if model["criterion_api_max_difference"] > model["criterion_api_tolerance"]:
                 api_failures.append(label)
+            objective_gap = model["population_grid_objective_gap"]
+            if abs(objective_gap) > settings["grid_objective_gap_tolerance"] + 1e-15:
+                grid_approximation_failures[label] = objective_gap
 
     coverage_cells: dict[tuple[str, str, int], list[bool]] = {}
     for record in records:
@@ -800,6 +817,19 @@ def _validation_gates(
         "public_likelihood_api_algebra": {
             "passed": not api_failures,
             "failures": api_failures,
+        },
+        "finite_grid_approximates_continuous_oracle": {
+            "passed": not grid_approximation_failures,
+            "maximum_absolute_normalized_nll_gap": max(
+                (
+                    abs(model["population_grid_objective_gap"])
+                    for configuration in configuration_diagnostics
+                    for model in configuration["models"]
+                ),
+                default=0.0,
+            ),
+            "tolerance": settings["grid_objective_gap_tolerance"],
+            "failures": grid_approximation_failures,
         },
         "raw_s_reapplication": {
             "passed": raw_passed,

@@ -86,8 +86,15 @@ uniform relative spectral control, criterion noise is of order
   \sqrt{\frac{\log M}{Np}}+\frac{\log M}{Np},
 \]
 
-where (M) is the fixed library size. The key misspecification phenomenon is
-that stochastic error can shrink while the naive KL target remains separated
+where \(M\) is the fixed library size. The full preset enumerates a
+\(161\times101=16{,}261\)-candidate Cartesian decay--variance library. This
+resolution was selected in a pre-run audit: across all eight \((p,\nu)\)
+designs, the normalized population NLL at the discrete oracle is within
+\(2.7\times10^{-5}\) of the continuously profiled oracle. The run aborts if
+the gap exceeds the predeclared \(5\times10^{-5}\) tolerance.
+
+The key misspecification phenomenon is that stochastic error can shrink while
+the naive KL target remains separated
 from the physical parameter: more information can make the wrong target more
 precise.
 
@@ -119,6 +126,8 @@ The final benchmark run is accepted only if all of the following hold:
   predeclared tolerance;
 - directional contrasts agree with their (h^2) coefficient and remain stable
   under quadrature refinement;
+- the finite-library population objective is within its predeclared tolerance
+  of the continuously profiled population objective;
 - empirical simultaneous-certificate coverage is at least its nominal level
   within a predeclared Monte Carlo tolerance, or any shortfall is reported rather
   than hidden;
