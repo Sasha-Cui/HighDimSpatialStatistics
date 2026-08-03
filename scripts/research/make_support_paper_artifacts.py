@@ -219,6 +219,312 @@ def convergence_figure(summary: pd.DataFrame, output: Path) -> None:
     save_figure(figure, output / "finite_convergence")
 
 
+def anisotropy_figure(data: pd.DataFrame, output: Path) -> None:
+    required = {
+        "aspect_ratio",
+        "angle_degrees",
+        "smoothness",
+        "bandwidth",
+        "decay_shift",
+        "implied_range_ratio",
+        "directional_contrast_coefficient_to_minor",
+    }
+    missing = required.difference(data.columns)
+    if missing:
+        raise ValueError(f"anisotropy data are missing columns: {sorted(missing)}")
+    aspect_ratio = float(data["aspect_ratio"].max())
+    selected = data[data["aspect_ratio"] == aspect_ratio].copy()
+    maximum_bandwidth = float(selected["bandwidth"].max())
+    figure, axes = plt.subplots(1, 2, figsize=(7.6, 3.8))
+    angle_axis, contrast_axis = axes
+    for color, (smoothness, group) in zip(
+        NU_COLORS,
+        selected.sort_values("smoothness").groupby("smoothness", sort=True),
+    ):
+        angular = group[group["bandwidth"] == maximum_bandwidth].sort_values(
+            "angle_degrees"
+        )
+        label = rf"$\nu={smoothness:g}$"
+        angle_axis.plot(
+            angular["angle_degrees"],
+            100.0 * (angular["implied_range_ratio"] - 1.0),
+            color=color,
+            marker="o",
+            markersize=3.0,
+            linewidth=1.5,
+            label=label,
+        )
+        major = group[group["angle_degrees"] == 0.0].sort_values("bandwidth")
+        minor = group[group["angle_degrees"] == 90.0].sort_values("bandwidth")
+        if major.empty or minor.empty:
+            raise ValueError("anisotropy data must contain zero- and 90-degree axes")
+        np.testing.assert_allclose(major["bandwidth"], minor["bandwidth"])
+        coefficient = major[
+            "directional_contrast_coefficient_to_minor"
+        ].to_numpy()
+        contrast = major["decay_shift"].to_numpy() - minor["decay_shift"].to_numpy()
+        ratio = contrast / (coefficient * major["bandwidth"].to_numpy() ** 2)
+        contrast_axis.plot(
+            major["bandwidth"],
+            ratio,
+            color=color,
+            marker="o",
+            markersize=3.0,
+            linewidth=1.5,
+            label=label,
+        )
+    angle_axis.set_xlabel(r"Lag angle (degrees)")
+    angle_axis.set_ylabel("Inferred range inflation (%)")
+    angle_axis.set_title(
+        rf"Aspect $\varrho={aspect_ratio:g}$ at $h={maximum_bandwidth:g}$"
+    )
+    angle_axis.grid(True, color=GRID, linewidth=0.6, alpha=0.8)
+    contrast_axis.axhline(1.0, color=TEXT, linestyle=":", linewidth=1.0)
+    contrast_axis.set_xscale("log")
+    contrast_axis.set_xlabel(r"Bandwidth $h$")
+    contrast_axis.set_ylabel(r"Exact contrast / $(D_\nu h^2)$")
+    contrast_axis.set_title("Directional coefficient check")
+    contrast_axis.grid(True, which="both", color=GRID, linewidth=0.6, alpha=0.8)
+    handles, labels = contrast_axis.get_legend_handles_labels()
+    legend = figure.legend(
+        handles,
+        labels,
+        loc="outside lower center",
+        ncol=len(labels),
+        frameon=True,
+        facecolor=BACKGROUND,
+        edgecolor=GRID,
+    )
+    legend.get_frame().set_alpha(1.0)
+    figure.suptitle("Directional range shift from elongated observation support")
+    figure.subplots_adjust(bottom=0.22, top=0.84, wspace=0.32)
+    save_figure(figure, output / "anisotropic_support")
+
+
+def raw_support_figure(data: pd.DataFrame, output: Path) -> None:
+    required = {"field_stage", "replicate", "x", "y", "value", "bandwidth"}
+    missing = required.difference(data.columns)
+    if missing:
+        raise ValueError(f"raw example data are missing columns: {sorted(missing)}")
+    replicate = int(data["replicate"].min())
+    selected = data[data["replicate"] == replicate]
+    stages = ["latent_input", "averaged_output"]
+    if set(stages).difference(selected["field_stage"].unique()):
+        raise ValueError("raw example must contain latent and averaged field stages")
+    magnitude = float(np.max(np.abs(selected["value"])))
+    figure, axes = plt.subplots(1, 2, figsize=(7.2, 3.15), constrained_layout=True)
+    image = None
+    for axis, stage, title in zip(
+        axes,
+        stages,
+        ("Latent Matérn field", "Recorded local averages"),
+    ):
+        values = selected[selected["field_stage"] == stage]
+        pivot = values.pivot(index="y", columns="x", values="value").sort_index()
+        image = axis.imshow(
+            pivot.to_numpy(),
+            origin="lower",
+            cmap="coolwarm",
+            vmin=-magnitude,
+            vmax=magnitude,
+            extent=[
+                float(pivot.columns.min()),
+                float(pivot.columns.max()),
+                float(pivot.index.min()),
+                float(pivot.index.max()),
+            ],
+            interpolation="nearest",
+            aspect="equal",
+        )
+        axis.set_title(title)
+        axis.set_xlabel(r"Coordinate $s_1$")
+        axis.set_ylabel(r"Coordinate $s_2$")
+        axis.set_facecolor(BACKGROUND)
+    if image is None:
+        raise RuntimeError("raw support figure did not create an image")
+    colorbar = figure.colorbar(image, ax=axes, shrink=0.88, pad=0.025)
+    colorbar.set_label("Field value")
+    bandwidth = float(selected["bandwidth"].iloc[0])
+    figure.suptitle(
+        rf"One SupportShift realization before and after averaging ($h={bandwidth:g}$)"
+    )
+    save_figure(figure, output / "supportshift_raw_example")
+
+
+def highdim_figure(data: pd.DataFrame, output: Path) -> pd.DataFrame:
+    required = {
+        "config_id",
+        "model",
+        "sample_size",
+        "dimension_p",
+        "smoothness",
+        "decay_estimate",
+        "decay_true",
+        "decay_error_to_grid_target",
+        "population_grid_decay_target",
+        "max_abs_criterion_deviation",
+        "uniform_likelihood_bound",
+        "uniform_bound_holds",
+    }
+    missing = required.difference(data.columns)
+    if missing:
+        raise ValueError(f"high-dimensional data are missing columns: {sorted(missing)}")
+    summary_records: list[dict[str, float | int | str]] = []
+    group_columns = [
+        "config_id",
+        "model",
+        "sample_size",
+        "dimension_p",
+        "smoothness",
+    ]
+    for keys, group in data.groupby(group_columns, sort=True):
+        errors = group["decay_error_to_grid_target"].to_numpy()
+        summary_records.append(
+            {
+                **dict(zip(group_columns, keys, strict=True)),
+                "effective_information": int(
+                    group["sample_size"].iloc[0] * group["dimension_p"].iloc[0]
+                ),
+                "criterion_deviation_q95": float(
+                    group["max_abs_criterion_deviation"].quantile(0.95)
+                ),
+                "uniform_likelihood_bound": float(
+                    group["uniform_likelihood_bound"].iloc[0]
+                ),
+                "uniform_bound_coverage": float(group["uniform_bound_holds"].mean()),
+                "decay_rmse_to_grid_target": float(np.sqrt(np.mean(errors**2))),
+                "decay_mean": float(group["decay_estimate"].mean()),
+                "decay_q10": float(group["decay_estimate"].quantile(0.10)),
+                "decay_q90": float(group["decay_estimate"].quantile(0.90)),
+                "decay_true": float(group["decay_true"].iloc[0]),
+                "population_grid_decay_target": float(
+                    group["population_grid_decay_target"].iloc[0]
+                ),
+            }
+        )
+    summary = pd.DataFrame.from_records(summary_records)
+    figure, axes = plt.subplots(1, 3, figsize=(10.4, 3.55))
+    certificate_axis, rmse_axis, target_axis = axes
+    model_styles = {
+        "corrected": (CORRECTED, "o", "Support-aware"),
+        "naive": (NAIVE, "s", "Point-support"),
+    }
+    for model, (color, marker, label) in model_styles.items():
+        values = summary[summary["model"] == model]
+        certificate_axis.scatter(
+            values["uniform_likelihood_bound"],
+            values["criterion_deviation_q95"],
+            color=color,
+            marker=marker,
+            s=25,
+            alpha=0.82,
+            label=label,
+        )
+        for (_, _, _), group in values.groupby(
+            ["dimension_p", "smoothness", "model"], sort=True
+        ):
+            group = group.sort_values("effective_information")
+            rmse_axis.plot(
+                group["effective_information"],
+                group["decay_rmse_to_grid_target"],
+                color=color,
+                marker=marker,
+                markersize=3.0,
+                linewidth=0.9,
+                alpha=0.45,
+            )
+    certificate_min = float(
+        min(summary["criterion_deviation_q95"].min(), summary["uniform_likelihood_bound"].min())
+    )
+    certificate_max = float(
+        max(summary["criterion_deviation_q95"].max(), summary["uniform_likelihood_bound"].max())
+    )
+    certificate_axis.plot(
+        [certificate_min, certificate_max],
+        [certificate_min, certificate_max],
+        color=TEXT,
+        linestyle=":",
+        linewidth=1.0,
+        label="Equality",
+    )
+    certificate_axis.set_xscale("log")
+    certificate_axis.set_yscale("log")
+    certificate_axis.set_xlabel("Theorem radius")
+    certificate_axis.set_ylabel("95th percentile max deviation")
+    certificate_axis.set_title("Finite-library certificate")
+    certificate_axis.grid(True, which="both", color=GRID, linewidth=0.6, alpha=0.75)
+
+    rmse_axis.set_xscale("log")
+    rmse_axis.set_yscale("log")
+    rmse_axis.set_xlabel(r"Effective information $Np$")
+    rmse_axis.set_ylabel("Decay RMSE to KL grid target")
+    rmse_axis.set_title("Stochastic error contracts")
+    rmse_axis.grid(True, which="both", color=GRID, linewidth=0.6, alpha=0.75)
+
+    maximum_dimension = int(summary["dimension_p"].max())
+    selected_smoothness = float(summary["smoothness"].max())
+    selected = summary[
+        (summary["dimension_p"] == maximum_dimension)
+        & (summary["smoothness"] == selected_smoothness)
+    ]
+    for model, (color, marker, label) in model_styles.items():
+        values = selected[selected["model"] == model].sort_values("sample_size")
+        target_axis.fill_between(
+            values["sample_size"],
+            values["decay_q10"],
+            values["decay_q90"],
+            color=color,
+            alpha=0.15,
+            linewidth=0.0,
+        )
+        target_axis.plot(
+            values["sample_size"],
+            values["decay_mean"],
+            color=color,
+            marker=marker,
+            markersize=4.0,
+            linewidth=1.6,
+            label=f"{label} mean",
+        )
+        target = float(values["population_grid_decay_target"].iloc[0])
+        target_axis.axhline(
+            target,
+            color=color,
+            linestyle="--",
+            linewidth=1.2,
+            label=f"{label} KL target",
+        )
+    target_axis.axhline(
+        float(selected["decay_true"].iloc[0]),
+        color=TEXT,
+        linestyle=":",
+        linewidth=1.2,
+        label="Physical decay",
+    )
+    target_axis.set_xscale("log", base=2)
+    target_axis.set_xlabel(r"Independent fields $N$")
+    target_axis.set_ylabel(r"Inverse range $\alpha$")
+    target_axis.set_title(
+        rf"More precise, wrong target ($p={maximum_dimension}$, $\nu={selected_smoothness:g}$)"
+    )
+    target_axis.grid(True, which="both", color=GRID, linewidth=0.6, alpha=0.75)
+    handles, labels = target_axis.get_legend_handles_labels()
+    legend = figure.legend(
+        handles,
+        labels,
+        loc="outside lower center",
+        ncol=3,
+        frameon=True,
+        facecolor=BACKGROUND,
+        edgecolor=GRID,
+    )
+    legend.get_frame().set_alpha(1.0)
+    figure.suptitle("High-dimensional SupportShift likelihood experiment")
+    figure.subplots_adjust(bottom=0.27, top=0.82, wspace=0.38)
+    save_figure(figure, output / "supportshift_highdim")
+    return summary
+
+
 def finite_table(summary: pd.DataFrame, path: Path) -> None:
     selected = summary[
         summary["config_id"].str.match(r"d2_nu(05|10|15|25)_h07")
@@ -244,6 +550,9 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--phase", type=Path, required=True)
     parser.add_argument("--finite-summary", type=Path, required=True)
+    parser.add_argument("--anisotropy", type=Path)
+    parser.add_argument("--raw-example", type=Path)
+    parser.add_argument("--highdim", type=Path)
     parser.add_argument("--paper-directory", type=Path, required=True)
     args = parser.parse_args()
     configure_matplotlib()
@@ -259,6 +568,21 @@ def main() -> None:
     finite_figure(summary, figures)
     convergence_figure(summary, figures)
     finite_table(summary, tables / "finite_summary.tex")
+    if args.anisotropy is not None:
+        anisotropy = pd.read_csv(args.anisotropy)
+        anisotropy_figure(anisotropy, figures)
+        anisotropy.to_csv(data_directory / "anisotropic_phase.csv", index=False)
+    if args.raw_example is not None:
+        raw_example = pd.read_csv(args.raw_example)
+        raw_support_figure(raw_example, figures)
+        raw_example.to_csv(data_directory / "supportshift_raw_example.csv", index=False)
+    if args.highdim is not None:
+        highdim = pd.read_csv(args.highdim)
+        highdim_summary = highdim_figure(highdim, figures)
+        highdim_summary.to_csv(
+            data_directory / "supportshift_highdim_summary.csv",
+            index=False,
+        )
     phase.to_csv(data_directory / "phase_oracle_d2.csv", index=False)
     summary.to_csv(data_directory / "finite_summary.csv", index=False)
     print(f"Generated figures, table, and source-data extracts under {args.paper_directory}")

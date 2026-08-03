@@ -129,6 +129,17 @@ def main() -> None:
                     kernel_transform=transform,
                     lag_direction=direction,
                 )
+                contrast_to_minor = (
+                    product_epanechnikov_direction_contrast_coefficient(
+                        dimension=2,
+                        smoothness=smoothness,
+                        decay=args.decay,
+                        lag=args.lag,
+                        kernel_transform=transform,
+                        first_direction=direction,
+                        second_direction=np.array([0.0, 1.0]),
+                    )
+                )
                 for bandwidth in bandwidths:
                     target = continuous_matern_pair_target(
                         dimension=2,
@@ -157,6 +168,7 @@ def main() -> None:
                             "smoothed_correlation": target.correlation,
                             "asymptotic_scale": scale,
                             "leading_coefficient": coefficient,
+                            "directional_contrast_coefficient_to_minor": contrast_to_minor,
                             "leading_shift": leading_shift,
                             "coefficient_ratio": shift / leading_shift,
                             "directional_kernel_variance": directional_variance,
