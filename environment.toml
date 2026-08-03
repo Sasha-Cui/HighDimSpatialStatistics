@@ -1,0 +1,20 @@
+[environment]
+name = "highdimspatial-research"
+manager = "central-venv"
+python = "/nfs/roberts/project/pi_btk22/zc362/environments/current/kt-main/bin/python"
+purpose = "CPU-only theorem validation and synthetic support-misspecification experiments"
+
+[native]
+project_spec = "pyproject.toml"
+portable_conda_spec = "environment-research.yml"
+
+[bouchet]
+account = "pi_jss233"
+partition = "day"
+qos = "normal"
+maximum_submissions_per_hour = 180
+threads_per_task = 1
+
+[verification]
+command = "/nfs/roberts/project/pi_btk22/zc362/environments/current/kt-main/bin/python -m pytest -q"
+last_verified_date = "2026-08-02"

@@ -1,0 +1,46 @@
+{
+  "run_id": "support_shakedown_20260802_v1",
+  "root_seed": 20260802,
+  "defaults": {
+    "dimension": 2,
+    "shape": [19, 19],
+    "spacing": 0.25,
+    "output_stride": 2,
+    "boundary_trim": 0.75,
+    "kernel": "radial",
+    "variance": 1.0,
+    "decay": 1.0,
+    "nugget": 0.05,
+    "replicates": 20,
+    "log_decay_bounds": [-2.302585092994046, 1.3862943611198906],
+    "log_decay_grid_size": 121
+  },
+  "configurations": [
+    {"config_id": "d2_nu05_h00", "common_random_number_group": "d2_nu05", "smoothness": 0.5, "bandwidth": 0.0},
+    {"config_id": "d2_nu05_h03", "common_random_number_group": "d2_nu05", "smoothness": 0.5, "bandwidth": 0.3},
+    {"config_id": "d2_nu05_h05", "common_random_number_group": "d2_nu05", "smoothness": 0.5, "bandwidth": 0.5},
+    {"config_id": "d2_nu05_h07", "common_random_number_group": "d2_nu05", "smoothness": 0.5, "bandwidth": 0.7},
+
+    {"config_id": "d2_nu10_h00", "common_random_number_group": "d2_nu10", "smoothness": 1.0, "bandwidth": 0.0},
+    {"config_id": "d2_nu10_h03", "common_random_number_group": "d2_nu10", "smoothness": 1.0, "bandwidth": 0.3},
+    {"config_id": "d2_nu10_h05", "common_random_number_group": "d2_nu10", "smoothness": 1.0, "bandwidth": 0.5},
+    {"config_id": "d2_nu10_h07", "common_random_number_group": "d2_nu10", "smoothness": 1.0, "bandwidth": 0.7},
+
+    {"config_id": "d2_nu15_h00", "common_random_number_group": "d2_nu15", "smoothness": 1.5, "bandwidth": 0.0},
+    {"config_id": "d2_nu15_h03", "common_random_number_group": "d2_nu15", "smoothness": 1.5, "bandwidth": 0.3},
+    {"config_id": "d2_nu15_h05", "common_random_number_group": "d2_nu15", "smoothness": 1.5, "bandwidth": 0.5},
+    {"config_id": "d2_nu15_h07", "common_random_number_group": "d2_nu15", "smoothness": 1.5, "bandwidth": 0.7},
+
+    {"config_id": "d2_nu25_h00", "common_random_number_group": "d2_nu25", "smoothness": 2.5, "bandwidth": 0.0},
+    {"config_id": "d2_nu25_h03", "common_random_number_group": "d2_nu25", "smoothness": 2.5, "bandwidth": 0.3},
+    {"config_id": "d2_nu25_h05", "common_random_number_group": "d2_nu25", "smoothness": 2.5, "bandwidth": 0.5},
+    {"config_id": "d2_nu25_h07", "common_random_number_group": "d2_nu25", "smoothness": 2.5, "bandwidth": 0.7},
+
+    {"config_id": "d2_boundary_nu05_h07", "common_random_number_group": "d2_boundary_nu05", "smoothness": 0.5, "bandwidth": 0.7, "boundary_trim": 0.0},
+    {"config_id": "d2_irregular_nu05_h05", "common_random_number_group": "d2_irregular_nu05", "smoothness": 0.5, "bandwidth": 0.5, "input_jitter": 0.04},
+
+    {"config_id": "d1_n100_nu05_h04", "common_random_number_group": "d1_n100_nu05", "dimension": 1, "number_of_points": 100, "spacing": 0.1, "output_stride": 4, "boundary_trim": 0.8, "smoothness": 0.5, "bandwidth": 0.4},
+    {"config_id": "d1_n225_nu05_h04", "common_random_number_group": "d1_n225_nu05", "dimension": 1, "number_of_points": 225, "spacing": 0.1, "output_stride": 4, "boundary_trim": 0.8, "smoothness": 0.5, "bandwidth": 0.4},
+    {"config_id": "d1_n400_nu05_h04", "common_random_number_group": "d1_n400_nu05", "dimension": 1, "number_of_points": 400, "spacing": 0.1, "output_stride": 4, "boundary_trim": 0.8, "smoothness": 0.5, "bandwidth": 0.4}
+  ]
+}
