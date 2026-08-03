@@ -128,3 +128,21 @@ def test_paper_artifact_builder_records_input_and_output_hashes(tmp_path: Path) 
         paper_directory / "data" / "supportshift_highdim_summary.csv"
     ).read_text(encoding="utf-8").splitlines()[0]
     assert "candidatewise_simultaneous_coverage" in summary_header
+    verification = subprocess.run(
+        [
+            sys.executable,
+            "scripts/research/verify_supportshift_release.py",
+            "--metadata",
+            str(result.with_suffix(".metadata.json")),
+            "--paper-directory",
+            str(paper_directory),
+            "--repository-root",
+            str(REPO_ROOT),
+            "--allow-dirty",
+        ],
+        cwd=REPO_ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    assert "SupportShift release verified" in verification.stdout
