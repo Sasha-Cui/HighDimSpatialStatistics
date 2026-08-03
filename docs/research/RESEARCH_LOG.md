@@ -193,6 +193,98 @@ operator.
 - The declared Bouchet environment passed all 62 tests. Ruff, Slurm shell
   syntax, and the support-only JSON manifest also passed validation.
 
+## 2026-08-03 -- SupportShift high-dimensional probability extension
+
+**Scope decision.** Retained the Matérn change-of-support theorem as the central
+contribution and added a separate replicated-field experiment. The extension
+does not resurrect the invalid legacy multivariate claims. It uses independent
+Gaussian field replicates with unrestricted within-field spatial dependence and
+a deterministic finite covariance library.
+
+**Probability statement.** For
+$X_i\stackrel{\mathrm{iid}}{\sim}N_p(0,\Sigma_0)$, a union bound over the
+Gaussian quadratic-form inequality gives, simultaneously over $M$ declared
+covariances,
+
+\[
+ |\widehat L_N(\theta)-L(\theta)|\leq
+ \frac{\|A_\theta\|_F}{p}\sqrt{\frac{\log(2M/\delta)}N}
+ +\frac{\|A_\theta\|_{\mathrm{op}}}{p}
+  \frac{\log(2M/\delta)}N.
+\]
+
+The ERM excess criterion is at most twice the largest radius. Under uniform
+relative spectral control this is
+$O\{\sqrt{\log M/(Np)}+\log M/(Np)\}$. This is standard supporting
+machinery, not a novelty claim, and its oracle radius uses the generating
+$\Sigma_0$.
+
+## 2026-08-03 -- final schema-1.1 Monte Carlo run
+
+**Configuration and provenance.** Slurm job `21081491` ran on allocation
+`pi_jss233` from clean commit `d5207fb43cf63f5dfd68a443853a209e303f9aa2`.
+It used $p\in\{16,36,64,100\}$, $N\in\{1,4,16,64\}$,
+$\nu\in\{0.5,1.5\}$, 200 trials, and a fixed
+$161\times101=16{,}261$-candidate variance--decay library. All 12,800 fits
+completed. The result and raw-example SHA-256 hashes are `247db5e6f09f95f3`
+and `ac5cd1543a777667` (prefixes).
+
+**Acceptance gates.** Every gate passed. All 64 separately defined
+candidatewise coverage cells had empirical coverage one; the global maximum
+candidatewise deviation-to-radius ratio was 0.789341. The maximum and median
+95th-percentile worst-envelope ratios were 0.401816 and 0.298185. The largest
+normalized grid-to-continuous population-objective gap was
+$2.6251\times10^{-5}$, below the fixed $5\times10^{-5}$ gate.
+
+**Theorem--experiment correspondence.** The 95th-percentile criterion-deviation
+log--$N$ slopes ranged from -0.528 to -0.454, with median -0.505. At
+$p=100,\nu=1.5$, the naive finite-grid decay target was 0.594 versus physical
+decay one. Its RMSE to that wrong target fell from 0.124 to 0.015 as $N$
+increased from one to 64, while RMSE to the physical value remained 0.409. The
+support-aware RMSE fell from 0.206 to 0.024. These parameter-error rates are
+empirical; the theorem itself controls likelihood and excess KL criterion.
+
+## 2026-08-03 -- independent audit and artifact-manifest repair
+
+An independent recomputation found no discrepancy in the statistical outputs,
+targets, slopes, or reported RMSE values. It did find that the artifact builder
+rewrote `paper/data/phase_oracle_d2.csv` while also declaring that file an
+immutable input, making the pre-fix manifest impossible to verify. Commit
+`3a0b9bf` now skips writes when a source extract aliases its destination, records
+the alias explicitly in manifest schema 1.1, and tests the same-directory case.
+The complete figure set was regenerated under Python 3.12.8, NumPy 2.3.5,
+pandas 2.2.3, and Matplotlib 3.10.9; every output and aliased input/output hash
+then verified.
+
+## 2026-08-03 -- paper decision
+
+**Verdict.** Continue only as a focused theorem-plus-synthetic-benchmark paper.
+The clean novelty claim is the explicit all-$\nu$ pairwise Matérn support phase
+law, including the $\nu=1$ logarithmic transition, plus the directional
+$h^2$ coefficient. Do not claim a new generic concentration inequality,
+full-likelihood phase theorem, fixed-domain separate range consistency, or
+data-driven confidence interval.
+
+**Primary route.** Submit the eight-page SupportShift benchmark paper to GeoSim
+2026, subject to independent human proof review and the official formatting
+check. Retain the longer technical manuscript for a specialized journal only if
+the workshop version receives constructive feedback or a broader
+continuous-parameter result is completed.
+
+## 2026-08-03 -- final independent release audit
+
+Two independent read-only checks recomputed the theorem-linked summaries and
+found no numerical discrepancy. They identified release-contract issues that
+were repaired in commit `aa272c9`: the promoted fit-level CSVs and metadata are
+now versioned so verification works from a clean clone; byte-preserving Git
+attributes protect their recorded SHA-256 hashes; Fuentes (2007), the closest
+block-Matérn likelihood comparison, is cited in the workshop paper; unresolved
+priority language was weakened; the dependency map restores the
+$\log(M)/(Np)$ term; and the raw illustration schema is described accurately.
+The technical manuscript now labels increasing-domain pair consistency as an
+unproved standard route rather than a completed theorem. Both PDFs were rebuilt
+and visually rechecked after these changes.
+
 ## Entry template
 
 ```text

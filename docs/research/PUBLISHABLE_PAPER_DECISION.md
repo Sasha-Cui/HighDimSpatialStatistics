@@ -1,5 +1,9 @@
 # Publishable-paper decision
 
+> **Superseded on 2026-08-03.** This memo records the earlier phase-only
+> decision. Use `FINAL_RESEARCH_ASSESSMENT.md` for the controlling scope,
+> schema-1.1 benchmark results, manuscripts, and venue roadmap.
+
 Date: 2026-08-02
 
 ## Decision

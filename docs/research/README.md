@@ -4,12 +4,17 @@ Audit date: 2026-08-02
 Preserved base: `main` at `2a6ef52`  
 Development branch: `research/paper-audit`
 
-This directory separates claims that are already established, claims invalidated
-by the original implementation, and hypotheses that still require research.
+This directory separates established claims, invalidated legacy claims, and
+remaining research obligations.
 
-- [PUBLISHABLE_PAPER_DECISION.md](PUBLISHABLE_PAPER_DECISION.md): current
-  synthetic-only paper decision, reconstructed model, theorem audit, novelty
-  map, candidate papers, promoted experiment results, and submission roadmap.
+- [FINAL_RESEARCH_ASSESSMENT.md](FINAL_RESEARCH_ASSESSMENT.md): controlling
+  reconstruction, proof audit, novelty map, candidate papers, promoted
+  experiment results, repository plan, and submission roadmap.
+- [SUPPORTSHIFT_BENCHMARK.md](SUPPORTSHIFT_BENCHMARK.md): final schema-1.1
+  statistical experiment, acceptance gates, products, and claim-to-result map.
+- [PUBLISHABLE_PAPER_DECISION.md](PUBLISHABLE_PAPER_DECISION.md): earlier
+  synthetic-only decision memo, retained for research provenance and superseded
+  by the final assessment.
 - [ASSESSMENT.md](ASSESSMENT.md): formal reconstruction, theorem/code audit,
   literature map, three candidate papers, primary recommendation, and original
   audit-stage decision.
@@ -25,9 +30,10 @@ by the original implementation, and hypotheses that still require research.
 - [RESEARCH_LOG.md](RESEARCH_LOG.md): dated findings, repairs, negative results,
   open questions, and a template for future entries.
 
-The manuscript source is in paper/manuscript.tex. The current decision memo
-supersedes the application-dependent recommendations in the earlier outline,
-simulation protocol, and venue roadmap.
+The technical manuscript is in `paper/manuscript.tex`; the eight-page GeoSim
+candidate is in `paper/geosim2026.tex`. The final assessment supersedes the
+application-dependent recommendations and pre-SupportShift venue discussion in
+the earlier outline, simulation protocol, and venue roadmap.
 
 The old result files are retained for forensic provenance only. They must not be
 used as paper evidence after the kernel convention, sign, ordering, gradient,

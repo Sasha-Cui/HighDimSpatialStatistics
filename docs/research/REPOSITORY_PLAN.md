@@ -1,5 +1,27 @@
 # Cleaned repository and reproducibility plan
 
+> The broad legacy refactor below remains a long-term plan. For the scoped
+> SupportShift paper release, the controlling status and remaining items are in
+> `FINAL_RESEARCH_ASSESSMENT.md`.
+
+## SupportShift release status (2026-08-03)
+
+- Original `main` remains preserved; paper development is isolated on
+  `research/paper-audit`.
+- The maintained theorem/benchmark code is script-first and covered by unit,
+  regression, and end-to-end integration tests.
+- `environment-research.yml`, `environment.toml`, and the promoted Bouchet pip
+  snapshot declare the executable environment.
+- Seeds, commands, Git cleanliness, Slurm job identity, configuration hashes,
+  row counts, validation gates, and input/output SHA-256 hashes are recorded.
+- Final synthetic artifacts are compact source-data extracts and deterministic
+  figures under `paper/`; large fit-level outputs remain ignored but exactly
+  regenerable from the clean run metadata.
+- Legacy notebooks, converted scripts, and invalid outputs remain in place for
+  forensic provenance and are explicitly excluded from paper evidence.
+- Bulk movement or deletion of the 1.5 GB legacy tree is intentionally deferred;
+  it would add release risk without strengthening the scoped paper.
+
 ## Current state
 
 The preserved base is a 1.5 GB checkout with 5,598 tracked files, 330 tracked

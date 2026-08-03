@@ -1,5 +1,9 @@
 # Venue and submission roadmap
 
+> **Superseded on 2026-08-03.** Current verified dates and the final
+> synthetic-benchmark venue recommendation are in
+> `FINAL_RESEARCH_ASSESSMENT.md`.
+
 Information was checked on 2026-08-02. Deadlines change; verify on the official
 site immediately before scheduling work. Journal submissions listed here are
 ordinary rolling submissions, not annual deadlines.
