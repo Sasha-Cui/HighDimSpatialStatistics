@@ -563,6 +563,17 @@ def finite_table(summary: pd.DataFrame, path: Path) -> None:
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
+def write_source_extract(
+    data: pd.DataFrame,
+    source_path: Path,
+    destination_path: Path,
+) -> None:
+    """Write a compact CSV unless it is already the declared input artifact."""
+    if source_path.resolve() == destination_path.resolve():
+        return
+    data.to_csv(destination_path, index=False)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--phase", type=Path, required=True)
@@ -603,11 +614,19 @@ def main() -> None:
     if args.anisotropy is not None:
         anisotropy = pd.read_csv(args.anisotropy)
         anisotropy_figure(anisotropy, figures)
-        anisotropy.to_csv(data_directory / "anisotropic_phase.csv", index=False)
+        write_source_extract(
+            anisotropy,
+            args.anisotropy,
+            data_directory / "anisotropic_phase.csv",
+        )
     if args.raw_example is not None:
         raw_example = pd.read_csv(args.raw_example)
         raw_support_figure(raw_example, figures)
-        raw_example.to_csv(data_directory / "supportshift_raw_example.csv", index=False)
+        write_source_extract(
+            raw_example,
+            args.raw_example,
+            data_directory / "supportshift_raw_example.csv",
+        )
     if args.highdim is not None:
         highdim = pd.read_csv(args.highdim)
         highdim_summary = highdim_figure(highdim, figures)
@@ -615,8 +634,16 @@ def main() -> None:
             data_directory / "supportshift_highdim_summary.csv",
             index=False,
         )
-    phase.to_csv(data_directory / "phase_oracle_d2.csv", index=False)
-    summary.to_csv(data_directory / "finite_summary.csv", index=False)
+    write_source_extract(
+        phase,
+        args.phase,
+        data_directory / "phase_oracle_d2.csv",
+    )
+    write_source_extract(
+        summary,
+        args.finite_summary,
+        data_directory / "finite_summary.csv",
+    )
     artifact_paths = [
         figures / "phase_law.pdf",
         figures / "phase_law.png",
@@ -655,9 +682,21 @@ def main() -> None:
     missing_artifacts = [str(path) for path in artifact_paths if not path.is_file()]
     if missing_artifacts:
         raise RuntimeError(f"artifact generation omitted expected files: {missing_artifacts}")
+    output_aliases = {
+        name: str(destination.relative_to(args.paper_directory))
+        for name, destination in {
+            "phase": data_directory / "phase_oracle_d2.csv",
+            "finite_summary": data_directory / "finite_summary.csv",
+            "anisotropy": data_directory / "anisotropic_phase.csv",
+            "raw_example": data_directory / "supportshift_raw_example.csv",
+        }.items()
+        if name in input_paths
+        and input_paths[name].resolve() == destination.resolve()
+    }
     manifest = {
-        "schema_version": "1.0",
+        "schema_version": "1.1",
         "inputs": input_manifest,
+        "input_output_aliases": output_aliases,
         "outputs": {
             str(path.relative_to(args.paper_directory)): sha256_file(path)
             for path in artifact_paths

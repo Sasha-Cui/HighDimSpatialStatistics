@@ -1,6 +1,7 @@
 import csv
 import hashlib
 import json
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -77,14 +78,22 @@ def test_paper_artifact_builder_records_input_and_output_hashes(tmp_path: Path) 
         text=True,
     )
     paper_directory = tmp_path / "paper"
+    data_directory = paper_directory / "data"
+    data_directory.mkdir(parents=True)
+    phase = data_directory / "phase_oracle_d2.csv"
+    finite_summary = data_directory / "finite_summary.csv"
+    shutil.copyfile(REPO_ROOT / "paper/data/phase_oracle_d2.csv", phase)
+    shutil.copyfile(REPO_ROOT / "paper/data/finite_summary.csv", finite_summary)
+    phase_hash_before = _sha256(phase)
+    finite_hash_before = _sha256(finite_summary)
     subprocess.run(
         [
             sys.executable,
             "scripts/research/make_support_paper_artifacts.py",
             "--phase",
-            "paper/data/phase_oracle_d2.csv",
+            str(phase),
             "--finite-summary",
-            "paper/data/finite_summary.csv",
+            str(finite_summary),
             "--highdim",
             str(result),
             "--paper-directory",
@@ -98,7 +107,20 @@ def test_paper_artifact_builder_records_input_and_output_hashes(tmp_path: Path) 
 
     manifest_path = paper_directory / "data" / "supportshift_artifact_manifest.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    assert manifest["schema_version"] == "1.1"
     assert manifest["inputs"]["highdim"]["sha256"] == _sha256(result)
+    assert manifest["input_output_aliases"] == {
+        "finite_summary": "data/finite_summary.csv",
+        "phase": "data/phase_oracle_d2.csv",
+    }
+    assert _sha256(phase) == phase_hash_before
+    assert _sha256(finite_summary) == finite_hash_before
+    assert manifest["inputs"]["phase"]["sha256"] == manifest["outputs"][
+        "data/phase_oracle_d2.csv"
+    ]
+    assert manifest["inputs"]["finite_summary"]["sha256"] == manifest[
+        "outputs"
+    ]["data/finite_summary.csv"]
     assert "figures/supportshift_highdim.pdf" in manifest["outputs"]
     for relative_path, expected_hash in manifest["outputs"].items():
         assert _sha256(paper_directory / relative_path) == expected_hash
