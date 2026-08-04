@@ -23,6 +23,10 @@
     "raw_example": {
       "path": "outputs/smoothing_bias/supportshift_raw_final_v2_20260803.csv",
       "sha256": "ac5cd1543a77766789b1f4768185aa63aae0d6ae5c61f81a0fa6363139965c18"
+    },
+    "transition_stress": {
+      "path": "outputs/smoothing_bias/supportshift_transition_stress_20260804.csv",
+      "sha256": "61537589aa30ee8a67f7970125a2aec2ddc23742661e0d75abebfba0a00873a9"
     }
   },
   "outputs": {
@@ -31,6 +35,7 @@
     "data/phase_oracle_d2.csv": "900d028eadaf67d5d9daced382f2c3cd63d382724d88adae4594e8a9f1ba3329",
     "data/supportshift_highdim_summary.csv": "6f8fa4eb22cf98a8fa750772f620a77000bd9eab73b134d8532dc35a23bed681",
     "data/supportshift_raw_example.csv": "f7a6512234c4264ffb82c8f501773a738e8d999fb166a1b083a182785e760b53",
+    "data/transition_stress.csv": "9e1def6feb48a7ed5cfde684578aa9181779110b63777e42d15ddfde07b92ab7",
     "figures/anisotropic_support.pdf": "13d26c45ff6f22ebe8d966287f739d447c86a396150767b70273bb2777521c2f",
     "figures/anisotropic_support.png": "fe66b720e4c50aada6ebc23350170a042e7eecdc8d6dad1844386691f3a3a04e",
     "figures/finite_convergence.pdf": "dc1595fc561cf1f9a3ce944233ccaaf1c694d7a5c9e02b5f8c44b3c88b0ff3a2",
@@ -43,6 +48,8 @@
     "figures/supportshift_highdim.png": "e61226c7cb24aa65742362c71b482c3e58c7cc10f7c265a2e699c482b6e7e037",
     "figures/supportshift_raw_example.pdf": "e9e712d617095b9f3a99b4837c3bac78701061a09dc329b71873307bbbd9cf57",
     "figures/supportshift_raw_example.png": "3e048ac929bcc180c830cd82246af1a9cc3edbed77fe445410a9f4dcc5b85720",
+    "figures/transition_stress.pdf": "58f0659f25adf89949d87404fe18755c1637bb7d25306aef17b46a6144d7f1c2",
+    "figures/transition_stress.png": "bd6f4513e8edba98fd2977617975cae3c2a379aad43eaee0373236c32ac64b7e",
     "tables/finite_summary.tex": "8ec55b77cc723148af27cbe6b79e4fd91327f52745f758f049833dd0079bee45"
   },
   "runtime": {

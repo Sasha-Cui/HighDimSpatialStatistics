@@ -28,6 +28,8 @@ outputs/smoothing_bias/*
 !outputs/smoothing_bias/supportshift_raw_final_v2_20260803.csv
 !outputs/smoothing_bias/supportshift_anisotropic_final_20260803.csv
 !outputs/smoothing_bias/supportshift_anisotropic_final_20260803.metadata.json
+!outputs/smoothing_bias/supportshift_transition_stress_20260804.csv
+!outputs/smoothing_bias/supportshift_transition_stress_20260804.metadata.json
 tmp/
 data/processed/checkpoints/
 *.pth

@@ -1,0 +1,57 @@
+{
+  "arguments": {
+    "bandwidths": [
+      0.01,
+      0.02,
+      0.05
+    ],
+    "decay": 1.0,
+    "dimension": 2,
+    "lag": 1.0,
+    "maximum_transition_relative_error": 0.002,
+    "output": "outputs/smoothing_bias/supportshift_transition_stress_20260804.csv",
+    "quadrature_order": 96,
+    "refinement_orders": [
+      64,
+      128
+    ],
+    "smoothness_count": 37,
+    "smoothness_maximum": 1.45,
+    "smoothness_minimum": 0.55
+  },
+  "benchmark": "SupportShift transition stress audit",
+  "created_utc": "2026-08-04T16:10:31.699212+00:00",
+  "diagnostics": {
+    "maximum_transition_shift_relative_error": 0.0009849332956964952,
+    "maximum_transition_variance_loss_relative_error": 0.0008319375756793062,
+    "minimum_exact_to_leading_ratio": 0.15361019996471093
+  },
+  "git_commit": "34a2603cf1933dd7b6396aac699a5260407b2c51",
+  "git_dirty": false,
+  "numpy": "2.3.5",
+  "python": "3.12.8",
+  "quadrature_refinement": {
+    "128": {
+      "max_abs_pseudo_decay_difference": 9.28590537796481e-12,
+      "max_relative_decay_shift_difference": 3.0003687201921756e-10
+    },
+    "64": {
+      "max_abs_pseudo_decay_difference": 1.2265588544835282e-10,
+      "max_relative_decay_shift_difference": 3.9631340948185475e-09
+    }
+  },
+  "result_csv": {
+    "path": "outputs/smoothing_bias/supportshift_transition_stress_20260804.csv",
+    "sha256": "61537589aa30ee8a67f7970125a2aec2ddc23742661e0d75abebfba0a00873a9"
+  },
+  "rows": 111,
+  "schema_version": "1.0",
+  "scipy": "1.17.1",
+  "validation_gates": {
+    "all_exact_shifts_positive": true,
+    "all_passed": true,
+    "all_transition_shifts_positive": true,
+    "transition_shift_relative_error_below_tolerance": true,
+    "transition_variance_relative_error_below_tolerance": true
+  }
+}
