@@ -27,6 +27,8 @@ references. Review is single-blind and uses the ACM `sigconf` format.
   Bellehumeur--Legendre practical-range result are distinguished from the
   Matérn KL pseudo-parameter.
 - [x] Priority search is documented without treating a negative search as proof.
+- [x] A claim-by-claim external proof-review packet records source identities,
+  numerical adversarial probes, and mandatory fallback actions.
 - [ ] An independent spatial-statistics/probability expert has checked every
   theorem and proof.
 - [ ] A human expert has manually checked older regularized-variogram monographs

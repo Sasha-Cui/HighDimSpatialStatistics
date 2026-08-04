@@ -412,6 +412,29 @@ expertise selections, immutable PDF hash, and an author-reviewable
 generative-AI disclosure while leaving all live-portal and attendance fields
 explicitly unchecked.
 
+## 2026-08-04 -- post-freeze independent identity audit and review packet
+
+After freezing `supportshift-geosim-v1.2.0`, the central special-function
+identities were recomputed at 100-decimal precision on an adversarial grid
+spanning smoothness 0.05 through 10 and arguments 0.01 through 10. The Matérn
+derivative identity and the two smooth-regime expressions for
+\(G_\nu\) agreed to scaled errors below \(2\times10^{-101}\), and every
+evaluated \(G_\nu\) was positive. The displayed integer-order remainders stayed
+bounded after normalization, and the two singular terms in the
+transition-aware expansion cancelled linearly as \(\nu\to1\).
+
+A separate post-freeze diagnostic evaluated 216 one-dimensional exact
+quadrature cells across two product kernels, 18 smoothness values (including
+0.99, 1.01, 1.99, and 2.01), and six bandwidths. Every pseudo-decay shift had
+the theorem's sign; the smallest was approximately \(5.25\times10^{-8}\).
+These probes are diagnostic rather than promoted confirmatory evidence and do
+not alter the frozen artifact.
+
+`EXTERNAL_PROOF_REVIEW_PACKET.md` now gives an independent reviewer nine
+equation-level checks, authoritative identity sources, and explicit fallback
+actions for each possible failure. This closes the internal preparation for
+proof review but does not mark the human-review gate complete.
+
 ## 2026-08-04 -- dimension and kernel robustness audit
 
 **Question.** The phase theorem permits fixed arbitrary dimension and compact

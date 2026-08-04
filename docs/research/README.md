@@ -20,6 +20,9 @@ remaining research obligations.
   audit-stage decision.
 - [THEORY_DEPENDENCY_MAP.md](THEORY_DEPENDENCY_MAP.md): explicit assumptions,
   theorem/lemma dependencies, proof obligations, and stop conditions.
+- [EXTERNAL_PROOF_REVIEW_PACKET.md](EXTERNAL_PROOF_REVIEW_PACKET.md): a
+  claim-by-claim worksheet for independent verification of every theorem,
+  coefficient, remainder, and fallback decision.
 - [SIMULATION_PROTOCOL.md](SIMULATION_PROTOCOL.md): claim-linked simulation and
   empirical validation plan, baselines, metrics, figures, and reproducibility.
 - [PAPER_OUTLINE.md](PAPER_OUTLINE.md): proposed title, abstract, and section plan.
