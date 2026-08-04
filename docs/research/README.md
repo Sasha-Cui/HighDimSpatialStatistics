@@ -29,11 +29,15 @@ remaining research obligations.
   packaging, and artifact-release plan.
 - [RESEARCH_LOG.md](RESEARCH_LOG.md): dated findings, repairs, negative results,
   open questions, and a template for future entries.
+- [GEOSIM_MOCK_REVIEW.md](GEOSIM_MOCK_REVIEW.md): reviewer-rubric red team,
+  likely objections, current answers, and remaining external acceptance gates.
+- [GEOSIM_SUBMISSION_PACKET.md](GEOSIM_SUBMISSION_PACKET.md): copy-ready title,
+  abstract, topics, artifact record, disclosure draft, and portal checklist.
 
-The technical manuscript is in `paper/manuscript.tex`; the eight-page GeoSim
-candidate is in `paper/geosim2026.tex`. The final assessment supersedes the
-application-dependent recommendations and pre-SupportShift venue discussion in
-the earlier outline, simulation protocol, and venue roadmap.
+The technical manuscript is in `paper/manuscript.tex`; the GeoSim candidate,
+with ten main-text pages, is in `paper/geosim2026.tex`. The final assessment
+supersedes the application-dependent recommendations and pre-SupportShift venue
+discussion in the earlier outline, simulation protocol, and venue roadmap.
 
 The old result files are retained for forensic provenance only. They must not be
 used as paper evidence after the kernel convention, sign, ordering, gradient,

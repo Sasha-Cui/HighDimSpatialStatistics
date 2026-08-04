@@ -6,7 +6,7 @@
 **Notification:** 2026-09-15<br>
 **Official call:** <https://geosim.org/2026/cfp/><br>
 **Submission site:** <https://easychair.org/conferences/?conf=geosim2026><br>
-**Artifact candidate:** `supportshift-geosim-v1.1.2`
+**Artifact candidate:** `supportshift-geosim-v1.1.3`
 
 The official call lists parameterizable and scalable spatial-simulation data
 sets made available to the community as an in-scope topic. Full papers may use
@@ -60,6 +60,13 @@ references. Review is single-blind and uses the ACM `sigconf` format.
   verification in addition to probability.
 - [x] Claims avoid “first,” “novel,” and unsupported universal language.
 - [x] Every plotted result is generated from hash-verified source data.
+- [x] A benchmark-contract table maps every synthetic track to its target,
+  controls, and falsification gate.
+- [x] An internal mock review records likely objections, current answers, and
+  acceptance-preserving fallbacks.
+- [x] A portal-ready metadata packet stages the title, plain-text abstract,
+  keywords, topic selections, reviewer expertise, artifact hash, and disclosure
+  draft without claiming that the live form is complete.
 - [ ] Run the official ACM TAPS/preflight checks available to submitters.
 - [x] The official call identifies the GeoSim 2026 EasyChair submission site.
 - [ ] Confirm the file-size limit and supplementary-material interface inside

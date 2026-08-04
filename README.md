@@ -7,9 +7,41 @@ distortion caused by fitting locally averaged Matérn observations as points.
 The original notebooks remain under `notebooks/legacy/` for traceability; their
 archived numerical claims are not paper evidence.
 
-## Quick Start
+## SupportShift reviewer quick start
 
-1. Create the paper environment:
+The audited artifact is frozen at
+[`supportshift-geosim-v1.1.3`](https://github.com/Sasha-Cui/HighDimSpatialStatistics/tree/supportshift-geosim-v1.1.3).
+Start with:
+
+- the [GeoSim submission PDF](output/pdf/supportshift_geosim2026.pdf);
+- the [technical manuscript](output/pdf/supportshift_technical_manuscript.pdf);
+- the [benchmark contract](docs/research/SUPPORTSHIFT_BENCHMARK.md);
+- the [synthetic-data card](docs/research/ARTIFACT_DATA_CARD.md); and
+- the [submission checklist](docs/research/GEOSIM_SUBMISSION_CHECKLIST.md).
+
+Create the portable environment and verify the promoted run, all paper
+artifacts, and every manuscript-facing numerical claim:
+
+```bash
+conda env create -f environment-research.yml
+conda activate highdimspatial-research
+python scripts/research/verify_supportshift_release.py \
+  --metadata outputs/smoothing_bias/supportshift_highdim_final_v2_20260803.metadata.json \
+  --paper-directory paper \
+  --repository-root . \
+  --require-full
+```
+
+A valid release reports 12,800 rows, 64 coverage cells, 21 hashed paper
+artifacts, and 100 passed paper claims. Verification uses tracked source tables;
+it does not require rerunning the full Monte Carlo experiment.
+
+## Preserved legacy pipeline
+
+The commands below exercise the older general package and are not part of the
+SupportShift paper evidence.
+
+1. Create the maintained portable environment:
 
 ```bash
 conda env create -f environment-research.yml
@@ -123,7 +155,7 @@ $161\times101=16{,}261$-candidate variance--decay library. The clean final
 run is Slurm job `21081491`, generated at commit `d5207fb` with all validation
 gates passing. The threshold audit was generated from clean commit `34a2603`
 and passed all sign, approximation-error, and quadrature-refinement gates. The
-audited paper package is frozen at tag `supportshift-geosim-v1.1.2`.
+audited paper package is frozen at tag `supportshift-geosim-v1.1.3`.
 
 Verify the promoted run, every paper-artifact hash, and all 100 numerical claims
 reported in the manuscripts in one command:

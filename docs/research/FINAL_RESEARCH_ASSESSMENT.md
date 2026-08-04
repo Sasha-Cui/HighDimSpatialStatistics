@@ -113,6 +113,11 @@ Clark (1977) and Bellehumeur and Legendre (1997) are now cited as qualitative
 predecessors for support-induced apparent-range inflation and distinguished
 from the variance-refitted, infinite-range Matérn KL target. It changes no
 theorem statement or reported numerical value.
+Patch release `supportshift-geosim-v1.1.3` adds a reviewer-facing benchmark
+contract that maps each synthetic track to its controls, nonrandom target, and
+falsification gate. It also makes the public README artifact-first and records
+an internal mock review with likely objections and acceptance-preserving
+fallbacks. It changes no theorem statement or reported numerical value.
 
 The pre-audit history consisted of four bulk commits made on one day and did not
 record a theorem or experiment-development trail. The research branch now has

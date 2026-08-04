@@ -15,7 +15,7 @@ be used to make scientific claims about one.
 ## Versioned release
 
 - Repository: <https://github.com/Sasha-Cui/HighDimSpatialStatistics>
-- Artifact release: `supportshift-geosim-v1.1.2`
+- Artifact release: `supportshift-geosim-v1.1.3`
 - Benchmark schema: `1.1`
 - Promoted high-dimensional run: Slurm job `21081491`
 - Authorized allocation: `pi_jss233`

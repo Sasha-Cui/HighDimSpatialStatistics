@@ -389,6 +389,29 @@ certificate. The main paper remains ten pages before references; the appendix
 is one page after them. No reported numerical value or promoted artifact
 changed.
 
+## 2026-08-04 -- reviewer-navigation and acceptance-rubric pass
+
+A rendered-paper mock review found that the individual theory and experiments
+were well supported but that the benchmark contract was distributed across
+several sections. A new full-width table now maps each of the four synthetic
+tracks to its nonrandom target, controlled factors, and explicit scoring or
+falsification gate. The table fits within the existing ten-page main-text
+limit and adds no new numerical claim.
+
+The repository landing page now leads with the immutable paper PDFs, benchmark
+specification, data card, checklist, and one-command verifier. Preserved
+legacy-pipeline commands are labeled as non-paper evidence instead of appearing
+as the primary quick start. An internal mock review records the likely
+objections about classical range regularization, pairwise versus full-grid
+claims, standard concentration machinery, synthetic-only validation, known
+support, and boundary behavior, together with the manuscript's scoped answers.
+The mock review gives a conditional weak-accept recommendation; it does not
+replace independent expert proof and priority review.
+A separate submission packet stages the portal-ready abstract, topic and
+expertise selections, immutable PDF hash, and an author-reviewable
+generative-AI disclosure while leaving all live-portal and attendance fields
+explicitly unchecked.
+
 ## Entry template
 
 ```text
