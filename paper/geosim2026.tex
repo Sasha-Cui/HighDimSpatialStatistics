@@ -47,7 +47,9 @@ two-point likelihood with known smoothness \(\nu\), the naive inverse-range
 shift has order \(h^{2\nu}\) for \(0<\nu<1\),
 \(h^2\log(1/h)\) at \(\nu=1\), and \(h^2\) for \(\nu>1\). Explicit
 coefficients prove range inflation for every fixed \(\nu>0\) at sufficiently
-small support and yield a directional \(h^2\) contrast for elongated support.
+small support. A transition-aware two-term approximation resolves the slow
+finite-bandwidth crossover at \(\nu=1\), while a directional \(h^2\) contrast
+handles elongated support.
 For \(N\) independent \(p\)-dimensional Gaussian fields and a deterministic
 finite covariance library, a simultaneous likelihood certificate scales as
 \(\sqrt{\log(M)/(Np)}+\log(M)/(Np)\) under relative spectral control; spatial
@@ -123,7 +125,8 @@ change-of-support method:
 
 \begin{itemize}
   \item We derive an all-smoothness, \(d\)-dimensional fixed-lag phase law
-  with explicit coefficients and a universal small-support range direction.
+  with explicit coefficients, a universal small-support range direction, and a
+  two-term approximation continuous through the smoothness-one threshold.
   \item We derive a directional \(h^2\) apparent-range contrast for elongated
   support. The qualitative link between convolution and anisotropy is known.
   \item We certify finite-library likelihood concentration and ERM excess risk
@@ -218,12 +221,12 @@ It is unique because
   =-\frac{2^{1-\nu}}{\Gamma(\nu)}x^\nu K_{\nu-1}(x)<0.
   \label{eq:deriv}
 \end{equation}
-On a fixed lattice and increasing rectangular F{\o}lner domains, a
-pair-composite estimator converges to this target under a compact parameter
-space, target uniqueness and interiority, correlations bounded away from one,
-and the usual continuity and integrable-envelope conditions for a uniform
-ergodic law. Dependence among overlapping pairs requires Godambe uncertainty;
-it does not change this population target.
+A standard route to pair-composite consistency would use a fixed lattice,
+increasing rectangular F{\o}lner domains, a compact parameter space, target
+uniqueness and interiority, correlations bounded away from one, and a uniform
+ergodic law with an integrable envelope. We do not establish that uniform law.
+Dependence among overlapping pairs would require Godambe uncertainty, not an
+independence Hessian.
 
 \section{Smoothness-dependent phase law}
 
@@ -298,6 +301,43 @@ v_h^\dagger<v,\qquad \rho_h(r)>\Matern_\nu(\alpha R),\qquad
 \alpha_h^\dagger<\alpha.
 \]
 \end{theorem}
+
+The leading law is pointwise in fixed \(\nu\). To resolve its slow crossover,
+let \(b_\nu=\Gamma(-\nu)/\{2^{2\nu}\Gamma(\nu)\}\) and define, for
+\(0<\nu<2\),
+\begin{equation}
+W_{\nu,k}(h)=
+\begin{cases}
+\dfrac{m_2(\alpha h)^2}{4(1-\nu)}
++b_\nu m_{2\nu}(\alpha h)^{2\nu},&\nu\ne1,\\[3pt]
+\dfrac{(\alpha h)^2}{2}\left[m_2\{\log(\alpha h/2)
++\gamma_{\rm E}-1/2\}+\ell_{2,k}\right],&\nu=1,
+\end{cases}
+\label{eq:transitionW}
+\end{equation}
+where \(\ell_{2,k}=\E\{\lVert D\rVert^2\log\lVert D\rVert\}\).
+Set
+\begin{equation}
+\widetilde\rho_h=
+\frac{\Matern_\nu(z)+h^2B_{\nu,k}(r)}{1+W_{\nu,k}(h)},\qquad
+\Matern_\nu(\widetilde\alpha_hR)=\widetilde\rho_h.
+\label{eq:transitiontarget}
+\end{equation}
+
+\begin{proposition}[Transition-aware approximation]
+For fixed \(0<\nu<2\),
+\begin{equation}
+\alpha_h^\dagger-\widetilde\alpha_h=
+\begin{cases}
+O(h^{2\nu+2}),&0<\nu<1,\\
+O\{h^4\log(1/h)\},&\nu=1,\\
+O(h^4),&1<\nu<2.
+\end{cases}
+\label{eq:transitionerror}
+\end{equation}
+Moreover \(W_{\nu,k}(h)\to W_{1,k}(h)\) as \(\nu\to1\) for fixed \(h>0\).
+The error orders are not claimed jointly uniform in \((\nu,h)\).
+\end{proposition}
 
 \begin{proposition}[Directional support contrast]
 Let \(\Delta_e(h)=\alpha-\alpha_h^\dagger(e)\). For two unit lag
@@ -570,6 +610,35 @@ leading asymptotic terms over smoothing bandwidth on logarithmic axes.}
 (solid) and theorem leading terms with explicit coefficients (dashed). Right:
 their ratio, which approaches one as \(h\downarrow0\).}
 \label{fig:phase}
+\end{figure*}
+
+The pointwise qualifier matters at practical bandwidths. We therefore audited
+the threshold layer on 111 deterministic cells with
+\(\nu\in[0.55,1.45]\), spacing 0.025, and
+\(h\in\{0.01,0.02,0.05\}\). The smallest exact-shift to one-term
+ratio was 0.154; equivalently, the one-term prediction was up to 6.51 times
+the exact shift near, but not at, \(\nu=1\). In contrast, the maximum relative
+error of \(\widetilde\alpha_h\) was 0.099\%, and the maximum relative
+error in variance loss was 0.084\%. Every exact and approximate shift had the
+theorem-predicted sign. Repeating the exact target at quadrature orders 64 and
+128 changed it by at most \(4.0\times10^{-9}\) and
+\(3.1\times10^{-10}\), respectively, relative to the shift computed at
+order 96. These are finite-grid diagnostics, not a claimed joint uniform
+asymptotic theorem.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.86\textwidth]{figures/transition_stress.pdf}
+\Description{The left panel shows the exact inverse-range shift divided by
+the regime-specific one-term asymptotic shift. The rough and smooth curves dip
+sharply on either side of one, while diamonds mark the logarithmic formula
+exactly at one. The right panel shows the transition-aware relative error below
+one tenth of one percent on a logarithmic scale.}
+\caption{Finite-bandwidth transition stress around \(\nu=1\). Left: the
+fixed-\(\nu\) one-term law is accurate away from the crossover but nonuniform
+near it. Right: retaining the canceling quadratic and fractional terms gives a
+continuous, sub-0.1\% approximation on the audited grid.}
+\label{fig:transition}
 \end{figure*}
 
 \subsection{Directional support oracle}

@@ -1,10 +1,12 @@
 """Theory and estimators for covariance inference after spatial smoothing."""
 
 from HighDimSpatial.smoothing_bias.continuous import (
+    TransitionPairApproximation,
     continuous_matern_pair_target,
     epanechnikov_difference_radial_moment,
     product_epanechnikov_decay_shift_coefficient,
     product_epanechnikov_direction_contrast_coefficient,
+    transition_aware_matern_pair_approximation,
     transformed_epanechnikov_difference_radial_moment,
 )
 from HighDimSpatial.smoothing_bias.high_dimensional import (
@@ -41,6 +43,7 @@ from HighDimSpatial.smoothing_bias.theory import (
 )
 
 __all__ = [
+    "TransitionPairApproximation",
     "corrected_two_lag_estimate",
     "continuous_matern_pair_target",
     "epanechnikov_difference_radial_moment",
@@ -58,6 +61,7 @@ __all__ = [
     "product_epanechnikov_decay_shift_coefficient",
     "product_epanechnikov_direction_contrast_coefficient",
     "transformed_epanechnikov_difference_radial_moment",
+    "transition_aware_matern_pair_approximation",
     "CandidateLikelihoodBound",
     "UniformLikelihoodBound",
     "gaussian_likelihood_uniform_bound",

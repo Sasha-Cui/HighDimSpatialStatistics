@@ -137,6 +137,90 @@ def phase_figure(data: pd.DataFrame, output: Path) -> None:
     save_figure(figure, output / "phase_law")
 
 
+def transition_figure(data: pd.DataFrame, output: Path) -> None:
+    required = {
+        "smoothness",
+        "bandwidth",
+        "exact_to_leading_ratio",
+        "transition_relative_error",
+    }
+    missing = required.difference(data.columns)
+    if missing:
+        raise ValueError(f"transition data are missing columns: {sorted(missing)}")
+    bandwidths = sorted(data["bandwidth"].unique())
+    if len(bandwidths) > len(NU_COLORS):
+        raise ValueError("transition figure has more bandwidths than declared colors")
+    figure, axes = plt.subplots(1, 2, figsize=(7.6, 3.55))
+    leading_axis, transition_axis = axes
+    for color, bandwidth in zip(NU_COLORS, bandwidths, strict=False):
+        group = data[data["bandwidth"] == bandwidth].sort_values("smoothness")
+        label = rf"$h={bandwidth:g}$"
+        for index, segment in enumerate(
+            (
+                group[group["smoothness"] < 1.0],
+                group[group["smoothness"] > 1.0],
+            )
+        ):
+            leading_axis.plot(
+                segment["smoothness"],
+                segment["exact_to_leading_ratio"],
+                color=color,
+                marker="o",
+                markersize=3.0,
+                linewidth=1.5,
+                label=label if index == 0 else None,
+            )
+        threshold = group[group["smoothness"] == 1.0]
+        leading_axis.scatter(
+            threshold["smoothness"],
+            threshold["exact_to_leading_ratio"],
+            color=color,
+            marker="D",
+            s=23,
+            zorder=3,
+        )
+        transition_error_percent = 100.0 * group[
+            "transition_relative_error"
+        ].to_numpy()
+        if np.any(transition_error_percent <= 0):
+            raise ValueError("transition relative errors must be strictly positive")
+        transition_axis.plot(
+            group["smoothness"],
+            transition_error_percent,
+            color=color,
+            marker="o",
+            markersize=3.0,
+            linewidth=1.5,
+            label=label,
+        )
+    leading_axis.axhline(1.0, color=TEXT, linestyle=":", linewidth=1.0)
+    leading_axis.axvline(1.0, color=GRID, linestyle="--", linewidth=1.0)
+    leading_axis.set_xlabel(r"Matérn smoothness $\nu$")
+    leading_axis.set_ylabel("Exact shift / one-term shift")
+    leading_axis.set_title("One-term law is nonuniform")
+    leading_axis.grid(True, color=GRID, linewidth=0.6, alpha=0.75)
+    transition_axis.axvline(1.0, color=GRID, linestyle="--", linewidth=1.0)
+    transition_axis.set_yscale("log")
+    transition_axis.set_xlabel(r"Matérn smoothness $\nu$")
+    transition_axis.set_ylabel("Two-term relative error (%)")
+    transition_axis.set_title("Cancellation-aware approximation")
+    transition_axis.grid(True, which="both", color=GRID, linewidth=0.6, alpha=0.75)
+    handles, labels = transition_axis.get_legend_handles_labels()
+    legend = figure.legend(
+        handles,
+        labels,
+        loc="outside lower center",
+        ncol=len(labels),
+        frameon=True,
+        facecolor=BACKGROUND,
+        edgecolor=GRID,
+    )
+    legend.get_frame().set_alpha(1.0)
+    figure.suptitle("Finite-bandwidth stress audit around smoothness one")
+    figure.subplots_adjust(bottom=0.23, top=0.82, wspace=0.34)
+    save_figure(figure, output / "transition_stress")
+
+
 def finite_figure(summary: pd.DataFrame, output: Path) -> None:
     core = summary[
         summary["config_id"].str.match(r"d2_nu(05|10|15|25)_h(00|03|05|07)")
@@ -577,6 +661,7 @@ def write_source_extract(
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--phase", type=Path, required=True)
+    parser.add_argument("--transition-stress", type=Path)
     parser.add_argument("--finite-summary", type=Path, required=True)
     parser.add_argument("--anisotropy", type=Path)
     parser.add_argument("--raw-example", type=Path)
@@ -587,6 +672,7 @@ def main() -> None:
         name: path
         for name, path in {
             "phase": args.phase,
+            "transition_stress": args.transition_stress,
             "finite_summary": args.finite_summary,
             "anisotropy": args.anisotropy,
             "raw_example": args.raw_example,
@@ -608,6 +694,14 @@ def main() -> None:
     phase = pd.read_csv(args.phase)
     summary = pd.read_csv(args.finite_summary)
     phase_figure(phase, figures)
+    if args.transition_stress is not None:
+        transition_stress = pd.read_csv(args.transition_stress)
+        transition_figure(transition_stress, figures)
+        write_source_extract(
+            transition_stress,
+            args.transition_stress,
+            data_directory / "transition_stress.csv",
+        )
     finite_figure(summary, figures)
     convergence_figure(summary, figures)
     finite_table(summary, tables / "finite_summary.tex")
@@ -655,6 +749,14 @@ def main() -> None:
         data_directory / "phase_oracle_d2.csv",
         data_directory / "finite_summary.csv",
     ]
+    if args.transition_stress is not None:
+        artifact_paths.extend(
+            [
+                figures / "transition_stress.pdf",
+                figures / "transition_stress.png",
+                data_directory / "transition_stress.csv",
+            ]
+        )
     if args.anisotropy is not None:
         artifact_paths.extend(
             [
@@ -686,6 +788,7 @@ def main() -> None:
         name: str(destination.relative_to(args.paper_directory))
         for name, destination in {
             "phase": data_directory / "phase_oracle_d2.csv",
+            "transition_stress": data_directory / "transition_stress.csv",
             "finite_summary": data_directory / "finite_summary.csv",
             "anisotropy": data_directory / "anisotropic_phase.csv",
             "raw_example": data_directory / "supportshift_raw_example.csv",

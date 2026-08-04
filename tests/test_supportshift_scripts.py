@@ -82,8 +82,26 @@ def test_paper_artifact_builder_records_input_and_output_hashes(tmp_path: Path) 
     data_directory.mkdir(parents=True)
     phase = data_directory / "phase_oracle_d2.csv"
     finite_summary = data_directory / "finite_summary.csv"
+    transition = data_directory / "transition_stress.csv"
     shutil.copyfile(REPO_ROOT / "paper/data/phase_oracle_d2.csv", phase)
     shutil.copyfile(REPO_ROOT / "paper/data/finite_summary.csv", finite_summary)
+    subprocess.run(
+        [
+            sys.executable,
+            "scripts/research/run_transition_stress_audit.py",
+            "--smoothness-count",
+            "5",
+            "--bandwidths",
+            "0.05",
+            "--refinement-orders",
+            "--output",
+            str(transition),
+        ],
+        cwd=REPO_ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
     phase_hash_before = _sha256(phase)
     finite_hash_before = _sha256(finite_summary)
     subprocess.run(
@@ -94,6 +112,8 @@ def test_paper_artifact_builder_records_input_and_output_hashes(tmp_path: Path) 
             str(phase),
             "--finite-summary",
             str(finite_summary),
+            "--transition-stress",
+            str(transition),
             "--highdim",
             str(result),
             "--paper-directory",
@@ -112,6 +132,7 @@ def test_paper_artifact_builder_records_input_and_output_hashes(tmp_path: Path) 
     assert manifest["input_output_aliases"] == {
         "finite_summary": "data/finite_summary.csv",
         "phase": "data/phase_oracle_d2.csv",
+        "transition_stress": "data/transition_stress.csv",
     }
     assert _sha256(phase) == phase_hash_before
     assert _sha256(finite_summary) == finite_hash_before
@@ -122,6 +143,7 @@ def test_paper_artifact_builder_records_input_and_output_hashes(tmp_path: Path) 
         "outputs"
     ]["data/finite_summary.csv"]
     assert "figures/supportshift_highdim.pdf" in manifest["outputs"]
+    assert "figures/transition_stress.pdf" in manifest["outputs"]
     for relative_path, expected_hash in manifest["outputs"].items():
         assert _sha256(paper_directory / relative_path) == expected_hash
     summary_header = (
@@ -146,3 +168,34 @@ def test_paper_artifact_builder_records_input_and_output_hashes(tmp_path: Path) 
         text=True,
     )
     assert "SupportShift release verified" in verification.stdout
+
+
+def test_transition_stress_driver_records_gates_and_hash(tmp_path: Path) -> None:
+    result = tmp_path / "transition.csv"
+    subprocess.run(
+        [
+            sys.executable,
+            "scripts/research/run_transition_stress_audit.py",
+            "--smoothness-count",
+            "5",
+            "--bandwidths",
+            "0.05",
+            "--refinement-orders",
+            "--output",
+            str(result),
+        ],
+        cwd=REPO_ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    metadata = json.loads(
+        result.with_suffix(".metadata.json").read_text(encoding="utf-8")
+    )
+    with result.open(encoding="utf-8", newline="") as handle:
+        rows = list(csv.DictReader(handle))
+    assert metadata["schema_version"] == "1.0"
+    assert metadata["rows"] == len(rows) == 5
+    assert metadata["validation_gates"]["all_passed"]
+    assert metadata["result_csv"]["sha256"] == _sha256(result)
+    assert max(float(row["transition_relative_error"]) for row in rows) <= 0.002

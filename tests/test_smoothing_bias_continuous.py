@@ -7,6 +7,7 @@ from HighDimSpatial.smoothing_bias.continuous import (
     product_epanechnikov_decay_shift_coefficient,
     product_epanechnikov_direction_contrast_coefficient,
     product_epanechnikov_difference_quadrature,
+    transition_aware_matern_pair_approximation,
     transformed_epanechnikov_difference_radial_moment,
 )
 from HighDimSpatial.smoothing_bias.theory import naive_exponential_pseudo_target
@@ -298,4 +299,71 @@ def test_anisotropic_geometry_validation_is_explicit() -> None:
             bandwidth=0.1,
             lag=1.0,
             lag_direction=np.array([2.0, 0.0]),
+        )
+
+
+@pytest.mark.parametrize("smoothness", [0.6, 0.95, 1.0, 1.05, 1.4])
+@pytest.mark.parametrize("bandwidth", [0.02, 0.05])
+def test_transition_aware_approximation_matches_exact_pair_target(
+    smoothness: float,
+    bandwidth: float,
+) -> None:
+    exact = continuous_matern_pair_target(
+        dimension=2,
+        smoothness=smoothness,
+        decay=1.0,
+        bandwidth=bandwidth,
+        lag=1.0,
+        quadrature_order=96,
+    )
+    approximation = transition_aware_matern_pair_approximation(
+        dimension=2,
+        smoothness=smoothness,
+        decay=1.0,
+        bandwidth=bandwidth,
+        lag=1.0,
+        quadrature_order=96,
+    )
+    exact_shift = 1.0 - exact.pseudo_decay
+    approximate_shift = 1.0 - approximation.pseudo_decay
+    assert exact_shift > 0.0
+    assert approximate_shift > 0.0
+    assert exact_shift / approximate_shift == pytest.approx(1.0, rel=0.002)
+
+
+def test_transition_aware_approximation_has_continuous_threshold_limit() -> None:
+    values = [
+        transition_aware_matern_pair_approximation(
+            dimension=2,
+            smoothness=smoothness,
+            decay=1.0,
+            bandwidth=0.05,
+            lag=1.0,
+            quadrature_order=96,
+        )
+        for smoothness in (1.0 - 1e-6, 1.0, 1.0 + 1e-6)
+    ]
+    assert values[0].variance_factor == pytest.approx(
+        values[1].variance_factor,
+        abs=2e-8,
+    )
+    assert values[2].variance_factor == pytest.approx(
+        values[1].variance_factor,
+        abs=2e-8,
+    )
+    assert values[0].pseudo_decay == pytest.approx(values[1].pseudo_decay, abs=2e-8)
+    assert values[2].pseudo_decay == pytest.approx(values[1].pseudo_decay, abs=2e-8)
+
+
+@pytest.mark.parametrize("smoothness", [0.0, 2.0, 2.5])
+def test_transition_aware_approximation_rejects_out_of_scope_smoothness(
+    smoothness: float,
+) -> None:
+    with pytest.raises(ValueError, match="strictly between zero and two"):
+        transition_aware_matern_pair_approximation(
+            dimension=2,
+            smoothness=smoothness,
+            decay=1.0,
+            bandwidth=0.05,
+            lag=1.0,
         )

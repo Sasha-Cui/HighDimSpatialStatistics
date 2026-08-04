@@ -106,6 +106,8 @@ flowchart TD
   L5["L5: inverse-map expansion"]
   L6["L6: Bessel recurrence and sign"]
   T1["T1: three-regime support phase law"]
+  L7["L7: two-term origin expansion and threshold cancellation"]
+  T1b["T1b: transition-aware pair approximation"]
   C1["C1: directional h^2 contrast"]
   F1["F1: exact finite-design support covariance"]
   H["H1--H5: iid vectors, finite library, normalization"]
@@ -121,6 +123,9 @@ flowchart TD
   L3 --> L4 --> L5
   L5 --> T1
   L6 --> T1
+  L3 --> L7
+  L2 --> T1b
+  L7 --> T1b
   L2 --> C1
   L3 --> C1
   L6 --> C1
@@ -227,6 +232,44 @@ For fixed (\nu>0),
 
 with explicit positive coefficients. The theorem is a pairwise
 pseudo-parameter statement, not a universal full-likelihood theorem.
+
+### L7--T1b. Threshold cancellation and transition-aware target -- complete
+
+For \(0<\nu<2\), retain both the analytic quadratic term and the fractional
+term in the Matérn origin series. For \(\nu\ne1\), define
+
+\[
+  W_{\nu,k}(h)
+  =\frac{m_2(\alpha h)^2}{4(1-\nu)}
+   +\frac{\Gamma(-\nu)}{2^{2\nu}\Gamma(\nu)}
+    m_{2\nu}(\alpha h)^{2\nu}.
+\]
+
+The two individually singular terms cancel as \(\nu\to1\). Their limit is
+
+\[
+  W_{1,k}(h)=\frac{(\alpha h)^2}{2}\left[
+  m_2\{\log(\alpha h/2)+\gamma_{\mathrm E}-1/2\}
+  +\ell_{2,k}\right],\qquad
+  \ell_{2,k}=\mathbb E\{\lVert D\rVert^2\log\lVert D\rVert\}.
+\]
+
+Combining \(1+W_{\nu,k}(h)\) with the fixed-lag quadratic expansion and
+inverting the Matérn correlation gives
+
+\[
+  \alpha_h^\dagger-\widetilde\alpha_h=
+  \begin{cases}
+  O(h^{2\nu+2}),&0<\nu<1,\\
+  O\{h^4\log(1/h)\},&\nu=1,\\
+  O(h^4),&1<\nu<2.
+  \end{cases}
+\]
+
+These are fixed-\(\nu\) errors. The proof establishes continuity of the
+retained terms through one, but does **not** establish a joint remainder
+uniform in \((\nu,h)\). The 111-cell threshold experiment is therefore a
+deterministic stress audit, not evidence for an unstated uniform theorem.
 
 ### C1. Directional support contrast -- complete
 

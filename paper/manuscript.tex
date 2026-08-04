@@ -47,6 +47,9 @@ Gaussian two-point likelihood with known smoothness \(\nu\), we characterize the
 exact pseudo-variance and pseudo-decay and derive their small-support
 expansions.  The naive inverse-range shift is of order \(h^{2\nu}\) for
 \(0<\nu<1\), \(h^2\log(1/h)\) at \(\nu=1\), and \(h^2\) for \(\nu>1\).
+Because this leading law is nonuniform near the threshold, we also derive a
+two-term approximation whose singular quadratic and fractional terms cancel
+continuously into the \(\nu=1\) logarithm.
 Explicit coefficients show that naive point-support fitting underestimates
 inverse range---and therefore overestimates spatial range---for every fixed
 \(\nu>0\) and all sufficiently small \(h\).  For anisotropic support, an
@@ -108,7 +111,8 @@ principal mathematical contribution is the explicit all-smoothness,
 \begin{enumerate}
   \item We derive a phase law for the naive Mat\'ern decay target: orders
   \(h^{2\nu}\), \(h^2\log(1/h)\), and \(h^2\) in the rough, threshold, and
-  smooth regimes.
+  smooth regimes.  A transition-aware two-term target approximation resolves
+  the slow finite-bandwidth crossover around \(\nu=1\).
   \item We give explicit coefficients.  Origin expansions, together with a
   Bessel-function identity in the smooth regime, prove that normalized
   correlation increases, hence inverse range decreases, for every \(\nu>0\)
@@ -350,6 +354,50 @@ in \eqref{eq:G-positive} remains positive.  For an isotropic kernel with
 \begin{equation}
   A_{\nu,k}(r)=\sigma_k^2\alpha^2(2\nu+d-2)G_\nu(z).
 \end{equation}
+
+The one-term phase law is pointwise in fixed \(\nu\), so convergence slows near
+the threshold.  The following refinement retains the two origin terms that
+cancel as \(\nu\to1\).  For \(0<\nu<2\), \(\nu\ne1\), put
+\begin{equation}
+  b_\nu=\frac{\Gamma(-\nu)}{2^{2\nu}\Gamma(\nu)},\qquad
+  W_{\nu,k}(h)=\frac{m_2(\alpha h)^2}{4(1-\nu)}
+  +b_\nu m_{2\nu}(\alpha h)^{2\nu}.
+  \label{eq:transition-W-noninteger}
+\end{equation}
+At \(\nu=1\), define
+\begin{equation}
+  \ell_{2,k}=\E\{\lVert D\rVert^2\log\lVert D\rVert\},\qquad
+  W_{1,k}(h)=\frac{(\alpha h)^2}{2}\left[
+  m_2\{\log(\alpha h/2)+\gamma_{\mathrm E}-1/2\}+\ell_{2,k}
+  \right],
+  \label{eq:transition-W-one}
+\end{equation}
+where \(0\log0=0\).  For sufficiently small \(h>0\), let
+\begin{equation}
+  \widetilde\rho_h(r)
+  =\frac{\Matern_\nu(z)+h^2B_{\nu,k}(r)}{1+W_{\nu,k}(h)},\qquad
+  \Matern_\nu(\widetilde\alpha_hR)=\widetilde\rho_h(r).
+  \label{eq:transition-target}
+\end{equation}
+
+\begin{proposition}[Transition-aware pair approximation]
+\label{prop:transition-aware}
+For fixed \(0<\nu<2\), the approximation in
+\eqref{eq:transition-target} satisfies
+\begin{equation}
+  \alpha_h^\dagger-\widetilde\alpha_h=
+  \begin{cases}
+    O(h^{2\nu+2}), & 0<\nu<1,\\
+    O\{h^4\log(1/h)\}, & \nu=1,\\
+    O(h^4), & 1<\nu<2.
+  \end{cases}
+  \label{eq:transition-target-error}
+\end{equation}
+Moreover, for every fixed \(h>0\),
+\(\lim_{\nu\to1}W_{\nu,k}(h)=W_{1,k}(h)\).
+The error orders are pointwise in \(\nu\); no joint uniform remainder in
+\((\nu,h)\) is asserted.
+\end{proposition}
 
 The qualitative fact that convolution can induce covariance anisotropy is
 known \citep{clifford2006yield,paciorek2006nonstationary}.  The next corollary
@@ -609,6 +657,42 @@ bandwidth, exact-shift to leading-term ratios were 1.021, 1.000, 0.958, 1.059,
   with their explicit coefficients (dashed).  Right: their ratio, which
   approaches one as \(h\downarrow0\).}
   \label{fig:phase}
+\end{figure}
+
+\subsection{Threshold-layer stress audit}
+
+The one-term theorem is pointwise in fixed smoothness, and its coefficient is
+therefore not a uniformly reliable finite-bandwidth approximation near
+\(\nu=1\).  We evaluated 111 deterministic cells with
+\(\nu\in[0.55,1.45]\) at spacing 0.025 and
+\(h\in\{0.01,0.02,0.05\}\).  The minimum ratio of the exact shift to
+the regime-specific one-term shift was 0.154.  Thus a literal switch between
+the rough, logarithmic, and smooth leading laws is unreliable in the threshold
+layer: the one-term prediction was up to 6.51 times the exact shift.
+
+The transition-aware target in Proposition~\ref{prop:transition-aware} had
+maximum relative pseudo-decay-shift error 0.099\% and maximum relative error
+in variance loss 0.084\% over the same grid.  Every exact and approximate shift
+was positive.  Relative to order 96, quadrature orders 64 and 128 changed an
+exact pseudo-decay by at most \(4.0\times10^{-9}\) and
+\(3.1\times10^{-10}\) of its exact shift, respectively.  These numerical
+results resolve a finite-\(h\) crossover; they do not strengthen the
+pointwise remainder in Proposition~\ref{prop:transition-aware} into a joint
+uniform theorem in \((\nu,h)\).
+
+\begin{figure}[t]
+  \centering
+  \IfFileExists{figures/transition_stress.pdf}{
+    \includegraphics[width=0.96\linewidth]{figures/transition_stress.pdf}
+  }{
+    \fcolorbox{black}{panelgray}{\parbox[c][2.0in][c]{0.90\linewidth}{
+      \centering Figure generated after the reproducible analysis step.}}
+  }
+  \caption{Finite-bandwidth transition stress around \(\nu=1\).  Left:
+  exact inverse-range shift divided by the fixed-\(\nu\) one-term
+  approximation.  Right: relative error of the cancellation-aware two-term
+  approximation on a logarithmic scale.}
+  \label{fig:transition-stress}
 \end{figure}
 
 \subsection{Directional support oracle}
@@ -1020,6 +1104,44 @@ Using \(m_2=2T_k\), the coefficient becomes
 
 implies \eqref{eq:G-positive}.  Positivity of \(K_\eta(z)\) for real \(\eta\)
 and \(z>0\), together with \eqref{eq:matern-derivative}, proves the sign.
+\end{proof}
+
+\section{Proof of the transition-aware approximation}
+
+\begin{proof}
+For noninteger \(0<\nu<2\), retain the quadratic analytic term and the
+leading fractional term in \eqref{eq:bessel-series}.  Compact support permits
+termwise expectation and gives
+\begin{equation}
+  \frac{C_h(0)}v=1+W_{\nu,k}(h)+
+  \begin{cases}
+    O(h^{2\nu+2}), & 0<\nu<1,\\
+    O(h^4), & 1<\nu<2.
+  \end{cases}
+  \label{eq:transition-variance-proof}
+\end{equation}
+At \(\nu=1\), taking the expectation of the displayed expansion for
+\(\Matern_1\) gives \(1+W_{1,k}(h)+O\{h^4\log(1/h)\}\).
+Together with the fixed-lag expansion \eqref{eq:fixed-lag-expansion}, these
+relations imply that the exact correlation differs from
+\(\widetilde\rho_h\) by the corresponding order in
+\eqref{eq:transition-target-error}.  The inverse of
+\(\alpha\mapsto\Matern_\nu(\alpha R)\) has a bounded derivative in a
+neighborhood of the fixed target, so the same orders hold for decay.
+
+To verify the threshold cancellation, write \(\nu=1+\varepsilon\).  As
+\(\varepsilon\to0\),
+\begin{align}
+  b_{1+\varepsilon}
+  &=\frac1{4\varepsilon}
+    +\frac{2\gamma_{\mathrm E}-1-2\log2}{4}+O(\varepsilon),\\
+  m_{2+2\varepsilon}(\alpha h)^{2+2\varepsilon}
+  &=(\alpha h)^2\left[m_2+2\varepsilon
+  \{\ell_{2,k}+m_2\log(\alpha h)\}+O(\varepsilon^2)\right].
+\end{align}
+The pole cancels the first term in
+\eqref{eq:transition-W-noninteger}; the finite remainder is exactly
+\eqref{eq:transition-W-one}.
 \end{proof}
 
 \section{Proof of the directional support contrast}

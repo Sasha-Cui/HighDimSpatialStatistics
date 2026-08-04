@@ -36,6 +36,22 @@ class ContinuousPairTarget:
     quadrature_order: int
 
 
+@dataclass(frozen=True)
+class TransitionPairApproximation:
+    """Two-term approximation to the pair target near smoothness one."""
+
+    dimension: int
+    smoothness: float
+    true_decay: float
+    pseudo_decay: float
+    bandwidth: float
+    lag: float
+    variance_factor: float
+    covariance_factor: float
+    correlation: float
+    quadrature_order: int
+
+
 def product_epanechnikov_difference_quadrature(
     dimension: int,
     order: int = 64,
@@ -250,6 +266,131 @@ def product_epanechnikov_direction_contrast_coefficient(
     if not np.isfinite(coefficient):
         raise ValueError("the directional contrast coefficient must be finite")
     return float(coefficient)
+
+
+def transition_aware_matern_pair_approximation(
+    *,
+    dimension: int,
+    smoothness: float,
+    decay: float,
+    bandwidth: float,
+    lag: float,
+    quadrature_order: int = 96,
+    kernel_transform: np.ndarray | None = None,
+    lag_direction: np.ndarray | None = None,
+) -> TransitionPairApproximation:
+    r"""Approximate the pair target with both origin terms around ``nu=1``.
+
+    For noninteger smoothness between zero and two, the Matérn origin series
+    contains an analytic quadratic term and a fractional-power term. Each has a
+    coefficient that diverges as smoothness approaches one, but their sum has a
+    finite logarithmic limit. Retaining both terms removes the slow transition
+    layer that makes either one-term phase approximation inaccurate at finite
+    bandwidth.
+
+    The fixed-lag covariance retains its quadratic Taylor term. For fixed
+    smoothness below one the resulting pseudo-decay error is order
+    ``h**(2*nu+2)``; at one it is order ``h**4 * abs(log(h))``; and between one
+    and two it is order ``h**4``.
+    """
+    if not 0.0 < smoothness < 2.0:
+        raise ValueError("smoothness must lie strictly between zero and two")
+    if decay <= 0 or bandwidth < 0 or lag <= 0:
+        raise ValueError("decay and lag must be positive; bandwidth must be nonnegative")
+    transform, direction = _kernel_geometry(
+        dimension,
+        kernel_transform,
+        lag_direction,
+    )
+    nodes, weights = product_epanechnikov_difference_quadrature(
+        dimension,
+        quadrature_order,
+    )
+    transformed_nodes = nodes @ transform.T
+    radii = np.linalg.norm(transformed_nodes, axis=1)
+    kernel_covariance = transform @ transform.T / 5.0
+    m2 = 2.0 * float(np.trace(kernel_covariance))
+
+    z = decay * lag
+    base_correlation = float(
+        matern_correlation(np.asarray(lag), decay, smoothness)
+    )
+    if bandwidth == 0:
+        return TransitionPairApproximation(
+            dimension=dimension,
+            smoothness=float(smoothness),
+            true_decay=float(decay),
+            pseudo_decay=float(decay),
+            bandwidth=0.0,
+            lag=float(lag),
+            variance_factor=1.0,
+            covariance_factor=base_correlation,
+            correlation=base_correlation,
+            quadrature_order=int(quadrature_order),
+        )
+
+    scaled_bandwidth = decay * bandwidth
+    if smoothness == 1.0:
+        squared_log_moment = float(
+            weights @ (np.square(radii) * np.log(radii))
+        )
+        variance_shift = 0.5 * scaled_bandwidth**2 * (
+            m2 * (np.log(scaled_bandwidth / 2.0) + np.euler_gamma - 0.5)
+            + squared_log_moment
+        )
+    else:
+        fractional_moment = float(weights @ radii ** (2.0 * smoothness))
+        fractional_coefficient = gamma(-smoothness) / (
+            2.0 ** (2.0 * smoothness) * gamma(smoothness)
+        )
+        variance_shift = (
+            m2 * scaled_bandwidth**2 / (4.0 * (1.0 - smoothness))
+            + fractional_coefficient
+            * fractional_moment
+            * scaled_bandwidth ** (2.0 * smoothness)
+        )
+    variance_factor = 1.0 + float(variance_shift)
+
+    derivative = -base_correlation * (
+        kve(smoothness - 1.0, z) / kve(smoothness, z)
+    )
+    second_derivative = base_correlation + (2.0 * smoothness - 1.0) * derivative / z
+    directional_variance = float(direction @ kernel_covariance @ direction)
+    total_variance = float(np.trace(kernel_covariance))
+    fixed_lag_coefficient = decay**2 * (
+        directional_variance * second_derivative
+        + (total_variance - directional_variance) * derivative / z
+    )
+    covariance_factor = base_correlation + bandwidth**2 * fixed_lag_coefficient
+    correlation = covariance_factor / variance_factor
+    if not 0.0 < correlation < 1.0:
+        raise ValueError(
+            "the transition-aware correlation must lie strictly between zero and one"
+        )
+
+    def root(candidate_decay: float) -> float:
+        candidate_correlation = matern_correlation(
+            np.asarray(lag),
+            candidate_decay,
+            smoothness,
+        )
+        return float(candidate_correlation) - correlation
+
+    lower = np.finfo(float).eps / lag
+    upper = max(100.0 / lag, 100.0 * decay)
+    pseudo_decay = float(brentq(root, lower, upper, xtol=1e-13, rtol=1e-13))
+    return TransitionPairApproximation(
+        dimension=dimension,
+        smoothness=float(smoothness),
+        true_decay=float(decay),
+        pseudo_decay=pseudo_decay,
+        bandwidth=float(bandwidth),
+        lag=float(lag),
+        variance_factor=variance_factor,
+        covariance_factor=float(covariance_factor),
+        correlation=float(correlation),
+        quadrature_order=int(quadrature_order),
+    )
 
 
 def continuous_matern_pair_target(
