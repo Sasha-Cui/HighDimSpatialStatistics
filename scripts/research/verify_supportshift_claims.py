@@ -92,6 +92,41 @@ def _rmse(values: pd.Series) -> float:
     return float(np.sqrt(np.mean(np.square(values.to_numpy(dtype=float)))))
 
 
+def _tables_match(
+    left: pd.DataFrame,
+    right: pd.DataFrame,
+    *,
+    relative_tolerance: float = 5e-15,
+    absolute_tolerance: float = 5e-18,
+) -> bool:
+    """Compare promoted and paper tables across pandas CSV parsers.
+
+    The paper-facing CSV is decimal-rounded from the promoted source.  Exact
+    float equality can therefore depend on the parser version at the final bit.
+    Non-floating columns remain exact, while floating columns must agree to a
+    tolerance far below the numerical precision reported in either paper.
+    """
+    if left.shape != right.shape or not left.columns.equals(right.columns):
+        return False
+    for column in left.columns:
+        left_values = left[column]
+        right_values = right[column]
+        if pd.api.types.is_float_dtype(left_values.dtype) and pd.api.types.is_float_dtype(
+            right_values.dtype
+        ):
+            if not np.allclose(
+                left_values.to_numpy(dtype=float),
+                right_values.to_numpy(dtype=float),
+                rtol=relative_tolerance,
+                atol=absolute_tolerance,
+                equal_nan=True,
+            ):
+                return False
+        elif not left_values.equals(right_values):
+            return False
+    return True
+
+
 def audit_claims(repository_root: Path, paper_directory: Path) -> dict[str, Any]:
     """Return a complete numerical claim ledger for both paper versions."""
     audit = ClaimAudit()
@@ -103,8 +138,9 @@ def audit_claims(repository_root: Path, paper_directory: Path) -> dict[str, Any]
     phase_metadata = _load_json(output_directory / "phase_oracle_d2_v2.metadata.json")
     audit.truth(
         "paper phase table matches promoted source",
-        phase.equals(promoted_phase),
-        "data frames are identical after CSV parsing",
+        _tables_match(phase, promoted_phase),
+        "schemas and discrete values are exact; floats agree within 5e-15 "
+        "relative and 5e-18 absolute tolerance",
     )
     audit.exact("phase rows", len(phase), 108)
     audit.exact("phase dimensions", sorted(phase["dimension"].unique().tolist()), [2])
