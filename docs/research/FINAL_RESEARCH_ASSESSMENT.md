@@ -100,6 +100,9 @@ The audited numerical release was frozen under tag
 benchmark-consumer contract, and the more precise Fuentes comparison were added
 without changing promoted numerical inputs in patch release
 `supportshift-geosim-v1.0.1`.
+Release `supportshift-geosim-v1.1.0` adds the transition-aware theorem,
+the clean-commit threshold stress audit, and its manifest-linked source data and
+figure; it does not alter the earlier finite-grid or replicated-field inputs.
 
 The pre-audit history consisted of four bulk commits made on one day and did not
 record a theorem or experiment-development trail. The research branch now has
@@ -114,14 +117,16 @@ The final benchmark files are:
 - outputs/smoothing_bias/supportshift_highdim_final_v2_20260803.metadata.json;
 - outputs/smoothing_bias/supportshift_raw_final_v2_20260803.csv;
 - outputs/smoothing_bias/supportshift_anisotropic_final_20260803.csv; and
-- outputs/smoothing_bias/supportshift_anisotropic_final_20260803.metadata.json.
+- outputs/smoothing_bias/supportshift_anisotropic_final_20260803.metadata.json;
+- outputs/smoothing_bias/supportshift_transition_stress_20260804.csv; and
+- outputs/smoothing_bias/supportshift_transition_stress_20260804.metadata.json.
 
 The artifact manifest at paper/data/supportshift_artifact_manifest.json links
 the final inputs to generated source data, figures, and tables. Manifest schema
 1.1 explicitly records any source file that is also a paper output and forbids
 rewriting that aliased input. Every current input/output hash verifies.
 
-The maintained suite was verified with 87 passing tests in the configured
+The maintained suite was verified with 102 passing tests in the configured
 research environment, and the maintained SupportShift Ruff scope is clean.
 Reproduction instructions point to the declared Python 3.12 environment and
 promoted package snapshot rather than an arbitrary system Python.
@@ -400,6 +405,7 @@ covered by regression tests. It does not replace independent expert review.
 | Uniform fixed-nonzero-lag expansion | Complete | Correct only away from the origin and with bounded support |
 | Origin expansion for \(0<\nu<1\) | Complete | Fractional \(h^{2\nu}\) term and remainder are consistent |
 | Threshold expansion at \(\nu=1\) | Complete | The \(h^2\log(1/h)\) coefficient is consistent |
+| Transition-aware two-term approximation | Complete | Singular quadratic and fractional terms cancel continuously at one; error orders remain pointwise in \(\nu\) |
 | Smooth expansion for \(\nu>1\) | Complete | Includes separate remainders at \(1<\nu<2\), \(\nu=2\), and \(\nu>2\) |
 | Universal small-support range-inflation sign | Complete | Bessel recurrence reduces the coefficient to a positive function |
 | Directional support contrast for all \(\nu>0\) | Complete | Common origin term cancels, leaving order \(h^2\) |
@@ -663,6 +669,7 @@ to reinterpret \(p\) as independent sample size or to claim a sparsity rate.
 | Theory claim | Synthetic track | Result | Interpretation |
 |---|---|---|---|
 | Three phase regimes | 2D product-Epanechnikov deterministic quadrature | 108 targets over six \(\nu\) and 18 bandwidths | Direct coefficient and rate check |
+| Smoothness-one transition | Fine-grid deterministic quadrature | 111 targets; two-term error below 0.1% | Resolves finite-bandwidth cancellation without claiming a joint uniform theorem |
 | Universal small-\(h\) sign | Same phase track | All 108 inverse-range shifts positive | Supports, but does not replace, proof |
 | Directional \(h^2\) contrast | Elongated-support quadrature | 2,128 rows; all gates pass | Tests exact directional coefficient |
 | Correct family contains truth | Finite-grid population KL | Corrected target numerically one | Model-containment control |
@@ -1116,7 +1123,7 @@ required for the minimum paper.
 
 ### 9.1 Completed datasets
 
-The paper already contains five useful synthetic products.
+The paper already contains six useful synthetic products.
 
 1. **Continuous phase table.** Exact quadrature targets across \(h\) and
    \(\nu\), with leading coefficients and refinement diagnostics.
@@ -1131,6 +1138,9 @@ The paper already contains five useful synthetic products.
 5. **Raw illustration data.** Four latent \(23\times23\) fields and their exact
    \(10\times10\) supported outputs, sufficient to reconstruct the
    before/after figure.
+6. **Threshold stress table.** Exact, one-term, and transition-aware targets on
+   111 cells around \(\nu=1\), with quadrature refinements and predeclared sign
+   and relative-error gates.
 
 These are empirical experiments on synthetic data, not empirical application
 data.
@@ -1140,6 +1150,7 @@ data.
 | Claim | Factors | Metric | Required gate |
 |---|---|---|---|
 | Phase exponent | six \(\nu\), 18 \(h\) | small-\(h\) slope and exact/leading ratio | refinement and sign pass |
+| Threshold cancellation | 37 \(\nu\), three \(h\) | one-term ratio and two-term relative error | sign and 0.2% error gates pass |
 | Directional coefficient | four \(\nu\), two aspects, angles, 14 \(h\) | contrast divided by theorem term | relative error below declared threshold |
 | Corrected containment | \(p,\nu\), corrected family | population target and objective gap | truth exactly represented |
 | Full-grid misspecification | \(h,\nu\), boundary/jitter | naive target and MC mean | all failures retained |
@@ -1217,11 +1228,12 @@ should be reserved for a future workload that demonstrably uses them.
 
 ### 10.2 Release state and submission blockers
 
-The internal artifact gates are complete: the GeoSim paper is within the
-10-page main-text limit, the technical manuscript is 20 pages, every page has
+The internal artifact gates are complete: the GeoSim paper has nine main-text
+pages plus one reference page and is within the 10-page main-text limit, the
+technical manuscript is 22 pages, every page has
 been rendered and inspected,
-the 87-test suite passes, scoped Ruff is clean, and the release verifier checks
-12,800 rows, 64 coverage cells, and 18 hashed paper artifacts. The remaining
+the 102-test suite passes, scoped Ruff is clean, and the release verifier checks
+12,800 rows, 64 coverage cells, and 21 hashed paper artifacts. The remaining
 tasks are proof, priority, publication, and release chores rather than further
 statistical computation:
 

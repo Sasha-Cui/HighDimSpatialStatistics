@@ -82,6 +82,9 @@ python scripts/research/run_matern_phase_oracle.py \
 
 python scripts/research/run_anisotropic_phase_oracle.py \
   --output outputs/smoothing_bias/supportshift_anisotropic.csv
+
+python scripts/research/run_transition_stress_audit.py \
+  --output outputs/smoothing_bias/supportshift_transition_stress_20260804.csv
 ```
 
 Run a small end-to-end replicated-field check locally:
@@ -106,6 +109,7 @@ manifest from validated inputs:
 ```bash
 python scripts/research/make_support_paper_artifacts.py \
   --phase paper/data/phase_oracle_d2.csv \
+  --transition-stress outputs/smoothing_bias/supportshift_transition_stress_20260804.csv \
   --finite-summary paper/data/finite_summary.csv \
   --anisotropy outputs/smoothing_bias/supportshift_anisotropic_final_20260803.csv \
   --highdim outputs/smoothing_bias/supportshift_highdim_final_v2_20260803.csv \
@@ -117,8 +121,9 @@ The promoted schema is 1.1: $p\in\{16,36,64,100\}$,
 $N\in\{1,4,16,64\}$, 200 trials per design, and a fixed
 $161\times101=16{,}261$-candidate variance--decay library. The clean final
 run is Slurm job `21081491`, generated at commit `d5207fb` with all validation
-gates passing. The audited paper package is frozen at tag
-`supportshift-geosim-v1.0.1`.
+gates passing. The threshold audit was generated from clean commit `34a2603`
+and passed all sign, approximation-error, and quadrature-refinement gates. The
+audited paper package is frozen at tag `supportshift-geosim-v1.1.0`.
 
 Verify the promoted run and every paper-artifact hash in one command:
 

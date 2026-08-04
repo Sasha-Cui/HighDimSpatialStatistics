@@ -305,6 +305,39 @@ scope. The intended patch tag is
 visual inspection, clean-clone verification, local tests, and Bouchet
 verification all pass.
 
+## 2026-08-04 -- smoothness-one transition repair and stress audit
+
+A fresh coefficient-by-coefficient proof audit confirmed the fixed-lag Hessian,
+all three origin regimes, the integer-\(\nu\) logarithmic remainders, the
+Bessel-recurrence sign reduction, the directional contrast, and the exact
+normalization constants in the Gaussian finite-library certificate. The audit
+also found and repaired one wording defect: the workshop manuscript had stated
+pair-composite convergence too strongly even though the required uniform
+ergodic law was not proved. Both manuscripts now describe that argument only
+as a standard possible route.
+
+The main substantive extension retains the analytic \(h^2\) term and the
+fractional \(h^{2\nu}\) term simultaneously. Their coefficients are separately
+singular as \(\nu\to1\), but the poles cancel and converge to the explicit
+Matérn-one logarithmic expression. For fixed smoothness, the resulting pair
+target has pseudo-decay error \(O(h^{2\nu+2})\) below one,
+\(O\{h^4\log(1/h)\}\) at one, and \(O(h^4)\) between one and two. No joint
+uniform remainder in \((\nu,h)\) is claimed.
+
+The deterministic audit generated 111 cells from clean commit `34a2603`, using
+\(d=2\), \(\alpha=R=1\), 37 smoothness values from 0.55 to 1.45, and
+\(h\in\{0.01,0.02,0.05\}\). The minimum exact-to-one-term shift ratio was
+0.153610, so the one-term prediction reached 6.51 times the exact shift near
+the threshold. The transition-aware maximum relative shift error was
+0.000984933, and its maximum relative variance-loss error was 0.000831938.
+All exact and approximate shifts were positive. Quadrature orders 64 and 128
+changed the order-96 target by at most \(3.9632\times10^{-9}\) and
+\(3.0004\times10^{-10}\) relative to the exact shift. Metadata record a clean
+worktree and CSV SHA-256
+`61537589aa30ee8a67f7970125a2aec2ddc23742661e0d75abebfba0a00873a9`.
+Bouchet Ruff checks passed; the full suite collected 102 tests, and the focused
+continuous and artifact-driver groups passed 39/39 and 3/3.
+
 ## Entry template
 
 ```text

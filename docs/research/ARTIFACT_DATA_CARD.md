@@ -15,7 +15,7 @@ be used to make scientific claims about one.
 ## Versioned release
 
 - Repository: <https://github.com/Sasha-Cui/HighDimSpatialStatistics>
-- Artifact release: `supportshift-geosim-v1.0.1`
+- Artifact release: `supportshift-geosim-v1.1.0`
 - Benchmark schema: `1.1`
 - Promoted high-dimensional run: Slurm job `21081491`
 - Authorized allocation: `pi_jss233`
@@ -31,6 +31,7 @@ generation commit, environment, arguments, validation gates, and hashes.
 | Track | Controlled factors | Oracle or population target | Main reported diagnostic |
 |---|---|---|---|
 | Continuous phase | bandwidth, Matérn smoothness | exact two-point pseudo-decay from deterministic quadrature | rate and coefficient ratio |
+| Smoothness-one transition audit | bandwidth and a fine smoothness grid around one | exact pair target and cancellation-aware two-term target | one-term failure and two-term relative error |
 | Directional support | bandwidth, smoothness, lag angle, support aspect ratio | exact directional two-point pseudo-decay | apparent-range contrast |
 | Finite grid | bandwidth, smoothness, boundary/irregular/domain design, fitted support model | exact finite-design Gaussian KL minimizer | bias and Monte Carlo error relative to target |
 | Replicated high dimension | \(p\), \(N\), smoothness, support-aware/naive model | exact finite-library population minimizer | criterion certificate, excess risk, and target-specific RMSE |
@@ -60,6 +61,12 @@ variance--decay library contains 16,261 candidates.
 - `outputs/smoothing_bias/supportshift_anisotropic_final_20260803.metadata.json`:
   generation arguments, environment, quadrature-refinement diagnostics, and
   validation gates.
+- `outputs/smoothing_bias/supportshift_transition_stress_20260804.csv`: 111
+  deterministic cells over 37 smoothness values and three bandwidths, with
+  exact, one-term, and transition-aware targets and errors.
+- `outputs/smoothing_bias/supportshift_transition_stress_20260804.metadata.json`:
+  clean-commit provenance, environment, SHA-256, quadrature refinement, and
+  predeclared sign and approximation-error gates.
 
 ### Compact paper data
 
@@ -70,8 +77,9 @@ variance--decay library contains 16,261 candidates.
 - `paper/data/supportshift_highdim_summary.csv`: compact replicated-track
   summaries.
 - `paper/data/supportshift_raw_example.csv`: plot-ready field extract.
-- `paper/data/supportshift_artifact_manifest.json`: SHA-256 contract for five
-  promoted inputs and 18 generated tables, data extracts, and figures.
+- `paper/data/transition_stress.csv`: threshold-audit plot data.
+- `paper/data/supportshift_artifact_manifest.json`: SHA-256 contract for six
+  promoted inputs and 21 generated tables, data extracts, and figures.
 
 CSV files use header rows, period decimal separators, and no implicit row index.
 Boolean fields are textual `True`/`False`. Coordinates and parameter values use
@@ -104,7 +112,7 @@ python scripts/research/verify_supportshift_release.py \
 ```
 
 A valid full release has 12,800 rows, 64 candidatewise-coverage cells, all
-predeclared statistical gates passing, and 18 matching paper-artifact hashes.
+predeclared statistical gates passing, and 21 matching paper-artifact hashes.
 The verifier fails on missing files, hash changes, incomplete grids, failed
 gates, or dirty generation provenance. The public artifact also supplies the
 exact regeneration command in `README.md`.
@@ -123,6 +131,9 @@ exact regeneration command in `README.md`.
 - The release does not establish uniform consistency over a continuous
   parameter set or separate fixed-domain consistency of Matérn variance and
   range.
+- The transition-aware error orders are pointwise in smoothness. The fine-grid
+  audit does not establish a joint remainder uniform in smoothness and
+  bandwidth.
 
 ## Intended and unintended uses
 

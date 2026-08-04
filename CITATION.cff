@@ -6,9 +6,9 @@ authors:
   - family-names: Cui
     given-names: Sasha
 repository-code: "https://github.com/Sasha-Cui/HighDimSpatialStatistics"
-url: "https://github.com/Sasha-Cui/HighDimSpatialStatistics/tree/supportshift-geosim-v1.0.1"
-version: 1.0.1
-date-released: 2026-08-03
+url: "https://github.com/Sasha-Cui/HighDimSpatialStatistics/tree/supportshift-geosim-v1.1.0"
+version: 1.1.0
+date-released: 2026-08-04
 keywords:
   - Matérn covariance
   - change of support

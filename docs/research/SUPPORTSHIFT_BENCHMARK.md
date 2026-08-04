@@ -66,6 +66,12 @@ for (0<\nu<1), (\nu=1), and (\nu>1), respectively. The plotted leading
 terms include their theorem coefficients. Orders 64, 96, and 128 provide a
 quadrature audit.
 
+A separate 111-cell threshold audit uses 37 smoothness values from 0.55 to
+1.45 and bandwidths 0.01, 0.02, and 0.05. It compares the exact target with
+both the pointwise one-term law and the cancellation-aware two-term target.
+The audit is deliberately labeled finite-grid evidence: it does not promote
+the fixed-smoothness theorem into a joint uniform result.
+
 ### B. Finite-grid support likelihood
 
 The existing finite study compares support-aware and naive full Gaussian
@@ -135,6 +141,8 @@ The final benchmark run is accepted only if all of the following hold:
 - the zero-support control has no pseudo-target displacement;
 - continuous phase coefficients agree with the smallest-bandwidth oracle to the
   predeclared tolerance;
+- every transition-audit shift has the predicted sign, and the two-term shift
+  and variance-loss relative errors stay below the predeclared 0.2% tolerance;
 - directional contrasts agree with their (h^2) coefficient and remain stable
   under quadrature refinement;
 - the finite-library population objective is within its predeclared tolerance
@@ -165,6 +173,7 @@ the seed and exact covariance generator reproduce them.
 | Paper claim | Benchmark evidence | What would falsify or weaken it |
 |---|---|---|
 | Three-regime pairwise phase law | Track A exact oracle and coefficient ratio | wrong slope, sign, or nonconvergent quadrature |
+| Two-term threshold approximation | Track A fine-grid transition audit | failed sign gate, error above 0.2%, or quadrature instability |
 | Support anisotropy creates directional range inflation | Track D angular oracle and contrast ratio | wrong contrast sign or coefficient |
 | Support-aware finite library contains the physical covariance | Tracks B and C population KL oracle | corrected oracle misses an on-grid truth |
 | Likelihood concentration depends on \(N,p,M\) and relative spectra | Track C varies \(N,p\) at fixed \(M\), reports matrix geometry, and compares deviations with the theorem radius | certificate undercoverage or uncontrolled spectra |
