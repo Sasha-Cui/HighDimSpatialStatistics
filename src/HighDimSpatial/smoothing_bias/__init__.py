@@ -1,13 +1,18 @@
 """Theory and estimators for covariance inference after spatial smoothing."""
 
 from HighDimSpatial.smoothing_bias.continuous import (
+    ContinuousPairTarget,
     TransitionPairApproximation,
     continuous_matern_pair_target,
     epanechnikov_difference_radial_moment,
     product_epanechnikov_decay_shift_coefficient,
     product_epanechnikov_direction_contrast_coefficient,
+    product_epanechnikov_difference_quadrature,
+    product_kernel_decay_shift_coefficient,
+    product_uniform_difference_quadrature,
     transition_aware_matern_pair_approximation,
     transformed_epanechnikov_difference_radial_moment,
+    uniform_difference_radial_moment,
 )
 from HighDimSpatial.smoothing_bias.high_dimensional import (
     CandidateLikelihoodBound,
@@ -43,6 +48,7 @@ from HighDimSpatial.smoothing_bias.theory import (
 )
 
 __all__ = [
+    "ContinuousPairTarget",
     "TransitionPairApproximation",
     "corrected_two_lag_estimate",
     "continuous_matern_pair_target",
@@ -60,8 +66,12 @@ __all__ = [
     "naive_separable_axis_pseudo_target",
     "product_epanechnikov_decay_shift_coefficient",
     "product_epanechnikov_direction_contrast_coefficient",
+    "product_epanechnikov_difference_quadrature",
+    "product_kernel_decay_shift_coefficient",
+    "product_uniform_difference_quadrature",
     "transformed_epanechnikov_difference_radial_moment",
     "transition_aware_matern_pair_approximation",
+    "uniform_difference_radial_moment",
     "CandidateLikelihoodBound",
     "UniformLikelihoodBound",
     "gaussian_likelihood_uniform_bound",

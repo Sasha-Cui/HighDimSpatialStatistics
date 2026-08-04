@@ -4,22 +4,42 @@ import pytest
 from HighDimSpatial.smoothing_bias.continuous import (
     continuous_matern_pair_target,
     epanechnikov_difference_radial_moment,
+    product_kernel_decay_shift_coefficient,
     product_epanechnikov_decay_shift_coefficient,
     product_epanechnikov_direction_contrast_coefficient,
     product_epanechnikov_difference_quadrature,
+    product_uniform_difference_quadrature,
     transition_aware_matern_pair_approximation,
     transformed_epanechnikov_difference_radial_moment,
 )
 from HighDimSpatial.smoothing_bias.theory import naive_exponential_pseudo_target
 
 
-@pytest.mark.parametrize("dimension", [1, 2])
+@pytest.mark.parametrize("dimension", [1, 2, 3])
 def test_product_difference_quadrature_is_a_probability_rule(dimension: int) -> None:
     nodes, weights = product_epanechnikov_difference_quadrature(dimension, order=48)
     assert nodes.shape == (48**dimension, dimension)
     assert weights.shape == (48**dimension,)
     assert np.all(weights >= 0.0)
     assert weights.sum() == pytest.approx(1.0, abs=2e-14)
+
+
+@pytest.mark.parametrize("dimension", [1, 2, 3])
+def test_product_uniform_difference_quadrature_is_a_probability_rule(
+    dimension: int,
+) -> None:
+    order = 32
+    nodes, weights = product_uniform_difference_quadrature(dimension, order=order)
+    assert nodes.shape == (order**dimension, dimension)
+    assert weights.shape == (order**dimension,)
+    assert np.all(weights >= 0.0)
+    assert weights.sum() == pytest.approx(1.0, abs=2e-14)
+
+
+def test_one_dimensional_uniform_difference_second_moment_is_exact() -> None:
+    nodes, weights = product_uniform_difference_quadrature(1, order=32)
+    second_moment = float(weights @ np.square(nodes[:, 0]))
+    assert second_moment == pytest.approx(2.0 / 3.0, rel=2e-15)
 
 
 def test_one_dimensional_difference_moments_match_closed_forms() -> None:
@@ -94,6 +114,57 @@ def test_leading_decay_shift_coefficient_is_positive_and_predictive(
     ratio = (1.0 - target.pseudo_decay) / (coefficient * scale)
     assert coefficient > 0.0
     assert ratio == pytest.approx(1.0, rel=0.12)
+
+
+@pytest.mark.parametrize("dimension", [1, 3])
+@pytest.mark.parametrize("kernel_family", ["epanechnikov", "uniform"])
+@pytest.mark.parametrize("smoothness", [0.5, 1.0, 1.5, 2.5])
+def test_dimension_kernel_robustness_coefficient_is_predictive(
+    dimension: int,
+    kernel_family: str,
+    smoothness: float,
+) -> None:
+    bandwidth = 0.002
+    target = continuous_matern_pair_target(
+        dimension=dimension,
+        smoothness=smoothness,
+        decay=1.0,
+        bandwidth=bandwidth,
+        lag=1.0,
+        kernel_family=kernel_family,
+        quadrature_order=48,
+    )
+    coefficient = product_kernel_decay_shift_coefficient(
+        dimension=dimension,
+        smoothness=smoothness,
+        decay=1.0,
+        lag=1.0,
+        kernel_family=kernel_family,
+        quadrature_order=48,
+    )
+    if smoothness < 1.0:
+        scale = bandwidth ** (2.0 * smoothness)
+    elif smoothness == 1.0:
+        scale = bandwidth**2 * np.log(1.0 / bandwidth)
+    else:
+        scale = bandwidth**2
+    ratio = (1.0 - target.pseudo_decay) / (coefficient * scale)
+    assert target.kernel_family == kernel_family
+    assert coefficient > 0.0
+    tolerance = 0.18 if smoothness == 1.0 else 0.12
+    assert ratio == pytest.approx(1.0, rel=tolerance)
+
+
+def test_unknown_product_kernel_is_rejected() -> None:
+    with pytest.raises(ValueError, match="kernel_family must be one of"):
+        continuous_matern_pair_target(
+            dimension=2,
+            smoothness=1.5,
+            decay=1.0,
+            bandwidth=0.02,
+            lag=1.0,
+            kernel_family="triangular",
+        )
 
 
 def test_zero_bandwidth_is_an_exact_no_shift_control() -> None:
@@ -304,9 +375,11 @@ def test_anisotropic_geometry_validation_is_explicit() -> None:
 
 @pytest.mark.parametrize("smoothness", [0.6, 0.95, 1.0, 1.05, 1.4])
 @pytest.mark.parametrize("bandwidth", [0.02, 0.05])
+@pytest.mark.parametrize("kernel_family", ["epanechnikov", "uniform"])
 def test_transition_aware_approximation_matches_exact_pair_target(
     smoothness: float,
     bandwidth: float,
+    kernel_family: str,
 ) -> None:
     exact = continuous_matern_pair_target(
         dimension=2,
@@ -314,6 +387,7 @@ def test_transition_aware_approximation_matches_exact_pair_target(
         decay=1.0,
         bandwidth=bandwidth,
         lag=1.0,
+        kernel_family=kernel_family,
         quadrature_order=96,
     )
     approximation = transition_aware_matern_pair_approximation(
@@ -322,12 +396,14 @@ def test_transition_aware_approximation_matches_exact_pair_target(
         decay=1.0,
         bandwidth=bandwidth,
         lag=1.0,
+        kernel_family=kernel_family,
         quadrature_order=96,
     )
     exact_shift = 1.0 - exact.pseudo_decay
     approximate_shift = 1.0 - approximation.pseudo_decay
     assert exact_shift > 0.0
     assert approximate_shift > 0.0
+    assert exact.kernel_family == approximation.kernel_family == kernel_family
     assert exact_shift / approximate_shift == pytest.approx(1.0, rel=0.002)
 
 

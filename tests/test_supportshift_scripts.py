@@ -239,6 +239,56 @@ def test_transition_stress_driver_records_gates_and_hash(tmp_path: Path) -> None
     assert max(float(row["transition_relative_error"]) for row in rows) <= 0.002
 
 
+def test_dimension_kernel_driver_records_gates_and_hash(tmp_path: Path) -> None:
+    result = tmp_path / "dimension_kernel.csv"
+    subprocess.run(
+        [
+            sys.executable,
+            "scripts/research/run_dimension_kernel_robustness.py",
+            "--dimensions",
+            "1",
+            "2",
+            "--kernel-families",
+            "epanechnikov",
+            "uniform",
+            "--smoothness",
+            "0.5",
+            "1.5",
+            "--bandwidths",
+            "0.004",
+            "0.008",
+            "--quadrature-order",
+            "24",
+            "--refinement-orders",
+            "16",
+            "32",
+            "--allow-dirty",
+            "--output",
+            str(result),
+        ],
+        cwd=REPO_ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    metadata = json.loads(
+        result.with_suffix(".metadata.json").read_text(encoding="utf-8")
+    )
+    with result.open(encoding="utf-8", newline="") as handle:
+        rows = list(csv.DictReader(handle))
+
+    assert metadata["schema_version"] == "1.0"
+    assert metadata["rows"] == metadata["expected_rows"] == len(rows) == 16
+    assert metadata["factor_grid"]["dimensions"] == [1, 2]
+    assert metadata["factor_grid"]["kernel_families"] == [
+        "epanechnikov",
+        "uniform",
+    ]
+    assert metadata["validation_gates"]["all_passed"]
+    assert metadata["result_csv"]["sha256"] == _sha256(result)
+    assert min(float(row["decay_shift"]) for row in rows) > 0.0
+
+
 def test_paper_claim_audit_matches_promoted_artifacts() -> None:
     result = subprocess.run(
         [

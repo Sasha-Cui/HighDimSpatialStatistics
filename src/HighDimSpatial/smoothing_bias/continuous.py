@@ -3,9 +3,11 @@
 The product Epanechnikov smoother has independent coordinates.  If ``U`` and
 ``V`` are independent draws from its standardized kernel, then every smoothed
 covariance is an expectation over ``D = U - V``.  Tensor Gauss--Legendre
-quadrature therefore gives a high-accuracy, simulation-free oracle in one and
-two spatial dimensions.  A nonsingular linear kernel transform permits compact
-anisotropic supports, and the fitted lag may point in any declared direction.
+quadrature therefore gives a high-accuracy, simulation-free oracle in one to
+three spatial dimensions. Product Epanechnikov and product uniform kernels
+provide two compact symmetric support families. A nonsingular linear kernel
+transform permits compact anisotropic supports, and the fitted lag may point in
+any declared direction.
 """
 from __future__ import annotations
 
@@ -34,6 +36,7 @@ class ContinuousPairTarget:
     covariance_factor: float
     correlation: float
     quadrature_order: int
+    kernel_family: str
 
 
 @dataclass(frozen=True)
@@ -50,36 +53,75 @@ class TransitionPairApproximation:
     covariance_factor: float
     correlation: float
     quadrature_order: int
+    kernel_family: str
+
+
+PRODUCT_KERNEL_VARIANCES = {
+    "epanechnikov": 1.0 / 5.0,
+    "uniform": 1.0 / 3.0,
+}
+
+
+def _validate_product_kernel(kernel_family: str) -> str:
+    if kernel_family not in PRODUCT_KERNEL_VARIANCES:
+        choices = ", ".join(sorted(PRODUCT_KERNEL_VARIANCES))
+        raise ValueError(f"kernel_family must be one of: {choices}")
+    return kernel_family
+
+
+def _product_difference_quadrature(
+    dimension: int,
+    order: int,
+    kernel_family: str,
+) -> tuple[np.ndarray, np.ndarray]:
+    if dimension not in (1, 2, 3):
+        raise ValueError("dimension must be one, two, or three")
+    if isinstance(order, bool) or int(order) != order or order < 8 or order % 2:
+        raise ValueError("order must be an even integer of at least eight")
+    kernel_family = _validate_product_kernel(kernel_family)
+    order = int(order)
+
+    # Split at zero because both difference densities and several
+    # theorem-facing integrands contain absolute values.
+    positive_nodes, positive_weights = leggauss(order // 2)
+    positive_nodes = positive_nodes + 1.0  # map [-1, 1] to [0, 2]
+    nodes_1d = np.concatenate((-positive_nodes[::-1], positive_nodes))
+    interval_weights = np.concatenate((positive_weights[::-1], positive_weights))
+    if kernel_family == "epanechnikov":
+        density = epanechnikov_difference_density(nodes_1d)
+    else:
+        density = (2.0 - np.abs(nodes_1d)) / 4.0
+    weights_1d = interval_weights * density
+    weights_1d /= np.sum(weights_1d)
+
+    if dimension == 1:
+        return nodes_1d[:, None], weights_1d
+    node_mesh = np.meshgrid(*([nodes_1d] * dimension), indexing="ij")
+    nodes = np.column_stack([grid.ravel() for grid in node_mesh])
+    weight_grid = np.ones((order,) * dimension)
+    for axis in range(dimension):
+        shape = [1] * dimension
+        shape[axis] = order
+        weight_grid *= weights_1d.reshape(shape)
+    weights = weight_grid.ravel()
+    weights /= np.sum(weights)
+    return nodes, weights
 
 
 def product_epanechnikov_difference_quadrature(
     dimension: int,
     order: int = 64,
 ) -> tuple[np.ndarray, np.ndarray]:
-    """Return nodes and probability weights for ``U-V`` in dimension 1 or 2."""
-    if dimension not in (1, 2):
-        raise ValueError("dimension must be one or two")
-    if isinstance(order, bool) or int(order) != order or order < 8 or order % 2:
-        raise ValueError("order must be an even integer of at least eight")
-    order = int(order)
-    # Split at zero because the difference density and several theorem-facing
-    # integrands contain absolute values.  A single Gauss rule across the cusp
-    # converges unnecessarily slowly.
-    positive_nodes, positive_weights = leggauss(order // 2)
-    positive_nodes = positive_nodes + 1.0  # map [-1, 1] to [0, 2]
-    nodes_1d = np.concatenate((-positive_nodes[::-1], positive_nodes))
-    interval_weights = np.concatenate((positive_weights[::-1], positive_weights))
-    weights_1d = interval_weights * epanechnikov_difference_density(nodes_1d)
-    weights_1d /= np.sum(weights_1d)
+    """Return product-Epanechnikov difference nodes and probability weights."""
+    return _product_difference_quadrature(dimension, order, "epanechnikov")
 
-    if dimension == 1:
-        return nodes_1d[:, None], weights_1d
-    first, second = np.meshgrid(nodes_1d, nodes_1d, indexing="ij")
-    first_weight, second_weight = np.meshgrid(weights_1d, weights_1d, indexing="ij")
-    nodes = np.column_stack((first.ravel(), second.ravel()))
-    weights = (first_weight * second_weight).ravel()
-    weights /= np.sum(weights)
-    return nodes, weights
+
+def product_uniform_difference_quadrature(
+    dimension: int,
+    order: int = 64,
+) -> tuple[np.ndarray, np.ndarray]:
+    """Return product-uniform difference nodes and probability weights."""
+    return _product_difference_quadrature(dimension, order, "uniform")
 
 
 def epanechnikov_difference_radial_moment(
@@ -94,13 +136,25 @@ def epanechnikov_difference_radial_moment(
     return float(weights @ np.linalg.norm(nodes, axis=1) ** power)
 
 
+def uniform_difference_radial_moment(
+    power: float,
+    dimension: int,
+    order: int = 96,
+) -> float:
+    """Return the radial moment for a product-uniform difference."""
+    if not np.isfinite(power) or power <= 0:
+        raise ValueError("power must be positive and finite")
+    nodes, weights = product_uniform_difference_quadrature(dimension, order)
+    return float(weights @ np.linalg.norm(nodes, axis=1) ** power)
+
+
 def _kernel_geometry(
     dimension: int,
     kernel_transform: np.ndarray | None,
     lag_direction: np.ndarray | None,
 ) -> tuple[np.ndarray, np.ndarray]:
-    if dimension not in (1, 2):
-        raise ValueError("dimension must be one or two")
+    if dimension not in (1, 2, 3):
+        raise ValueError("dimension must be one, two, or three")
     if kernel_transform is None:
         transform = np.eye(dimension)
     else:
@@ -140,12 +194,33 @@ def transformed_epanechnikov_difference_radial_moment(
     return float(weights @ np.linalg.norm(transformed, axis=1) ** power)
 
 
-def product_epanechnikov_decay_shift_coefficient(
+def _transformed_product_difference_radial_moment(
+    power: float,
+    dimension: int,
+    *,
+    kernel_transform: np.ndarray,
+    kernel_family: str,
+    order: int = 96,
+) -> float:
+    if not np.isfinite(power) or power <= 0:
+        raise ValueError("power must be positive and finite")
+    transform, _ = _kernel_geometry(dimension, kernel_transform, None)
+    nodes, weights = _product_difference_quadrature(
+        dimension,
+        order,
+        kernel_family,
+    )
+    transformed = nodes @ transform.T
+    return float(weights @ np.linalg.norm(transformed, axis=1) ** power)
+
+
+def product_kernel_decay_shift_coefficient(
     *,
     dimension: int,
     smoothness: float,
     decay: float,
     lag: float,
+    kernel_family: str,
     quadrature_order: int = 96,
     kernel_transform: np.ndarray | None = None,
     lag_direction: np.ndarray | None = None,
@@ -154,12 +229,12 @@ def product_epanechnikov_decay_shift_coefficient(
 
     The associated bandwidth scale is h to 2 nu for nu below one,
     h squared times log(1/h) at nu equal to one, and h squared above one.
-    The product Epanechnikov kernel has coordinate variance one fifth.
+    The kernel covariance and rough-regime radial moment are evaluated for the
+    declared compact product family.
     """
-    if dimension not in (1, 2):
-        raise ValueError("dimension must be one or two")
     if smoothness <= 0 or decay <= 0 or lag <= 0:
         raise ValueError("smoothness, decay, and lag must be positive")
+    kernel_family = _validate_product_kernel(kernel_family)
     transform, direction = _kernel_geometry(
         dimension,
         kernel_transform,
@@ -171,16 +246,20 @@ def product_epanechnikov_decay_shift_coefficient(
             smoothness * 2.0 ** (2.0 * smoothness) * gamma(smoothness)
         )
         if kernel_transform is None:
-            radial_moment = epanechnikov_difference_radial_moment(
-                2.0 * smoothness,
+            nodes, weights = _product_difference_quadrature(
                 dimension,
                 quadrature_order,
+                kernel_family,
+            )
+            radial_moment = float(
+                weights @ np.linalg.norm(nodes, axis=1) ** (2.0 * smoothness)
             )
         else:
-            radial_moment = transformed_epanechnikov_difference_radial_moment(
+            radial_moment = _transformed_product_difference_radial_moment(
                 2.0 * smoothness,
                 dimension,
                 kernel_transform=transform,
+                kernel_family=kernel_family,
                 order=quadrature_order,
             )
         coefficient = (
@@ -192,7 +271,9 @@ def product_epanechnikov_decay_shift_coefficient(
             / kve(smoothness - 1.0, z)
         )
     elif smoothness == 1.0:
-        kernel_covariance = transform @ transform.T / 5.0
+        kernel_covariance = PRODUCT_KERNEL_VARIANCES[kernel_family] * (
+            transform @ transform.T
+        )
         m2 = 2.0 * float(np.trace(kernel_covariance))
         coefficient = (
             m2
@@ -202,7 +283,9 @@ def product_epanechnikov_decay_shift_coefficient(
             / kve(0.0, z)
         )
     else:
-        kernel_covariance = transform @ transform.T / 5.0
+        kernel_covariance = PRODUCT_KERNEL_VARIANCES[kernel_family] * (
+            transform @ transform.T
+        )
         directional_variance = float(direction @ kernel_covariance @ direction)
         total_variance = float(np.trace(kernel_covariance))
         coefficient = (
@@ -216,6 +299,29 @@ def product_epanechnikov_decay_shift_coefficient(
     if not np.isfinite(coefficient) or coefficient <= 0:
         raise ValueError("the leading decay-shift coefficient must be positive")
     return coefficient
+
+
+def product_epanechnikov_decay_shift_coefficient(
+    *,
+    dimension: int,
+    smoothness: float,
+    decay: float,
+    lag: float,
+    quadrature_order: int = 96,
+    kernel_transform: np.ndarray | None = None,
+    lag_direction: np.ndarray | None = None,
+) -> float:
+    """Return the product-Epanechnikov leading decay-shift coefficient."""
+    return product_kernel_decay_shift_coefficient(
+        dimension=dimension,
+        smoothness=smoothness,
+        decay=decay,
+        lag=lag,
+        kernel_family="epanechnikov",
+        quadrature_order=quadrature_order,
+        kernel_transform=kernel_transform,
+        lag_direction=lag_direction,
+    )
 
 
 def product_epanechnikov_direction_contrast_coefficient(
@@ -275,6 +381,7 @@ def transition_aware_matern_pair_approximation(
     decay: float,
     bandwidth: float,
     lag: float,
+    kernel_family: str = "epanechnikov",
     quadrature_order: int = 96,
     kernel_transform: np.ndarray | None = None,
     lag_direction: np.ndarray | None = None,
@@ -297,18 +404,22 @@ def transition_aware_matern_pair_approximation(
         raise ValueError("smoothness must lie strictly between zero and two")
     if decay <= 0 or bandwidth < 0 or lag <= 0:
         raise ValueError("decay and lag must be positive; bandwidth must be nonnegative")
+    kernel_family = _validate_product_kernel(kernel_family)
     transform, direction = _kernel_geometry(
         dimension,
         kernel_transform,
         lag_direction,
     )
-    nodes, weights = product_epanechnikov_difference_quadrature(
+    nodes, weights = _product_difference_quadrature(
         dimension,
         quadrature_order,
+        kernel_family,
     )
     transformed_nodes = nodes @ transform.T
     radii = np.linalg.norm(transformed_nodes, axis=1)
-    kernel_covariance = transform @ transform.T / 5.0
+    kernel_covariance = PRODUCT_KERNEL_VARIANCES[kernel_family] * (
+        transform @ transform.T
+    )
     m2 = 2.0 * float(np.trace(kernel_covariance))
 
     z = decay * lag
@@ -327,6 +438,7 @@ def transition_aware_matern_pair_approximation(
             covariance_factor=base_correlation,
             correlation=base_correlation,
             quadrature_order=int(quadrature_order),
+            kernel_family=kernel_family,
         )
 
     scaled_bandwidth = decay * bandwidth
@@ -390,6 +502,7 @@ def transition_aware_matern_pair_approximation(
         covariance_factor=float(covariance_factor),
         correlation=float(correlation),
         quadrature_order=int(quadrature_order),
+        kernel_family=kernel_family,
     )
 
 
@@ -400,6 +513,7 @@ def continuous_matern_pair_target(
     decay: float,
     bandwidth: float,
     lag: float,
+    kernel_family: str = "epanechnikov",
     quadrature_order: int = 64,
     kernel_transform: np.ndarray | None = None,
     lag_direction: np.ndarray | None = None,
@@ -416,13 +530,16 @@ def continuous_matern_pair_target(
         raise ValueError(
             "smoothness, decay, and lag must be positive; bandwidth must be nonnegative"
         )
+    kernel_family = _validate_product_kernel(kernel_family)
     transform, direction = _kernel_geometry(
         dimension,
         kernel_transform,
         lag_direction,
     )
-    nodes, weights = product_epanechnikov_difference_quadrature(
-        dimension, quadrature_order
+    nodes, weights = _product_difference_quadrature(
+        dimension,
+        quadrature_order,
+        kernel_family,
     )
     transformed_nodes = nodes @ transform.T
     if bandwidth == 0:
@@ -468,4 +585,5 @@ def continuous_matern_pair_target(
         covariance_factor=float(covariance_factor),
         correlation=float(correlation),
         quadrature_order=int(quadrature_order),
+        kernel_family=kernel_family,
     )
