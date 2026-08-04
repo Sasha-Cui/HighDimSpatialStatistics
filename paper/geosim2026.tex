@@ -934,19 +934,19 @@ promoted inputs, all paper artifacts, and 113 reported numerical claims.
 \label{app:analytic-proof}
 
 \begin{proof}[Proof of Theorem~\ref{thm:phase-law}]
-Let \(f_\alpha(x)=\Matern_\nu(\alpha\lVert x\rVert)\).  Its first four
+Set \(f(x)=C(x)/v\). Its first four
 derivatives are uniformly bounded on the declared annulus.  Since
 \(D=U-V\) is centrally symmetric and
 \(\E(DD^\top)=2\Sigma_k\), Taylor's theorem gives
 \begin{equation}
- \E f_\alpha(r+hD)
- =f_\alpha(r)+\frac{h^2}{2}
-  \tr\{\nabla^2f_\alpha(r)\E(DD^\top)\}+O(h^4).
+ \E f(r+hD)
+ =f(r)+\frac{h^2}{2}
+  \tr\{\nabla^2f(r)\E(DD^\top)\}+O(h^4).
  \label{eq:appendix-taylor}
 \end{equation}
 For \(r=Re\), the radial Hessian is
 \[
- \nabla^2f_\alpha(r)=\alpha^2\Matern_\nu''(z)ee^\top
+ \nabla^2f(r)=\alpha^2\Matern_\nu''(z)ee^\top
  +\alpha^2\frac{\Matern_\nu'(z)}z(I-ee^\top),
 \]
 which proves Proposition~\ref{prop:fixed-lag}.
@@ -972,7 +972,7 @@ remainder.  At the two integer transitions,
    +O\{x^4(1+|\log x|)\},\\
  \Matern_2(x)
  &=1-\frac{x^2}{4}
-   +x^4\left\{\frac3{64}-\frac{\log(x/2)+\gamma_{\rm E}}{16}\right\}
+   -\frac{x^4}{16}\{\log(x/2)+\gamma_{\rm E}-3/4\}
    +O\{x^6(1+|\log x|)\}.
 \end{align}
 These formulas prove \eqref{eq:vrough}--\eqref{eq:vsmooth}, including the

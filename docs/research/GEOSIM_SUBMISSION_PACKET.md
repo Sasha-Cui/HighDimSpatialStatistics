@@ -69,8 +69,8 @@ Suggested reviewer expertise:
 - Submission PDF: `output/pdf/supportshift_geosim2026.pdf`
 - PDF structure: 10 main pages, one reference page, two appendix pages
 - Current PDF SHA-256:
-  `27c9e349111f66a30df8235e1e930a4af258a6e19e84677d1f736d6d24bd98ff`
-- Current PDF size: 702,520 bytes
+  `9621c15e72c6e08cdd91b4a8b7e00daff415cf948d2b5dd6161adec43f86b304`
+- Current PDF size: 702,402 bytes
 
 Recompute the hash from the exact uploaded file and replace these values if the
 portal copy differs from the tagged artifact.
