@@ -30,6 +30,8 @@ outputs/smoothing_bias/*
 !outputs/smoothing_bias/supportshift_anisotropic_final_20260803.metadata.json
 !outputs/smoothing_bias/supportshift_transition_stress_20260804.csv
 !outputs/smoothing_bias/supportshift_transition_stress_20260804.metadata.json
+!outputs/smoothing_bias/phase_oracle_d2_v2.csv
+!outputs/smoothing_bias/phase_oracle_d2_v2.metadata.json
 tmp/
 data/processed/checkpoints/
 *.pth

@@ -1,0 +1,41 @@
+{
+  "arguments": {
+    "bandwidth_count": 18,
+    "decay": 1.0,
+    "dimension": 2,
+    "lag": 1.0,
+    "maximum_bandwidth": 0.3,
+    "minimum_bandwidth": 0.003,
+    "output": "outputs/smoothing_bias/phase_oracle_d2_v2.csv",
+    "quadrature_order": 96,
+    "refinement_orders": [
+      64,
+      128
+    ],
+    "smoothness": [
+      0.25,
+      0.5,
+      0.75,
+      1.0,
+      1.5,
+      2.5
+    ]
+  },
+  "created_utc": "2026-08-03T00:35:21.352115+00:00",
+  "git_commit": "36cdec846fdeb7669fdc279c7489d906a77f1b71",
+  "git_dirty": false,
+  "numpy": "1.26.4",
+  "python": "3.11.8",
+  "quadrature_refinement": {
+    "128": {
+      "max_abs_pseudo_decay_difference": 5.1170488957197335e-09,
+      "max_relative_decay_shift_difference": 1.1003470066220374e-08
+    },
+    "64": {
+      "max_abs_pseudo_decay_difference": 4.307620449228722e-08,
+      "max_relative_decay_shift_difference": 9.26291181414638e-08
+    }
+  },
+  "rows": 108,
+  "scipy": "1.10.1"
+}

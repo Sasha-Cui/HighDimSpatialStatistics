@@ -17,5 +17,5 @@ maximum_submissions_per_hour = 180
 threads_per_task = 1
 
 [verification]
-command = "/nfs/roberts/project/pi_btk22/zc362/environments/current/kt-main/bin/python -m ruff check scripts/research/run_supportshift_highdim.py scripts/research/make_support_paper_artifacts.py src/HighDimSpatial/smoothing_bias tests/test_smoothing_bias_high_dimensional.py tests/test_smoothing_bias_continuous.py && /nfs/roberts/project/pi_btk22/zc362/environments/current/kt-main/bin/python -m pytest -q"
-last_verified_date = "2026-08-02"
+command = "/nfs/roberts/project/pi_btk22/zc362/environments/current/kt-main/bin/python -m ruff check scripts/research src/HighDimSpatial/smoothing_bias tests/test_smoothing_bias_high_dimensional.py tests/test_smoothing_bias_continuous.py tests/test_supportshift_scripts.py && /nfs/roberts/project/pi_btk22/zc362/environments/current/kt-main/bin/python scripts/research/verify_supportshift_release.py --metadata outputs/smoothing_bias/supportshift_highdim_final_v2_20260803.metadata.json --paper-directory paper --repository-root . --require-full && /nfs/roberts/project/pi_btk22/zc362/environments/current/kt-main/bin/python -m pytest -q"
+last_verified_date = "2026-08-04"

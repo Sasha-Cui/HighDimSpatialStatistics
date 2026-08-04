@@ -199,3 +199,45 @@ def test_transition_stress_driver_records_gates_and_hash(tmp_path: Path) -> None
     assert metadata["validation_gates"]["all_passed"]
     assert metadata["result_csv"]["sha256"] == _sha256(result)
     assert max(float(row["transition_relative_error"]) for row in rows) <= 0.002
+
+
+def test_paper_claim_audit_matches_promoted_artifacts() -> None:
+    result = subprocess.run(
+        [
+            sys.executable,
+            "scripts/research/verify_supportshift_claims.py",
+            "--repository-root",
+            str(REPO_ROOT),
+            "--paper-directory",
+            str(REPO_ROOT / "paper"),
+        ],
+        cwd=REPO_ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    assert "SupportShift paper claims verified" in result.stdout
+
+
+def test_paper_claim_audit_rejects_changed_source_table(tmp_path: Path) -> None:
+    paper_directory = tmp_path / "paper"
+    shutil.copytree(REPO_ROOT / "paper" / "data", paper_directory / "data")
+    phase = paper_directory / "data" / "phase_oracle_d2.csv"
+    lines = phase.read_text(encoding="utf-8").splitlines()
+    phase.write_text("\n".join(lines[:-1]) + "\n", encoding="utf-8")
+    result = subprocess.run(
+        [
+            sys.executable,
+            "scripts/research/verify_supportshift_claims.py",
+            "--repository-root",
+            str(REPO_ROOT),
+            "--paper-directory",
+            str(paper_directory),
+        ],
+        cwd=REPO_ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode != 0
+    assert "phase rows" in result.stderr

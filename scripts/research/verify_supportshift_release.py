@@ -7,6 +7,8 @@ import json
 from pathlib import Path
 from typing import Any
 
+from verify_supportshift_claims import audit_claims
+
 
 def sha256_file(path: Path) -> str:
     digest = hashlib.sha256()
@@ -143,7 +145,16 @@ def main() -> None:
         args.paper_directory,
         repository_root,
     )
-    failures = run_failures + artifact_failures
+    claim_ledger = None
+    claim_failures: list[str] = []
+    if args.require_full:
+        claim_ledger = audit_claims(repository_root, args.paper_directory)
+        claim_failures = [
+            f"paper claim {failure['claim']}: observed {failure['observed']!r}; "
+            f"required {failure['requirement']}"
+            for failure in claim_ledger["failures"]
+        ]
+    failures = run_failures + artifact_failures + claim_failures
     if failures:
         raise SystemExit("SupportShift release verification failed:\n- " + "\n- ".join(failures))
     coverage = metadata["validation_gates"]["empirical_uniform_bound_coverage"][
@@ -152,7 +163,12 @@ def main() -> None:
     print(
         "SupportShift release verified: "
         f"{metadata['rows']} rows, {len(coverage)} coverage cells, "
-        f"{len(manifest['outputs'])} hashed paper artifacts."
+        f"{len(manifest['outputs'])} hashed paper artifacts"
+        + (
+            f", {claim_ledger['summary']['passed']} paper claims."
+            if claim_ledger is not None
+            else "."
+        )
     )
 
 
