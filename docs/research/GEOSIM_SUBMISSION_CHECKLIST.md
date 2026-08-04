@@ -66,6 +66,9 @@ references. Review is single-blind and uses the ACM `sigconf` format.
   controls, and falsification gate.
 - [x] An internal mock review records likely objections, current answers, and
   acceptance-preserving fallbacks.
+- [x] Topic routing and full-paper expectations were calibrated against the
+  official 2025 ACM proceedings and the 2026 call; Big Spatial Data is not
+  selected without a throughput claim.
 - [x] A portal-ready metadata packet stages the title, plain-text abstract,
   keywords, topic selections, reviewer expertise, artifact hash, and disclosure
   draft without claiming that the live form is complete.

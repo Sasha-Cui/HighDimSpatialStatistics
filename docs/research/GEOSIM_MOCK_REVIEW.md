@@ -1,9 +1,9 @@
 # GeoSim 2026 internal mock review
 
-**Review date:** 2026-08-04  
-**Artifact reviewed:** `supportshift-geosim-v1.2.0` candidate
-**Status:** internal red-team assessment, not an official review or an
-acceptance prediction
+- **Review date:** 2026-08-04
+- **Artifact reviewed:** frozen tag `supportshift-geosim-v1.2.0`
+- **Status:** internal red-team assessment, not an official review or an
+  acceptance prediction
 
 ## Overall assessment
 
@@ -16,6 +16,31 @@ execution; it is whether a spatial-statistics reviewer regards the
 fixed-lag Matérn pseudo-parameter expansion as sufficiently distinct from
 classical semivariogram regularization and sufficiently connected to the
 full-grid benchmark.
+
+## Venue calibration from the latest proceedings
+
+The official ACM record for
+[GeoSim 2025](https://doi.org/10.1145/3764921) reports 11 acceptances from 13
+submissions (85%). The same record lists 64% for 2020 and 70% for 2019. These
+are small annual denominators and are context, not an acceptance guarantee.
+
+The 2025 proceedings contain 11 papers covering mobility simulation,
+experiential geosimulation, adaptive flow modeling, agent-based wildfire,
+surrogate modeling, point and trajectory generation, hyperspectral generation,
+and land-cover simulation. Their proceedings spans are four pages for short
+papers and roughly eight to thirteen pages for full papers. The current
+SupportShift package has the expected full-paper footprint and unusually strong
+verification infrastructure. Its main venue-fit risk is instead topical: it is
+more statistical and less application-driven than most 2025 papers. The
+[2026 call](https://geosim.org/2026/cfp/) directly mitigates that risk by
+soliciting parameterizable and scalable benchmark data, spatial analysis based
+on simulation, and verification and validation of spatial simulations.
+
+Accordingly, the submission should use **Verifying and Validating Spatial
+Simulations** as its primary topic. **Spatial Data/Trajectory Generators** and
+**Spatial Analysis based on Simulation** are defensible secondary topics.
+**Big Spatial Data Simulation** should not be selected merely because the
+benchmark varies dimension: the paper makes no large-system throughput claim.
 
 | Criterion | Internal score | Evidence and remaining risk |
 |---|---:|---|
@@ -89,6 +114,7 @@ for the interior coefficient.
 1. A spatial-statistics or applied-probability expert should verify every
    theorem and the two-page appendix, especially the Bessel expansions at
    ν=1 and ν=2, the inverse-map remainders, and the smooth-regime sign.
+   The claim-by-claim worksheet is in `EXTERNAL_PROOF_REVIEW_PACKET.md`.
 2. That reviewer should inspect the older regularized-variogram monographs
    listed in `PRIOR_ART_SEARCH.md` for an exact free-variance Matérn
    pseudo-range result.

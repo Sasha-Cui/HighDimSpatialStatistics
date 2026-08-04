@@ -435,6 +435,25 @@ equation-level checks, authoritative identity sources, and explicit fallback
 actions for each possible failure. This closes the internal preparation for
 proof review but does not mark the human-review gate complete.
 
+## 2026-08-04 -- GeoSim proceedings and topic-routing audit
+
+The official ACM GeoSim 2025 proceedings report 11 accepted papers from 13
+submissions. The accepted program spans short and full papers on mobility,
+flow, agent-based wildfire, surrogate modeling, and spatial-data generation;
+full-paper proceedings spans are roughly eight to thirteen pages. The 2026
+call explicitly solicits parameterized and scaled benchmark data and
+verification and validation of spatial simulations. This supports the current
+benchmark-first title, abstract, contribution order, and 13-page
+main--references--appendix structure. No manuscript rewrite was justified by
+the comparison.
+
+The portal packet now makes Verifying and Validating Spatial Simulations the
+primary topic, with data generators and simulation-based spatial analysis as
+secondary topics. Big Spatial Data Simulation was removed: varying dimension
+and lattice size is not, by itself, evidence of high-throughput computational
+scalability. This routing change reduces the chance of review against an
+unsupported systems claim while preserving the frozen paper.
+
 ## 2026-08-04 -- dimension and kernel robustness audit
 
 **Question.** The phase theorem permits fixed arbitrary dimension and compact

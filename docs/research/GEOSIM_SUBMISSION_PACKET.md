@@ -1,9 +1,9 @@
 # GeoSim 2026 submission packet
 
-**Prepared:** 2026-08-04  
-**Official call:** <https://geosim.org/2026/cfp/>  
-**Paper type:** Full paper  
-**Artifact candidate:** `supportshift-geosim-v1.2.0`
+- **Prepared:** 2026-08-04
+- **Official call:** <https://geosim.org/2026/cfp/>
+- **Paper type:** Full paper
+- **Artifact candidate:** `supportshift-geosim-v1.2.0`
 
 This file stages copy-ready submission metadata and records the fields that
 still require the author or the live EasyChair portal. It is not evidence that
@@ -51,9 +51,13 @@ likelihood
 If the portal presents the topics from the official call, select:
 
 1. Verifying and Validating Spatial Simulations
-2. Big Spatial Data Simulation
+2. Spatial Data/Trajectory Generators
 3. Spatial Analysis based on Simulation
-4. Spatial Data/Trajectory Generators
+
+Do not select Big Spatial Data Simulation solely because the benchmark varies
+\(p\), \(N\), and lattice size. SupportShift controls statistical scale but
+does not claim large-system throughput or subcubic dense-covariance
+computation.
 
 Suggested reviewer expertise:
 
@@ -61,6 +65,15 @@ Suggested reviewer expertise:
 - Matérn Gaussian processes and covariance misspecification;
 - high-dimensional probability and Gaussian quadratic forms; and
 - reproducible simulation benchmark design.
+
+If EasyChair offers an optional note to the program chairs, use:
+
+> This paper is submitted primarily under Verifying and Validating Spatial
+> Simulations. It releases a parameterized synthetic benchmark with analytic
+> and finite-grid targets for testing whether spatial covariance procedures
+> distinguish physical parameters, misspecified KL targets, and sampling
+> error. The paper is intentionally theory-plus-simulation rather than a
+> real-data application.
 
 ## Artifact and PDF record
 
