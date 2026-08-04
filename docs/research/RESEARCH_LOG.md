@@ -338,6 +338,29 @@ worktree and CSV SHA-256
 Bouchet Ruff checks passed; the full suite collected 102 tests, and the focused
 continuous and artifact-driver groups passed 39/39 and 3/3.
 
+## 2026-08-04 -- venue-fit red team and manuscript-claim audit
+
+The current official GeoSim 2026 call was rechecked. It explicitly prioritizes
+parameterizable, scalable benchmark data sets, community availability, and
+verification and validation of spatial simulations. The 2025 program was
+dominated by concrete generators and simulation frameworks. In response, the
+GeoSim abstract now names the independent scale controls, released source
+tables, seeds, metadata, and pass/fail gates; its ACM classification now leads
+with modeling and simulation plus model verification and validation rather
+than probability alone. The official EasyChair submission URL is recorded in
+the submission checklist.
+
+A new deterministic claim audit recomputes every paper-facing numerical result
+from the promoted tables and metadata. Its 100 checks cover phase slopes and
+coefficient ratios, transition errors, directional contrasts, finite-grid KL
+targets and Monte Carlo summaries, raw-table dimensions, high-dimensional
+certificate events, criterion-noise slopes, and wrong-target RMSE values. The
+full release verifier now invokes this audit. A negative regression test removes
+one phase row and confirms that the audit fails rather than silently accepting a
+changed source table. The previously untracked clean phase-oracle CSV and
+quadrature metadata are promoted so that the audit also works from a clean
+clone. No reported number changed during this pass.
+
 ## Entry template
 
 ```text

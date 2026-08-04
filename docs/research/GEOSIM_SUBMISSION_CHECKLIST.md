@@ -5,7 +5,8 @@
 **Submission deadline:** 2026-08-15<br>
 **Notification:** 2026-09-15<br>
 **Official call:** <https://geosim.org/2026/cfp/><br>
-**Artifact candidate:** `supportshift-geosim-v1.1.0`
+**Submission site:** <https://easychair.org/conferences/?conf=geosim2026><br>
+**Artifact candidate:** `supportshift-geosim-v1.1.1`
 
 The official call lists parameterizable and scalable spatial-simulation data
 sets made available to the community as an in-scope topic. Full papers may use
@@ -34,6 +35,8 @@ references. Review is single-blind and uses the ACM `sigconf` format.
 - [x] Seeds, factors, environment, generation commit, and validation gates are
   recorded in machine-readable metadata.
 - [x] One command verifies 12,800 fits, 64 coverage cells, and 21 hashes.
+- [x] The same command recomputes all 100 reported numerical claims from the
+  promoted tables and fails on any mismatch.
 - [x] Clean-clone reproduction has passed.
 - [x] Local and Bouchet checks have passed.
 - [x] `CITATION.cff`, scoped license, and synthetic-data card are present.
@@ -48,11 +51,14 @@ references. Review is single-blind and uses the ACM `sigconf` format.
 - [x] Current main text fits the full-paper limit.
 - [x] ACM classification, keywords, figure descriptions, and references are
   present.
+- [x] ACM classification foregrounds modeling, simulation, and model
+  verification in addition to probability.
 - [x] Claims avoid “first,” “novel,” and unsupported universal language.
 - [x] Every plotted result is generated from hash-verified source data.
 - [ ] Run the official ACM TAPS/preflight checks available to submitters.
-- [ ] Confirm the workshop's exact submission portal, file-size limit, and
-  supplementary-material interface when the portal opens.
+- [x] The official call identifies the GeoSim 2026 EasyChair submission site.
+- [ ] Confirm the file-size limit and supplementary-material interface inside
+  EasyChair before the final upload.
 - [ ] Complete any required use-of-generative-AI disclosure in the venue's
   current author form.
 - [ ] Replace placeholder copyright/DOI/ISBN fields only at the stage directed

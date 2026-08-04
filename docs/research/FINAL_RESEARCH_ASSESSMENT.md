@@ -103,6 +103,10 @@ without changing promoted numerical inputs in patch release
 Release `supportshift-geosim-v1.1.0` adds the transition-aware theorem,
 the clean-commit threshold stress audit, and its manifest-linked source data and
 figure; it does not alter the earlier finite-grid or replicated-field inputs.
+Patch release `supportshift-geosim-v1.1.1` promotes the phase-oracle provenance,
+adds a 100-check manuscript-claim audit with a negative mutation test, and
+foregrounds simulation and model verification in the ACM classification and
+abstract. It changes no reported numerical value.
 
 The pre-audit history consisted of four bulk commits made on one day and did not
 record a theorem or experiment-development trail. The research branch now has
@@ -1232,8 +1236,9 @@ The internal artifact gates are complete: the GeoSim paper has nine main-text
 pages plus one reference page and is within the 10-page main-text limit, the
 technical manuscript is 22 pages, every page has
 been rendered and inspected,
-the 102-test suite passes, scoped Ruff is clean, and the release verifier checks
-12,800 rows, 64 coverage cells, and 21 hashed paper artifacts. The remaining
+the maintained test suite passes, scoped Ruff is clean, and the release verifier
+checks 12,800 rows, 64 coverage cells, 21 hashed paper artifacts, and 100
+manuscript claims. The remaining
 tasks are proof, priority, publication, and release chores rather than further
 statistical computation:
 

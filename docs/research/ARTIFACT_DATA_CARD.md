@@ -15,7 +15,7 @@ be used to make scientific claims about one.
 ## Versioned release
 
 - Repository: <https://github.com/Sasha-Cui/HighDimSpatialStatistics>
-- Artifact release: `supportshift-geosim-v1.1.0`
+- Artifact release: `supportshift-geosim-v1.1.1`
 - Benchmark schema: `1.1`
 - Promoted high-dimensional run: Slurm job `21081491`
 - Authorized allocation: `pi_jss233`
@@ -45,6 +45,11 @@ variance--decay library contains 16,261 candidates.
 
 ### Promoted source data
 
+- `outputs/smoothing_bias/phase_oracle_d2_v2.csv`: 108 deterministic
+  continuous-oracle rows used by the phase-law figure and coefficient checks.
+- `outputs/smoothing_bias/phase_oracle_d2_v2.metadata.json`: clean-commit
+  provenance, environment, resolved factors, and order-64/order-128 quadrature
+  refinements for the phase oracle.
 - `outputs/smoothing_bias/supportshift_highdim_final_v2_20260803.csv`:
   12,800 fit rows and 58 columns. It includes factor values, seeds, estimates,
   physical and grid targets, criterion deviations, certificate radii, ERM
@@ -112,10 +117,12 @@ python scripts/research/verify_supportshift_release.py \
 ```
 
 A valid full release has 12,800 rows, 64 candidatewise-coverage cells, all
-predeclared statistical gates passing, and 21 matching paper-artifact hashes.
+predeclared statistical gates passing, 21 matching paper-artifact hashes, and
+100 machine-checked manuscript claims.
 The verifier fails on missing files, hash changes, incomplete grids, failed
-gates, or dirty generation provenance. The public artifact also supplies the
-exact regeneration command in `README.md`.
+gates, dirty generation provenance, or a mismatch between any reported number
+and its released source table. The public artifact also supplies the exact
+regeneration command in `README.md`.
 
 ## Known limitations
 

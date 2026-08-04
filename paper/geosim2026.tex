@@ -38,9 +38,12 @@ Geospatial Simulation}{November 3, 2026}{Riverside, California, USA}
 \begin{abstract}
 Spatial measurements often represent pixels, footprints, or local averages but
 are fitted as point observations. We introduce \emph{SupportShift}, a
-parameterized synthetic benchmark that separates the physical covariance
-parameter, the population Kullback--Leibler (KL) target, and finite-sample
-estimation error under this support misspecification. Its analytic anchor is a
+parameterized and scalable synthetic benchmark that separates the physical
+covariance parameter, the population Kullback--Leibler (KL) target, and
+finite-sample estimation error under this support misspecification. Users can
+vary support width and geometry, smoothness, lattice size, output dimension,
+replicate count, and covariance-library resolution.
+Its analytic anchor is a
 stationary Matérn Gaussian field in \(\R^d\) observed through a compact
 symmetric averaging kernel of bandwidth \(h\). For a fixed nonzero-lag
 two-point likelihood with known smoothness \(\nu\), the naive inverse-range
@@ -55,27 +58,34 @@ finite covariance library, a simultaneous likelihood certificate scales as
 \(\sqrt{\log(M)/(Np)}+\log(M)/(Np)\) under relative spectral control; spatial
 dependence within each field is unrestricted. Four reproducible tracks pair
 these statements with deterministic quadrature, finite-grid likelihoods,
-directional support, and growing-\(p\) replicated fields. The benchmark exposes
-a sharp failure mode: likelihood noise can vanish while a point-support fit
-concentrates around the wrong range target.
+directional support, and growing-\(p\) replicated fields. Released generators,
+source tables, seeds, metadata, and pass/fail gates make every reported number
+auditable. The benchmark exposes a sharp failure mode: likelihood noise can
+vanish while a point-support fit concentrates around the wrong range target.
 \end{abstract}
 
 \begin{CCSXML}
 <ccs2012>
  <concept>
-  <concept_id>10002950.10003714.10003715</concept_id>
-  <concept_desc>Mathematics of computing~Probabilistic representations</concept_desc>
+  <concept_id>10010147.10010341</concept_id>
+  <concept_desc>Computing methodologies~Modeling and simulation</concept_desc>
   <concept_significance>500</concept_significance>
  </concept>
  <concept>
-  <concept_id>10002950.10003648.10003649</concept_id>
-  <concept_desc>Mathematics of computing~Probability and statistics</concept_desc>
+  <concept_id>10010147.10010341.10010342.10010344</concept_id>
+  <concept_desc>Computing methodologies~Model verification and validation</concept_desc>
   <concept_significance>500</concept_significance>
+ </concept>
+ <concept>
+  <concept_id>10002950.10003714.10003715</concept_id>
+  <concept_desc>Mathematics of computing~Probabilistic representations</concept_desc>
+  <concept_significance>300</concept_significance>
  </concept>
 </ccs2012>
 \end{CCSXML}
 
-\ccsdesc[500]{Mathematics of computing~Probability and statistics}
+\ccsdesc[500]{Computing methodologies~Modeling and simulation}
+\ccsdesc[500]{Computing methodologies~Model verification and validation}
 \ccsdesc[300]{Mathematics of computing~Probabilistic representations}
 
 \keywords{Matérn covariance, change of support, Gaussian random field,
@@ -134,7 +144,9 @@ change-of-support method:
   independent spatial coordinates.
   \item SupportShift turns the theorem into four reusable synthetic tracks:
   a continuous phase oracle, finite-grid likelihoods, directional support, and
-  growing-\(p\) replicated fields, with deterministic seeds and numerical gates.
+  growing-\(p\) replicated fields. Each exposes declared scale controls,
+  deterministic seeds, source tables, numerical gates, and a machine-checkable
+  claim audit.
 \end{itemize}
 
 The phase theorem is pairwise; full-grid targets are computed, not asserted to
@@ -859,9 +871,9 @@ arbitrary full-likelihood fits, or continuous-parameter estimation.
 
 Code, manifests, and audited aggregate results are available at
 \url{https://github.com/Sasha-Cui/HighDimSpatialStatistics} under the immutable
-tag \texttt{supportshift-geosim-v1.1.0}. The release includes a synthetic-data
+tag \texttt{supportshift-geosim-v1.1.1}. The release includes a synthetic-data
 card, scoped reuse terms, a citation file, and a one-command verifier for the
-promoted inputs and all paper artifacts.
+promoted inputs, all paper artifacts, and 100 reported numerical claims.
 
 \clearpage
 \bibliographystyle{ACM-Reference-Format}

@@ -152,6 +152,8 @@ The final benchmark run is accepted only if all of the following hold:
   than hidden;
 - estimates at parameter-grid endpoints are retained and counted;
 - figures are regenerated only from validated aggregate tables; and
+- all manuscript-facing numerical claims recompute from promoted tables under
+  `verify_supportshift_claims.py`;
 - final metadata identify a clean immutable Git commit, seed, environment,
   command, and output checksums.
 
