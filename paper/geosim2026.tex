@@ -616,8 +616,8 @@ Track & Nonrandom target & Principal controls & Reported scoring or falsificatio
 \midrule
 Continuous phase and transition
 & Exact pairwise KL pseudo-decay
-& \(h,\nu\), quadrature order
-& Sign, local rate and coefficient; two-term error and quadrature stability \\
+& \(h,\nu,d\), kernel family, quadrature order
+& Sign, local rate and coefficient; kernel--dimension and quadrature stability \\
 Directional support
 & Exact pairwise KL pseudo-decay by lag angle
 & \(h,\nu\), angle, support aspect
@@ -647,7 +647,8 @@ and 0.3, are stress points outside the sufficient Taylor neighborhood
 bandwidths, which are inside that neighborhood.
 Repeating at orders 64 and 128 changed pseudo-decay by at most
 \(4.4\times10^{-8}\) and \(5.2\times10^{-9}\), respectively, relative to
-order 96.
+order 96. Appendix~\ref{app:dimension-kernel-audit} audits the same phase
+coefficient in dimensions one through three and for a second compact kernel.
 
 All 108 shifts \(\alpha-\alpha_h^\dagger\) were positive. For smoothness 0.25,
 0.5, and 0.75, log--log slopes over the six smallest bandwidths were 0.515,
@@ -919,9 +920,9 @@ arbitrary full-likelihood fits, or continuous-parameter estimation.
 
 Code, manifests, and audited aggregate results are available at
 \url{https://github.com/Sasha-Cui/HighDimSpatialStatistics} under the immutable
-tag \texttt{supportshift-geosim-v1.1.3}. The release includes a synthetic-data
+tag \texttt{supportshift-geosim-v1.2.0}. The release includes a synthetic-data
 card, scoped reuse terms, a citation file, and a one-command verifier for the
-promoted inputs, all paper artifacts, and 100 reported numerical claims.
+promoted inputs, all paper artifacts, and 113 reported numerical claims.
 
 \clearpage
 \bibliographystyle{ACM-Reference-Format}
@@ -1075,5 +1076,47 @@ independent of \(\theta\).  If
 \(\lVert A_\theta\rVert_F\leq\sqrt p/c\), which proves
 \eqref{eq:np-rate}.
 \end{proof}
+
+\clearpage
+\section{Dimension--kernel robustness audit}
+\label{app:dimension-kernel-audit}
+
+The primary phase figure fixes \(d=2\) and the product Epanechnikov kernel.
+As a separate, predeclared implementation audit, we used
+\(d\in\{1,2,3\}\), product Epanechnikov and product uniform kernels,
+\(\nu\in\{0.5,1,1.5,2.5\}\), and
+\(h\in\{0.002,0.004,0.008\}\), with \(\alpha=R=1\). Tensor quadrature used
+order 48 per coordinate and was repeated at orders 32 and 64. These factors
+give 72 deterministic cells.
+
+Put
+\[
+ s_\nu(h)=
+ \begin{cases}
+ h^{2\nu},&0<\nu<1,\\
+ h^2\log(1/h),&\nu=1,\\
+ h^2,&\nu>1,
+ \end{cases}
+\]
+and let \(C_{\nu,k}\) be the positive coefficient of
+\(\alpha-\alpha_h^\dagger\) in Theorem~\ref{thm:phase-law}. Table~\ref{tab:dimension-kernel}
+reports the range, over the four smoothness values, of
+\((\alpha-\alpha_h^\dagger)/\{C_{\nu,k}s_\nu(h)\}\) at \(h=0.002\).
+
+\begin{table}[h]
+\centering
+\small
+\caption{Smallest-bandwidth coefficient ratios in the robustness audit.}
+\label{tab:dimension-kernel}
+\input{tables/dimension_kernel_robustness.tex}
+\end{table}
+
+All 72 exact shifts were positive. The largest absolute coefficient-ratio
+error was 0.169, below the predeclared 0.20 gate; it occurred at \(\nu=1\),
+where logarithmic convergence is slow. The maximum relative shift change under
+quadrature refinement was \(3.92\times10^{-7}\), below the predeclared
+\(2\times10^{-4}\) gate. This finite audit checks two kernel families and
+three dimensions only; it is neither the proof of the kernel-general theorem
+nor a uniform guarantee over kernels or dimensions.
 
 \end{document}

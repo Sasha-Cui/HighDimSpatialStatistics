@@ -233,6 +233,14 @@ For fixed (\nu>0),
 with explicit positive coefficients. The theorem is a pairwise
 pseudo-parameter statement, not a universal full-likelihood theorem.
 
+**Finite implementation audit, not a proof dependency.** A predeclared
+72-cell deterministic grid evaluates the exact target and displayed
+coefficient for (d\in\{1,2,3\}), product Epanechnikov and product uniform
+kernels, four fixed smoothnesses, and three small bandwidths. All shifts and
+the coefficient/refinement gates pass. This audit exercises the implementation
+beyond the main (d=2) design; T1 continues to depend on L0--L6, not on
+numerical evidence.
+
 ### L7--T1b. Threshold cancellation and transition-aware target -- complete
 
 For \(0<\nu<2\), retain both the analytic quadratic term and the fractional

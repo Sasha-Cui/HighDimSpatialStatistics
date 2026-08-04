@@ -220,7 +220,9 @@ Do not combine the scientific model replacement with bulk legacy-file movement.
 - all unit/integration/regression tests pass;
 - final simulation configuration frozen and checksummed;
 - all figures/tables regenerate from archived metrics;
-- real data source/license and independent samples documented;
+- either real-data source/license and independent samples are documented or
+  the release is explicitly scoped as synthetic-only with no external-validity
+  claim;
 - manuscript claims linked to a theorem, test, figure, or table;
 - no unresolved P0/P1 audit issue;
 - archived invalid outputs cannot be mistaken for final outputs.

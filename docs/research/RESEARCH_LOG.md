@@ -412,6 +412,36 @@ expertise selections, immutable PDF hash, and an author-reviewable
 generative-AI disclosure while leaving all live-portal and attendance fields
 explicitly unchecked.
 
+## 2026-08-04 -- dimension and kernel robustness audit
+
+**Question.** The phase theorem permits fixed arbitrary dimension and compact
+symmetric kernels, but the main deterministic display used only (d=2) and a
+product Epanechnikov kernel. This left a reviewer-facing implementation-coverage
+gap even though the proof itself is kernel-general.
+
+**Predeclared audit.** Before examining the promoted results, the driver fixed
+(d\in\{1,2,3\}), product Epanechnikov and product uniform kernels,
+(\nu\in\{0.5,1,1.5,2.5\}),
+(h\in\{0.002,0.004,0.008\}), and (alpha=R=1). Tensor quadrature used order
+48 per coordinate with orders 32 and 64 as refinements. Acceptance required a
+complete 72-cell grid, positive shifts in every cell, maximum
+smallest-bandwidth coefficient error at most 0.20, and maximum relative
+quadrature-refinement change at most (2\times10^{-4}).
+
+**Clean result.** Bouchet generated the promoted table from clean commit
+`2fc7040c0f3f82b8b6c196a0b05ac9dad3ccb791` under Python 3.12.8, NumPy 2.3.5,
+and SciPy 1.17.1. All 72 shifts were positive. The worst coefficient error was
+0.168688, and the worst relative refinement change was
+(3.9131\times10^{-7}). The CSV SHA-256 is
+`175ac2ca3417002f69dde1746165d4fd576ae80ae1e727f1da58913d89867516`.
+
+**Decision.** Promote the result as a finite robustness audit in the second
+GeoSim appendix page and the technical manuscript, not as proof of the theorem
+or as a uniform result over kernels or dimensions. Artifact schema 1.2 copies
+source tables byte-for-byte, records 23 output hashes, and expands the claim
+ledger from 100 to 113 checks. The configured Bouchet environment passes 138
+tests and the maintained Ruff scope.
+
 ## Entry template
 
 ```text

@@ -1,6 +1,6 @@
 # Final research assessment: SupportShift
 
-**Assessment date:** 2026-08-02
+**Assessment date:** 2026-08-04
 
 **Repository:** HighDimSpatialStatistics
 
@@ -118,6 +118,12 @@ contract that maps each synthetic track to its controls, nonrandom target, and
 falsification gate. It also makes the public README artifact-first and records
 an internal mock review with likely objections and acceptance-preserving
 fallbacks. It changes no theorem statement or reported numerical value.
+Release `supportshift-geosim-v1.2.0` adds a predeclared 72-cell deterministic
+audit across dimensions one through three and product Epanechnikov and uniform
+kernels. It also makes paper-facing source extracts byte-identical to their
+promoted CSV inputs, expands the artifact manifest to schema 1.2, and adds a
+second permitted appendix page. The audit changes no theorem statement and is
+explicitly labeled finite evidence rather than a proof or uniform guarantee.
 
 The pre-audit history consisted of four bulk commits made on one day and did not
 record a theorem or experiment-development trail. The research branch now has
@@ -134,14 +140,18 @@ The final benchmark files are:
 - outputs/smoothing_bias/supportshift_anisotropic_final_20260803.csv; and
 - outputs/smoothing_bias/supportshift_anisotropic_final_20260803.metadata.json;
 - outputs/smoothing_bias/supportshift_transition_stress_20260804.csv; and
-- outputs/smoothing_bias/supportshift_transition_stress_20260804.metadata.json.
+- outputs/smoothing_bias/supportshift_transition_stress_20260804.metadata.json;
+- outputs/smoothing_bias/supportshift_dimension_kernel_robustness_20260804.csv;
+  and
+- outputs/smoothing_bias/supportshift_dimension_kernel_robustness_20260804.metadata.json.
 
 The artifact manifest at paper/data/supportshift_artifact_manifest.json links
 the final inputs to generated source data, figures, and tables. Manifest schema
-1.1 explicitly records any source file that is also a paper output and forbids
-rewriting that aliased input. Every current input/output hash verifies.
+1.2 records seven inputs and 23 paper outputs, preserves source extracts
+byte-for-byte, and explicitly records any source file that is also a paper
+output. Every current input/output hash verifies.
 
-The maintained suite was verified with 102 passing tests in the configured
+The maintained suite was verified with 138 passing tests in the configured
 research environment, and the maintained SupportShift Ruff scope is clean.
 Reproduction instructions point to the declared Python 3.12 environment and
 promoted package snapshot rather than an arbitrary system Python.
@@ -685,6 +695,7 @@ to reinterpret \(p\) as independent sample size or to claim a sparsity rate.
 |---|---|---|---|
 | Three phase regimes | 2D product-Epanechnikov deterministic quadrature | 108 targets over six \(\nu\) and 18 bandwidths | Direct coefficient and rate check |
 | Smoothness-one transition | Fine-grid deterministic quadrature | 111 targets; two-term error below 0.1% | Resolves finite-bandwidth cancellation without claiming a joint uniform theorem |
+| Kernel and dimension robustness | Deterministic quadrature in (d=1,2,3) for two compact product kernels | 72 targets; all signs and predeclared gates pass | Checks implementation beyond the main 2D Epanechnikov design; not a proof |
 | Universal small-\(h\) sign | Same phase track | All 108 inverse-range shifts positive | Supports, but does not replace, proof |
 | Directional \(h^2\) contrast | Elongated-support quadrature | 2,128 rows; all gates pass | Tests exact directional coefficient |
 | Correct family contains truth | Finite-grid population KL | Corrected target numerically one | Model-containment control |
@@ -722,6 +733,15 @@ Quadrature refinement changed pseudo-decay by at most
 \(5.12\times10^{-9}\) at order 128 relative to order 96. The two largest
 bandwidths, 0.229 and 0.3, lie outside the sufficient Taylor neighborhood and
 are correctly labeled stress points.
+
+A separate robustness grid used
+(d\in\{1,2,3\}), product Epanechnikov and product uniform kernels,
+(\nu\in\{0.5,1,1.5,2.5\}), and
+(h\in\{0.002,0.004,0.008\}). All 72 shifts were positive. At the smallest
+bandwidth, the worst absolute leading-coefficient ratio error was 0.169,
+below the predeclared 0.20 gate. Quadrature refinement changed a shift by at
+most (3.92\times10^{-7}) relatively, below the predeclared
+(2\times10^{-4}) gate. This grid is finite robustness evidence only.
 
 ### 4.3 Directional results
 
@@ -1246,12 +1266,12 @@ should be reserved for a future workload that demonstrably uses them.
 
 ### 10.2 Release state and submission blockers
 
-The internal artifact gates are complete: the GeoSim paper has nine main-text
-pages plus one reference page and is within the 10-page main-text limit, the
-technical manuscript is 22 pages, every page has
+The internal artifact gates are complete: the GeoSim paper has ten main-text
+pages, one reference page, and two appendix pages and is within both limits;
+the technical manuscript is 22 pages, every page has
 been rendered and inspected,
 the maintained test suite passes, scoped Ruff is clean, and the release verifier
-checks 12,800 rows, 64 coverage cells, 21 hashed paper artifacts, and 100
+checks 12,800 rows, 64 coverage cells, 23 hashed paper artifacts, and 113
 manuscript claims. The remaining
 tasks are proof, priority, publication, and release chores rather than further
 statistical computation:

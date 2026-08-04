@@ -15,8 +15,8 @@ be used to make scientific claims about one.
 ## Versioned release
 
 - Repository: <https://github.com/Sasha-Cui/HighDimSpatialStatistics>
-- Artifact release: `supportshift-geosim-v1.1.3`
-- Benchmark schema: `1.1`
+- Artifact release: `supportshift-geosim-v1.2.0`
+- Benchmark schema: `1.2`
 - Promoted high-dimensional run: Slurm job `21081491`
 - Authorized allocation: `pi_jss233`
 - Promoted generation commit recorded in metadata: `d5207fb`
@@ -32,6 +32,7 @@ generation commit, environment, arguments, validation gates, and hashes.
 |---|---|---|---|
 | Continuous phase | bandwidth, Matérn smoothness | exact two-point pseudo-decay from deterministic quadrature | rate and coefficient ratio |
 | Smoothness-one transition audit | bandwidth and a fine smoothness grid around one | exact pair target and cancellation-aware two-term target | one-term failure and two-term relative error |
+| Dimension--kernel robustness audit | dimension, compact product-kernel family, bandwidth, smoothness | exact pair target and theorem coefficient | sign, coefficient ratio, and quadrature stability |
 | Directional support | bandwidth, smoothness, lag angle, support aspect ratio | exact directional two-point pseudo-decay | apparent-range contrast |
 | Finite grid | bandwidth, smoothness, boundary/irregular/domain design, fitted support model | exact finite-design Gaussian KL minimizer | bias and Monte Carlo error relative to target |
 | Replicated high dimension | \(p\), \(N\), smoothness, support-aware/naive model | exact finite-library population minimizer | criterion certificate, excess risk, and target-specific RMSE |
@@ -72,6 +73,12 @@ variance--decay library contains 16,261 candidates.
 - `outputs/smoothing_bias/supportshift_transition_stress_20260804.metadata.json`:
   clean-commit provenance, environment, SHA-256, quadrature refinement, and
   predeclared sign and approximation-error gates.
+- `outputs/smoothing_bias/supportshift_dimension_kernel_robustness_20260804.csv`:
+  72 deterministic cells in dimensions one through three for product
+  Epanechnikov and product uniform kernels.
+- `outputs/smoothing_bias/supportshift_dimension_kernel_robustness_20260804.metadata.json`:
+  clean-commit provenance, SHA-256, factor grid, quadrature refinement, and
+  predeclared sign and coefficient-accuracy gates.
 
 ### Compact paper data
 
@@ -83,8 +90,10 @@ variance--decay library contains 16,261 candidates.
   summaries.
 - `paper/data/supportshift_raw_example.csv`: plot-ready field extract.
 - `paper/data/transition_stress.csv`: threshold-audit plot data.
-- `paper/data/supportshift_artifact_manifest.json`: SHA-256 contract for six
-  promoted inputs and 21 generated tables, data extracts, and figures.
+- `paper/data/dimension_kernel_robustness.csv`: exact robustness-audit source
+  data for the appendix table.
+- `paper/data/supportshift_artifact_manifest.json`: SHA-256 contract for seven
+  promoted inputs and 23 generated tables, data extracts, and figures.
 
 CSV files use header rows, period decimal separators, and no implicit row index.
 Boolean fields are textual `True`/`False`. Coordinates and parameter values use
@@ -117,8 +126,8 @@ python scripts/research/verify_supportshift_release.py \
 ```
 
 A valid full release has 12,800 rows, 64 candidatewise-coverage cells, all
-predeclared statistical gates passing, 21 matching paper-artifact hashes, and
-100 machine-checked manuscript claims.
+predeclared statistical gates passing, 23 matching paper-artifact hashes, and
+113 machine-checked manuscript claims.
 The verifier fails on missing files, hash changes, incomplete grids, failed
 gates, dirty generation provenance, or a mismatch between any reported number
 and its released source table. The public artifact also supplies the exact
@@ -141,6 +150,9 @@ regeneration command in `README.md`.
 - The transition-aware error orders are pointwise in smoothness. The fine-grid
   audit does not establish a joint remainder uniform in smoothness and
   bandwidth.
+- The dimension--kernel audit covers only (d\in\{1,2,3\}) and two compact
+  product kernels. It is not a proof or a uniform guarantee over dimensions or
+  kernel families.
 
 ## Intended and unintended uses
 

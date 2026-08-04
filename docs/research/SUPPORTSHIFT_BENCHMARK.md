@@ -1,8 +1,10 @@
 # SupportShift synthetic benchmark
 
-Promoted schema: **1.1**. Version 1.1 adds the resolution-certified
-\(161\times101\) library and exact candidatewise simultaneous-coverage fields;
-earlier 1.0 files are pre-release artifacts.
+Promoted artifact schema: **1.2**. Version 1.2 adds the 72-cell
+dimension--kernel robustness audit and byte-preserving paper source extracts.
+The replicated-field component remains schema 1.1 with its
+resolution-certified \(161\times101\) library and exact candidatewise
+simultaneous-coverage fields; earlier 1.0 files are pre-release artifacts.
 
 ## Purpose
 
@@ -71,6 +73,12 @@ A separate 111-cell threshold audit uses 37 smoothness values from 0.55 to
 both the pointwise one-term law and the cancellation-aware two-term target.
 The audit is deliberately labeled finite-grid evidence: it does not promote
 the fixed-smoothness theorem into a joint uniform result.
+
+A second deterministic audit uses dimensions one through three, product
+Epanechnikov and product uniform kernels, four smoothnesses, and three small
+bandwidths. Its 72 cells test the theorem coefficient and sign away from the
+single design used in the main phase figure. This finite audit does not replace
+the proof or establish uniformity over kernels or dimensions.
 
 ### B. Finite-grid support likelihood
 
@@ -143,6 +151,9 @@ The final benchmark run is accepted only if all of the following hold:
   predeclared tolerance;
 - every transition-audit shift has the predicted sign, and the two-term shift
   and variance-loss relative errors stay below the predeclared 0.2% tolerance;
+- all dimension--kernel shifts have the predicted sign, the smallest-bandwidth
+  coefficient error stays below 20%, and quadrature refinement stays below
+  (2\times10^{-4}) relative to the shift;
 - directional contrasts agree with their (h^2) coefficient and remain stable
   under quadrature refinement;
 - the finite-library population objective is within its predeclared tolerance
@@ -176,6 +187,7 @@ the seed and exact covariance generator reproduce them.
 |---|---|---|
 | Three-regime pairwise phase law | Track A exact oracle and coefficient ratio | wrong slope, sign, or nonconvergent quadrature |
 | Two-term threshold approximation | Track A fine-grid transition audit | failed sign gate, error above 0.2%, or quadrature instability |
+| Kernel- and dimension-general phase coefficient | Track A 72-cell dimension--kernel audit | wrong sign, coefficient error above 20%, or quadrature instability |
 | Support anisotropy creates directional range inflation | Track D angular oracle and contrast ratio | wrong contrast sign or coefficient |
 | Support-aware finite library contains the physical covariance | Tracks B and C population KL oracle | corrected oracle misses an on-grid truth |
 | Likelihood concentration depends on \(N,p,M\) and relative spectra | Track C varies \(N,p\) at fixed \(M\), reports matrix geometry, and compares deviations with the theorem radius | certificate undercoverage or uncontrolled spectra |
