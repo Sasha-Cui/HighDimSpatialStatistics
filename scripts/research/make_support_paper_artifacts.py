@@ -5,6 +5,7 @@ import argparse
 import hashlib
 import json
 import platform
+import shutil
 from pathlib import Path
 
 import matplotlib as mpl
@@ -647,21 +648,56 @@ def finite_table(summary: pd.DataFrame, path: Path) -> None:
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
+def dimension_kernel_table(data: pd.DataFrame, path: Path) -> None:
+    required = {
+        "dimension",
+        "kernel_family",
+        "smoothness",
+        "bandwidth",
+        "decay_shift",
+        "coefficient_ratio",
+    }
+    missing = required.difference(data.columns)
+    if missing:
+        raise ValueError(
+            f"dimension-kernel data are missing columns: {sorted(missing)}"
+        )
+    smallest_bandwidth = float(data["bandwidth"].min())
+    selected = data[np.isclose(data["bandwidth"], smallest_bandwidth)]
+    lines = [
+        r"\begin{tabular}{lrrr}",
+        r"\toprule",
+        r"Kernel & $d$ & Minimum ratio & Maximum ratio\\",
+        r"\midrule",
+    ]
+    for (kernel_family, dimension), group in selected.groupby(
+        ["kernel_family", "dimension"], sort=True
+    ):
+        label = str(kernel_family).capitalize()
+        lines.append(
+            f"{label} & {int(dimension)} & "
+            f"{group['coefficient_ratio'].min():.3f} & "
+            f"{group['coefficient_ratio'].max():.3f}\\\\"
+        )
+    lines.extend([r"\bottomrule", r"\end{tabular}"])
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
 def write_source_extract(
-    data: pd.DataFrame,
     source_path: Path,
     destination_path: Path,
 ) -> None:
-    """Write a compact CSV unless it is already the declared input artifact."""
+    """Copy an immutable source table unless it already is the destination."""
     if source_path.resolve() == destination_path.resolve():
         return
-    data.to_csv(destination_path, index=False)
+    shutil.copyfile(source_path, destination_path)
 
 
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--phase", type=Path, required=True)
     parser.add_argument("--transition-stress", type=Path)
+    parser.add_argument("--dimension-kernel-robustness", type=Path)
     parser.add_argument("--finite-summary", type=Path, required=True)
     parser.add_argument("--anisotropy", type=Path)
     parser.add_argument("--raw-example", type=Path)
@@ -673,6 +709,7 @@ def main() -> None:
         for name, path in {
             "phase": args.phase,
             "transition_stress": args.transition_stress,
+            "dimension_kernel_robustness": args.dimension_kernel_robustness,
             "finite_summary": args.finite_summary,
             "anisotropy": args.anisotropy,
             "raw_example": args.raw_example,
@@ -698,9 +735,18 @@ def main() -> None:
         transition_stress = pd.read_csv(args.transition_stress)
         transition_figure(transition_stress, figures)
         write_source_extract(
-            transition_stress,
             args.transition_stress,
             data_directory / "transition_stress.csv",
+        )
+    if args.dimension_kernel_robustness is not None:
+        dimension_kernel = pd.read_csv(args.dimension_kernel_robustness)
+        dimension_kernel_table(
+            dimension_kernel,
+            tables / "dimension_kernel_robustness.tex",
+        )
+        write_source_extract(
+            args.dimension_kernel_robustness,
+            data_directory / "dimension_kernel_robustness.csv",
         )
     finite_figure(summary, figures)
     convergence_figure(summary, figures)
@@ -709,7 +755,6 @@ def main() -> None:
         anisotropy = pd.read_csv(args.anisotropy)
         anisotropy_figure(anisotropy, figures)
         write_source_extract(
-            anisotropy,
             args.anisotropy,
             data_directory / "anisotropic_phase.csv",
         )
@@ -717,7 +762,6 @@ def main() -> None:
         raw_example = pd.read_csv(args.raw_example)
         raw_support_figure(raw_example, figures)
         write_source_extract(
-            raw_example,
             args.raw_example,
             data_directory / "supportshift_raw_example.csv",
         )
@@ -729,12 +773,10 @@ def main() -> None:
             index=False,
         )
     write_source_extract(
-        phase,
         args.phase,
         data_directory / "phase_oracle_d2.csv",
     )
     write_source_extract(
-        summary,
         args.finite_summary,
         data_directory / "finite_summary.csv",
     )
@@ -755,6 +797,13 @@ def main() -> None:
                 figures / "transition_stress.pdf",
                 figures / "transition_stress.png",
                 data_directory / "transition_stress.csv",
+            ]
+        )
+    if args.dimension_kernel_robustness is not None:
+        artifact_paths.extend(
+            [
+                tables / "dimension_kernel_robustness.tex",
+                data_directory / "dimension_kernel_robustness.csv",
             ]
         )
     if args.anisotropy is not None:
@@ -789,6 +838,8 @@ def main() -> None:
         for name, destination in {
             "phase": data_directory / "phase_oracle_d2.csv",
             "transition_stress": data_directory / "transition_stress.csv",
+            "dimension_kernel_robustness": data_directory
+            / "dimension_kernel_robustness.csv",
             "finite_summary": data_directory / "finite_summary.csv",
             "anisotropy": data_directory / "anisotropic_phase.csv",
             "raw_example": data_directory / "supportshift_raw_example.csv",
@@ -797,7 +848,7 @@ def main() -> None:
         and input_paths[name].resolve() == destination.resolve()
     }
     manifest = {
-        "schema_version": "1.1",
+        "schema_version": "1.2",
         "inputs": input_manifest,
         "input_output_aliases": output_aliases,
         "outputs": {

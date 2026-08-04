@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 from dataclasses import asdict, dataclass
 from pathlib import Path
@@ -74,6 +75,14 @@ def _jsonable(value: Any) -> Any:
 
 def _load_json(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for block in iter(lambda: handle.read(1 << 20), b""):
+            digest.update(block)
+    return digest.hexdigest()
 
 
 def _selected_row(data: pd.DataFrame, **conditions: float | int | str) -> pd.Series:
@@ -232,6 +241,84 @@ def audit_claims(repository_root: Path, paper_directory: Path) -> dict[str, Any]
         "transition order-128 relative refinement",
         transition_refinement["128"]["max_relative_decay_shift_difference"],
         3.1e-10,
+    )
+
+    dimension_kernel = pd.read_csv(
+        data_directory / "dimension_kernel_robustness.csv"
+    )
+    promoted_dimension_kernel_path = (
+        output_directory / "supportshift_dimension_kernel_robustness_20260804.csv"
+    )
+    promoted_dimension_kernel = pd.read_csv(promoted_dimension_kernel_path)
+    dimension_kernel_metadata = _load_json(
+        output_directory
+        / "supportshift_dimension_kernel_robustness_20260804.metadata.json"
+    )
+    audit.truth(
+        "paper dimension-kernel table matches promoted source",
+        _tables_match(dimension_kernel, promoted_dimension_kernel),
+        "schemas and discrete values are exact; floats agree within 5e-15 "
+        "relative and 5e-18 absolute tolerance",
+    )
+    audit.exact("dimension-kernel rows", len(dimension_kernel), 72)
+    audit.exact(
+        "dimension-kernel dimensions",
+        sorted(dimension_kernel["dimension"].unique().tolist()),
+        [1, 2, 3],
+    )
+    audit.exact(
+        "dimension-kernel families",
+        sorted(dimension_kernel["kernel_family"].unique().tolist()),
+        ["epanechnikov", "uniform"],
+    )
+    audit.exact(
+        "dimension-kernel smoothnesses",
+        sorted(dimension_kernel["smoothness"].unique().tolist()),
+        [0.5, 1.0, 1.5, 2.5],
+    )
+    audit.exact(
+        "dimension-kernel bandwidths",
+        sorted(dimension_kernel["bandwidth"].unique().tolist()),
+        [0.002, 0.004, 0.008],
+    )
+    audit.exact(
+        "dimension-kernel quadrature order",
+        sorted(dimension_kernel["quadrature_order"].unique().tolist()),
+        [48],
+    )
+    audit.truth(
+        "all dimension-kernel shifts positive",
+        bool((dimension_kernel["decay_shift"] > 0).all()),
+        "all positive",
+    )
+    smallest_bandwidth = float(dimension_kernel["bandwidth"].min())
+    smallest = dimension_kernel[
+        np.isclose(dimension_kernel["bandwidth"], smallest_bandwidth)
+    ]
+    audit.close(
+        "maximum dimension-kernel coefficient error",
+        np.abs(smallest["coefficient_ratio"] - 1.0).max(),
+        0.169,
+        3,
+    )
+    refinement = dimension_kernel_metadata["validation_gates"][
+        "quadrature_refinement"
+    ]["observed_maximum_relative_shift_difference"]
+    audit.upper("dimension-kernel relative refinement", refinement, 4.0e-7)
+    audit.exact(
+        "dimension-kernel gates pass",
+        dimension_kernel_metadata["validation_gates"]["all_passed"],
+        True,
+    )
+    audit.exact(
+        "dimension-kernel provenance is clean",
+        dimension_kernel_metadata["provenance"]["git_dirty"],
+        False,
+    )
+    audit.exact(
+        "dimension-kernel promoted hash",
+        dimension_kernel_metadata["result_csv"]["sha256"],
+        _sha256(promoted_dimension_kernel_path),
     )
 
     anisotropy = pd.read_csv(data_directory / "anisotropic_phase.csv")

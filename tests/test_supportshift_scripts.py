@@ -121,6 +121,10 @@ def test_paper_artifact_builder_records_input_and_output_hashes(tmp_path: Path) 
     phase = data_directory / "phase_oracle_d2.csv"
     finite_summary = data_directory / "finite_summary.csv"
     transition = data_directory / "transition_stress.csv"
+    dimension_kernel = (
+        REPO_ROOT
+        / "outputs/smoothing_bias/supportshift_dimension_kernel_robustness_20260804.csv"
+    )
     shutil.copyfile(REPO_ROOT / "paper/data/phase_oracle_d2.csv", phase)
     shutil.copyfile(REPO_ROOT / "paper/data/finite_summary.csv", finite_summary)
     subprocess.run(
@@ -152,6 +156,8 @@ def test_paper_artifact_builder_records_input_and_output_hashes(tmp_path: Path) 
             str(finite_summary),
             "--transition-stress",
             str(transition),
+            "--dimension-kernel-robustness",
+            str(dimension_kernel),
             "--highdim",
             str(result),
             "--paper-directory",
@@ -165,8 +171,11 @@ def test_paper_artifact_builder_records_input_and_output_hashes(tmp_path: Path) 
 
     manifest_path = paper_directory / "data" / "supportshift_artifact_manifest.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    assert manifest["schema_version"] == "1.1"
+    assert manifest["schema_version"] == "1.2"
     assert manifest["inputs"]["highdim"]["sha256"] == _sha256(result)
+    assert manifest["inputs"]["dimension_kernel_robustness"]["sha256"] == _sha256(
+        dimension_kernel
+    )
     assert manifest["input_output_aliases"] == {
         "finite_summary": "data/finite_summary.csv",
         "phase": "data/phase_oracle_d2.csv",
@@ -182,6 +191,10 @@ def test_paper_artifact_builder_records_input_and_output_hashes(tmp_path: Path) 
     ]["data/finite_summary.csv"]
     assert "figures/supportshift_highdim.pdf" in manifest["outputs"]
     assert "figures/transition_stress.pdf" in manifest["outputs"]
+    assert "tables/dimension_kernel_robustness.tex" in manifest["outputs"]
+    assert manifest["outputs"]["data/dimension_kernel_robustness.csv"] == _sha256(
+        dimension_kernel
+    )
     for relative_path, expected_hash in manifest["outputs"].items():
         assert _sha256(paper_directory / relative_path) == expected_hash
     summary_header = (

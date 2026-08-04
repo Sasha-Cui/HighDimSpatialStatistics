@@ -1,0 +1,105 @@
+{
+  "arguments": {
+    "allow_dirty": false,
+    "bandwidths": [
+      0.002,
+      0.004,
+      0.008
+    ],
+    "coefficient_relative_tolerance": 0.2,
+    "decay": 1.0,
+    "dimensions": [
+      1,
+      2,
+      3
+    ],
+    "kernel_families": [
+      "epanechnikov",
+      "uniform"
+    ],
+    "lag": 1.0,
+    "output": "outputs/smoothing_bias/supportshift_dimension_kernel_robustness_20260804.csv",
+    "quadrature_order": 48,
+    "quadrature_relative_tolerance": 0.0002,
+    "refinement_orders": [
+      32,
+      64
+    ],
+    "smoothness": [
+      0.5,
+      1.0,
+      1.5,
+      2.5
+    ]
+  },
+  "benchmark": "SupportShift dimension-kernel robustness",
+  "created_utc": "2026-08-04T17:08:43.499551+00:00",
+  "expected_rows": 72,
+  "factor_grid": {
+    "bandwidths": [
+      0.002,
+      0.004,
+      0.008
+    ],
+    "dimensions": [
+      1,
+      2,
+      3
+    ],
+    "kernel_families": [
+      "epanechnikov",
+      "uniform"
+    ],
+    "smoothness": [
+      0.5,
+      1.0,
+      1.5,
+      2.5
+    ]
+  },
+  "provenance": {
+    "git_commit": "2fc7040c0f3f82b8b6c196a0b05ac9dad3ccb791",
+    "git_dirty": false,
+    "numpy": "2.3.5",
+    "python": "3.12.8",
+    "scipy": "1.17.1"
+  },
+  "quadrature_refinement": {
+    "32": {
+      "max_abs_pseudo_decay_difference": 2.5152105953551995e-09,
+      "max_relative_decay_shift_difference": 3.913001406363246e-07
+    },
+    "64": {
+      "max_abs_pseudo_decay_difference": 2.1205681655089847e-10,
+      "max_relative_decay_shift_difference": 3.299042326415601e-08
+    }
+  },
+  "result_csv": {
+    "path": "outputs/smoothing_bias/supportshift_dimension_kernel_robustness_20260804.csv",
+    "sha256": "175ac2ca3417002f69dde1746165d4fd576ae80ae1e727f1da58913d89867516"
+  },
+  "rows": 72,
+  "schema_version": "1.0",
+  "validation_gates": {
+    "all_decay_shifts_positive": {
+      "observed_minimum": 5.333324526457517e-07,
+      "passed": true
+    },
+    "all_passed": true,
+    "complete_factor_grid": {
+      "observed": 72,
+      "passed": true,
+      "required": 72
+    },
+    "quadrature_refinement": {
+      "observed_maximum_relative_shift_difference": 3.913001406363246e-07,
+      "passed": true,
+      "predeclared_maximum": 0.0002
+    },
+    "smallest_bandwidth_coefficient_error": {
+      "observed_maximum": 0.16868822531256478,
+      "passed": true,
+      "predeclared_maximum": 0.2
+    }
+  }
+}

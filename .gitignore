@@ -17,7 +17,7 @@ venv/
 .DS_Store
 *.egg-info/
 
-# Generated research artifacts and optimizer state. The five promoted
+# Generated research artifacts and optimizer state. The six promoted
 # SupportShift release inputs are intentionally versioned so the frozen tag can
 # be verified from a clean clone; all other generated outputs remain ignored.
 outputs/*
@@ -30,6 +30,8 @@ outputs/smoothing_bias/*
 !outputs/smoothing_bias/supportshift_anisotropic_final_20260803.metadata.json
 !outputs/smoothing_bias/supportshift_transition_stress_20260804.csv
 !outputs/smoothing_bias/supportshift_transition_stress_20260804.metadata.json
+!outputs/smoothing_bias/supportshift_dimension_kernel_robustness_20260804.csv
+!outputs/smoothing_bias/supportshift_dimension_kernel_robustness_20260804.metadata.json
 !outputs/smoothing_bias/phase_oracle_d2_v2.csv
 !outputs/smoothing_bias/phase_oracle_d2_v2.metadata.json
 tmp/
