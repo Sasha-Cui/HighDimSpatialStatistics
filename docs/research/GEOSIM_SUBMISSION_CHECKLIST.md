@@ -6,7 +6,7 @@
 **Notification:** 2026-09-15<br>
 **Official call:** <https://geosim.org/2026/cfp/><br>
 **Submission site:** <https://easychair.org/conferences/?conf=geosim2026><br>
-**Artifact candidate:** `supportshift-geosim-v1.1.1`
+**Artifact candidate:** `supportshift-geosim-v1.1.2`
 
 The official call lists parameterizable and scalable spatial-simulation data
 sets made available to the community as an in-scope topic. Full papers may use
@@ -23,6 +23,9 @@ references. Review is single-blind and uses the ACM `sigconf` format.
 - [x] Synthetic factors map directly to theorem or limitation statements.
 - [x] Monte Carlo uncertainty and boundary fits are reported.
 - [x] Closest modern and classical change-of-support work is compared directly.
+- [x] Clark's finite range-of-influence rule and the
+  Bellehumeur--Legendre practical-range result are distinguished from the
+  Matérn KL pseudo-parameter.
 - [x] Priority search is documented without treating a negative search as proof.
 - [ ] An independent spatial-statistics/probability expert has checked every
   theorem and proof.
@@ -49,6 +52,8 @@ references. Review is single-blind and uses the ACM `sigconf` format.
 - [x] Draft uses `\documentclass[sigconf]{acmart}`.
 - [x] Authors and affiliations are visible for single-blind review.
 - [x] Current main text fits the full-paper limit.
+- [x] A one-page proof appendix follows the references and remains within the
+  call's optional two-page appendix allowance.
 - [x] ACM classification, keywords, figure descriptions, and references are
   present.
 - [x] ACM classification foregrounds modeling, simulation, and model

@@ -1,6 +1,6 @@
 # SupportShift prior-art search
 
-**Search date:** 2026-08-03<br>
+**Search dates:** 2026-08-03 and 2026-08-04<br>
 **Purpose:** identify the closest published or publicly available result to the
 SupportShift small-support pseudo-range expansion.<br>
 **Status:** a documented screening search, not proof of priority.
@@ -40,6 +40,8 @@ restricted to publisher, Project Euclid, arXiv, and proceedings domains:
 - `Matérn aggregated observations covariance misspecification range`
 - `Matérn local averages pseudo true range covariance`
 - `regularized variogram range parameter block support bias`
+- `regularization semivariogram range of influence support width`
+- `deregularized variogram practical range support size`
 - `regularization effect variogram range block support`
 - `block covariance Matérn asymptotic small block`
 - `change of support Matérn covariance parameter estimation`
@@ -59,6 +61,8 @@ older monographs remain a human-review item.
 | Source | What it establishes | Why it is not the screened claim |
 |---|---|---|
 | [Journel and Huijbregts (1978), *Mining Geostatistics*](https://www.sciencedirect.com/book/9780123910509/mining-geostatistics) and [Chilès and Delfiner (2012), *Geostatistics: Modeling Spatial Uncertainty*](https://doi.org/10.1002/9781118136188) | Classical point-to-block and block-to-block regularization, including the reduction of within-block variability. | Establishes the support transform, not the KL parameter obtained by ignoring it, and no all-\(\nu\) Matérn pseudo-range phase law was located. |
+| [Clark (1977)](https://doi.org/10.1016/0098-3004(77)90010-3) | Derives regularized semivariograms for standard geostatistical models. For models with a finite range of influence, the exact geometric range of two length-\(l\) supports is the point range plus \(l\); practical de-regularization then subtracts the support width. | This is the closest older *range-direction* predecessor and must be cited. It concerns a finite zero-covariance range or a graphical practical-range rule, not a variance-refitted Matérn KL pseudo-parameter. A Matérn covariance has no finite range of influence. |
+| [Bellehumeur and Legendre (1997)](https://doi.org/10.1111/j.1538-4632.1997.tb00961.x) | Uses analytical change-of-support relationships with an exponential model and reports increasing autocorrelation range as sampling units grow. | Confirms the qualitative direction empirically and through model-specific regularization approximations, but does not derive the fixed-lag KL target, its small-support coefficient, or the Matérn smoothness transition. |
 | [Gelfand, Zhu and Carlin (2001)](https://doi.org/10.1093/biostatistics/2.1.31) and [Gotway and Young (2002)](https://doi.org/10.1198/016214502760047140) | Statistical change-of-support models and the dangers of combining incompatible supports. | Motivates support-aware modeling; it does not provide the fixed-lag Matérn pseudo-parameter expansion screened here. |
 | [Kyriakidis and Yoo (2005)](https://doi.org/10.1111/j.1538-4632.2005.00633.x) | Prediction and simulation of point values from areal data using coherent change-of-support geostatistics. | Solves a support-aware prediction/simulation problem rather than quantifying a point-support likelihood target under ignored averaging. |
 | [Fuentes (2007)](https://doi.org/10.1198/016214506000000852) | For irregular spatial data, explicitly represents a rectangular block average and its filtered spectrum, then notes that the spectrum approaches the point-support spectrum for a small pixel. | This is the nearest located analytic setup. It does not compute the next-order range displacement, the smoothness transition at \(\nu=1\), or the directional coefficient. |
@@ -71,26 +75,33 @@ older monographs remain a human-review item.
 ## Search conclusion and wording rule
 
 No exact predecessor for the all-smoothness point-fit pseudo-range expansion or
-its directional coefficient was identified in this search. That negative result
-does **not** prove priority. The paper must therefore use comparative wording:
+its directional coefficient was identified in this search. Clark (1977) and
+Bellehumeur and Legendre (1997) are nevertheless direct qualitative
+predecessors for support-induced apparent-range inflation, and omitting them
+would overstate the literature gap. The negative exact-result search does
+**not** prove priority. The paper must therefore use comparative wording:
 “the object studied here,” “the addition studied here,” and “we did not locate,”
 not “first,” “novel,” or “previously unknown.”
 
 The strongest defensible comparison is:
 
-> Classical work derives the support-transformed covariance, and Fuentes
-> (2007) gives the small-pixel spectral approximation. SupportShift studies the
-> next-order parameter selected when that transform is ignored, including the
-> Matérn smoothness transition and a directional coefficient.
+> Classical regularized-semivariogram work shows that larger support can
+> increase a finite or practical range, while Fuentes (2007) gives the
+> small-pixel block-spectral approximation. SupportShift studies a different
+> object: the next-order, variance-refitted Matérn KL parameter selected when
+> the support transform is ignored, including the smoothness transition and a
+> directional coefficient.
 
 ## Residual priority risk
 
-Before submission, a spatial-statistics expert should manually inspect the
-relevant sections and bibliographies of Journel and Huijbregts (1978), Chilès
-and Delfiner (2012), Webster and Oliver, and older regularized-variogram and
-dispersion-variance literature. The question is specifically whether any source
-fits a point-support Matérn model to block support and derives the asymptotic
-range shift, not merely whether it describes regularization. If such a result is
-found, the theorem can remain useful as a benchmark anchor, but the paper must
-reframe it as a sharpened synthesis or special-case derivation and cite the
-predecessor directly.
+The Clark (1977) and Bellehumeur--Legendre (1997) trails have now been checked
+directly. Before submission, a spatial-statistics expert should still inspect
+the relevant sections and bibliographies of Journel and Huijbregts (1978),
+Chilès and Delfiner (2012), Webster and Oliver, Matheron's 1971 monograph, and
+older dispersion-variance literature. The question is specifically whether any
+source fits a point-support Matérn model to block support with free variance and
+derives the asymptotic KL range shift, not merely whether it describes
+regularization or a finite range of influence. If such a result is found, the
+theorem can remain useful as a benchmark anchor, but the paper must reframe it
+as a sharpened synthesis or special-case derivation and cite the predecessor
+directly.

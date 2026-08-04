@@ -95,7 +95,16 @@ Ornstein--Uhlenbeck inference has been studied directly
 calculation alone is not a novelty claim.  Reviews and geostatistical methods
 for incompatible supports establish the block-to-block covariance and
 area-to-point prediction problems
-\citep{gotway2002incompatible,kyriakidis2005areal}.  Most closely,
+\citep{gotway2002incompatible,kyriakidis2005areal}.  Classical
+regularized-semivariogram work already explains why larger support can increase
+an apparent autocorrelation range
+\citep{clark1977regularization,bellehumeur1997aggregation}.  Clark's exact
+geometric argument concerns a finite range of influence, and later practical
+de-regularization rules are model-specific.  A Mat\'ern covariance is positive
+at every finite lag, while our estimand is a free-variance Gaussian KL
+pseudo-parameter at a fixed nonzero lag; the classical support-width rule and
+our smoothness-dependent displacement therefore refer to different range
+objects.  Most closely on the likelihood side,
 \citet{fuentes2007approximate} constructs a likelihood for block averages in
 terms of an underlying point covariance and studies a Mat\'ern example.  That
 work correctly models the support; it does not derive the pseudo-range selected
@@ -1311,7 +1320,7 @@ The public code at
 \url{https://github.com/Sasha-Cui/HighDimSpatialStatistics} records the exact
 configuration and commit identifier in each promoted run's metadata; the
 frozen paper artifact is tagged
-\texttt{supportshift-geosim-v1.1.1}.  The release includes a synthetic-data
+\texttt{supportshift-geosim-v1.1.2}.  The release includes a synthetic-data
 card, scoped reuse terms, a citation file, and a one-command verifier for the
 promoted inputs, every paper-artifact hash, and 100 reported numerical claims.  The
 finite-grid full-likelihood track uses an immutable JSON manifest, SHA-256

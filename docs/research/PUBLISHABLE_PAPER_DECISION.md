@@ -124,6 +124,11 @@ made.
 - Change of support and \(SKS^\top\) are established spatial-statistics ideas;
   see Gelfand, Zhu and Carlin (2001), Gotway and Young (2002), Kyriakidis and
   Yoo (2005), and Chacón-Montalván et al. (2024).
+- Clark (1977) and Bellehumeur and Legendre (1997) are direct qualitative
+  predecessors for support-induced apparent-range inflation. Their finite or
+  practical variogram-range rules are not the free-variance fixed-lag Matérn
+  KL target derived here, but they must be cited rather than presenting the
+  direction of range change as absent from the classical literature.
 - Fuentes (2007) is the closest methodological predecessor found: it develops
   approximate likelihood for irregularly placed block averages and includes a
   Matérn example. It models the blocks correctly; it does not derive the

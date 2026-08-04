@@ -117,6 +117,13 @@ origin as smoothness crosses one.
 
 Block covariance and regularized variograms are classical
 \cite{chiles2012geostatistics,gelfand2001support,gotway2002incompatible}.
+Classical semivariogram regularization also shows that larger sampling support
+can increase an apparent or practical range. Clark's geometric rule concerns a
+finite range of influence, while Bellehumeur and Legendre use model-specific
+de-regularization approximations
+\cite{clark1977regularization,bellehumeur1997aggregation}. A Matérn
+correlation has no finite range of influence; our target is instead the
+variance-refitted KL parameter at a fixed nonzero lag.
 Fuentes explicitly represents rectangular block averages in the spectral
 likelihood and invokes a small-pixel approximation
 \cite{fuentes2007approximate}; the next-order point-fit parameter displacement
@@ -169,6 +176,10 @@ Change of support and block covariance
 tanaka2019aggregated}
 & Integrate the latent covariance over known observation supports
 & Explicit small-support Matérn \emph{point-fit pseudo-range} phase law \\
+Regularized-semivariogram range rules
+\cite{clark1977regularization,bellehumeur1997aggregation}
+& Support can enlarge a finite or practical variogram range
+& Infinite-range Matérn KL target, smoothness phase, and coefficient \\
 Misspecified GP likelihood \cite{bachoc2018misspecified}
 & Population KL pseudo-target under covariance misspecification
 & Closed direction, rate, and coefficient for ignored support \\
@@ -250,6 +261,7 @@ Put \(z=\alpha R\), \(a_k(e)=e^\top\Sigma_ke\), and
 \end{equation}
 
 \begin{proposition}[Fixed nonzero lag]
+\label{prop:fixed-lag}
 Uniformly for \(r\) in a compact annulus bounded away from zero, for
 \(h\leq\lVert r\rVert/(4L)\), and for \(\alpha\) in a compact subset of
 \((0,\infty)\),
@@ -263,6 +275,7 @@ Uniformly for \(r\) in a compact annulus bounded away from zero, for
 At zero lag, the Matérn origin expansion produces a phase transition.
 
 \begin{theorem}[Matérn support phase law]
+\label{thm:phase-law}
 Fix \(\nu>0\).
 Let
 \[
@@ -337,6 +350,7 @@ Set
 \end{equation}
 
 \begin{proposition}[Transition-aware approximation]
+\label{prop:transition}
 For fixed \(0<\nu<2\),
 \begin{equation}
 \alpha_h^\dagger-\widetilde\alpha_h=
@@ -352,6 +366,7 @@ The error orders are not claimed jointly uniform in \((\nu,h)\).
 \end{proposition}
 
 \begin{proposition}[Directional support contrast]
+\label{prop:direction}
 Let \(\Delta_e(h)=\alpha-\alpha_h^\dagger(e)\). For two unit lag
 directions \(e_1,e_2\), under the theorem assumptions,
 \begin{equation}
@@ -424,8 +439,9 @@ equation and the recurrence
 K_\nu(z)=K_{\nu-2}(z)+2(\nu-1)K_{\nu-1}(z)/z
 \]
 reduce the normalized-correlation coefficient to \(A_{\nu,k}(r)\), proving its
-sign. Full transition constants and an exact exponential benchmark are in the
-reproducible technical manuscript.
+sign. Appendix~\ref{app:analytic-proof} records the proof details used by these
+claims; the reproducible technical manuscript also gives an exact exponential
+benchmark.
 
 For \eqref{eq:direction}, subtract the two directional fixed-lag expansions;
 the common zero-lag normalization and all direction-free terms cancel. Using
@@ -507,6 +523,7 @@ part of its error can shrink with information; it is supporting machinery, not
 a new concentration inequality.
 
 \begin{proposition}[Gaussian finite-library certificate]
+\label{prop:certificate}
 Let \(0<\delta<1\),
 \(\Sigma_0\in\mathbb S_{++}^p\), and
 \(X_1,\ldots,X_N\overset{\mathrm{iid}}\sim N_p(0,\Sigma_0)\). Let
@@ -817,6 +834,10 @@ curvature condition is added.
 The theorem separates a standard operation from a less-studied inferential
 consequence. Propagating a covariance through a known support is classical; the
 object studied here is the parameter selected when that propagation is ignored.
+This differs from classical range-of-influence rules: compactly supported
+variograms can gain a geometric support-width extension
+\cite{clark1977regularization}, but Matérn has no finite range and our
+variance-refitted KL target moves at a smoothness-dependent power.
 Rough
 Matérn fields move at a fractional bandwidth power because the origin cusp
 changes the variance more rapidly than fixed-lag covariance. Smooth fields move
@@ -871,12 +892,161 @@ arbitrary full-likelihood fits, or continuous-parameter estimation.
 
 Code, manifests, and audited aggregate results are available at
 \url{https://github.com/Sasha-Cui/HighDimSpatialStatistics} under the immutable
-tag \texttt{supportshift-geosim-v1.1.1}. The release includes a synthetic-data
+tag \texttt{supportshift-geosim-v1.1.2}. The release includes a synthetic-data
 card, scoped reuse terms, a citation file, and a one-command verifier for the
 promoted inputs, all paper artifacts, and 100 reported numerical claims.
 
 \clearpage
 \bibliographystyle{ACM-Reference-Format}
 \bibliography{references}
+
+\clearpage
+\appendix
+\section{Proof details for the analytic claims}
+\label{app:analytic-proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:phase-law}]
+Let \(f_\alpha(x)=\Matern_\nu(\alpha\lVert x\rVert)\).  Its first four
+derivatives are uniformly bounded on the declared annulus.  Since
+\(D=U-V\) is centrally symmetric and
+\(\E(DD^\top)=2\Sigma_k\), Taylor's theorem gives
+\begin{equation}
+ \E f_\alpha(r+hD)
+ =f_\alpha(r)+\frac{h^2}{2}
+  \tr\{\nabla^2f_\alpha(r)\E(DD^\top)\}+O(h^4).
+ \label{eq:appendix-taylor}
+\end{equation}
+For \(r=Re\), the radial Hessian is
+\[
+ \nabla^2f_\alpha(r)=\alpha^2\Matern_\nu''(z)ee^\top
+ +\alpha^2\frac{\Matern_\nu'(z)}z(I-ee^\top),
+\]
+which proves Proposition~\ref{prop:fixed-lag}.
+
+For noninteger \(\nu\), the convergent origin expansion is
+\begin{equation}
+\Matern_\nu(x)=
+\sum_{j\geq0}\frac{(x^2/4)^j}{j!(1-\nu)_j}
++b_\nu x^{2\nu}\sum_{j\geq0}\frac{(x^2/4)^j}{j!(1+\nu)_j},
+\quad b_\nu=\frac{\Gamma(-\nu)}{2^{2\nu}\Gamma(\nu)}.
+\label{eq:appendix-bessel}
+\end{equation}
+Because \(D\) is bounded, termwise expectation at
+\(x=\alpha h\lVert D\rVert\) is dominated uniformly for \(\alpha\) in a
+compact subset of \((0,\infty)\).  For \(0<\nu<1\), the fractional term is
+leading and the next terms are \(O(h^2)\).  For \(1<\nu<2\), the quadratic
+term is leading and the fractional remainder is \(O(h^{2\nu})\).  For fixed
+\(\nu>2\), four-times differentiability at zero gives an \(O(h^4)\)
+remainder.  At the two integer transitions,
+\begin{align}
+ \Matern_1(x)
+ &=1+\frac{x^2}{2}\{\log(x/2)+\gamma_{\rm E}-1/2\}
+   +O\{x^4(1+|\log x|)\},\\
+ \Matern_2(x)
+ &=1-\frac{x^2}{4}
+   +x^4\left\{\frac3{64}-\frac{\log(x/2)+\gamma_{\rm E}}{16}\right\}
+   +O\{x^6(1+|\log x|)\}.
+\end{align}
+These formulas prove \eqref{eq:vrough}--\eqref{eq:vsmooth}, including the
+stated remainders.
+
+Write \(d_h=C_h(0)/v\).  Dividing
+\eqref{eq:appendix-taylor} by \(d_h\), then applying the local inverse of
+\(\alpha\mapsto\Matern_\nu(\alpha R)\), is valid because
+\[
+\Matern_\nu'(z)
+=-\frac{2^{1-\nu}}{\Gamma(\nu)}z^\nu K_{\nu-1}(z)<0.
+\]
+This gives \eqref{eq:arough}--\eqref{eq:asmooth}.  In the smooth regime, the
+order-\(h^2\)
+normalized-correlation coefficient is
+\[
+ B_{\nu,k}(r)+\Matern_\nu(z)\frac{\alpha^2m_2}{4(\nu-1)}.
+\]
+Using \(m_2=2T_k\), the Matérn differential equation, and
+\(
+K_\nu(z)=K_{\nu-2}(z)+2(\nu-1)K_{\nu-1}(z)/z
+\)
+reduces it to the displayed identity \(A_{\nu,k}(r)>0\).  Division by the
+negative
+\(R\Matern_\nu'(z)\) proves that \(\alpha_h^\dagger-\alpha<0\).
+\end{proof}
+
+\begin{proof}[Proof of Propositions~\ref{prop:transition}--\ref{prop:direction}]
+Retaining both displayed terms of \eqref{eq:appendix-bessel} gives
+\[
+ d_h=1+W_{\nu,k}(h)+
+ \begin{cases}
+ O(h^{2\nu+2}),&0<\nu<1,\\
+ O(h^4),&1<\nu<2.
+ \end{cases}
+\]
+At \(\nu=1\), the corresponding error is
+\(O\{h^4\log(1/h)\}\).  Combining these denominators with
+\eqref{eq:appendix-taylor} and using the bounded derivative of the inverse
+Matérn map proves \eqref{eq:transitionerror}.  For
+\(\nu=1+\varepsilon\),
+\begin{align}
+ b_{1+\varepsilon}
+ &=\frac1{4\varepsilon}
+   +\frac{2\gamma_{\rm E}-1-2\log2}{4}+O(\varepsilon),\\
+ m_{2+2\varepsilon}(\alpha h)^{2+2\varepsilon}
+ &=(\alpha h)^2\Big[m_2+2\varepsilon
+ \{\ell_{2,k}+m_2\log(\alpha h)\}+O(\varepsilon^2)\Big].
+\end{align}
+The pole cancels the analytic quadratic term, leaving
+\eqref{eq:transitionW} at \(\nu=1\).
+
+For directions \(e_1,e_2\), the common \(d_h\) cancels and
+\[
+ \rho_h(Re_1)-\rho_h(Re_2)
+ =h^2\{B_{\nu,k}(Re_1)-B_{\nu,k}(Re_2)\}+o(h^2).
+\]
+The inverse-function theorem and
+\[
+\Matern_\nu''(z)-\Matern_\nu'(z)/z
+=2^{1-\nu}z^\nu K_{\nu-2}(z)/\Gamma(\nu)
+\]
+then give \eqref{eq:direction} for every fixed \(\nu>0\).
+\end{proof}
+
+\section{Proof of the finite-library certificate}
+\label{app:certificate-proof}
+
+\begin{proof}[Proof of Proposition~\ref{prop:certificate}]
+Write \(X_i=\Sigma_0^{1/2}Z_i\), stack the independent
+\(Z_i\sim N_p(0,I_p)\), and put
+\(A_\theta=\Sigma_0^{1/2}\Sigma_\theta^{-1}\Sigma_0^{1/2}\).
+The random likelihood term is the quadratic form associated with
+\(I_N\otimes A_\theta\).  The two-sided Gaussian quadratic-form inequality
+gives, for \(t>0\),
+\begin{align}
+ \Pr\Big(&\Big|\sum_{i=1}^N
+ X_i^\top\Sigma_\theta^{-1}X_i-N\tr(A_\theta)\Big|
+ >2\sqrt N\lVert A_\theta\rVert_F\sqrt t
+ +2\lVert A_\theta\rVert_{\rm op}t\Big)\notag\\
+ &\leq2e^{-t}.
+\end{align}
+Indeed, the Frobenius and operator norms of the Kronecker matrix are
+\(\sqrt N\lVert A_\theta\rVert_F\) and
+\(\lVert A_\theta\rVert_{\rm op}\).  The log determinant is
+deterministic.  Divide by \(2Np\), take \(t=\log(2M/\delta)\), and union
+bound over the deterministic library to obtain \eqref{eq:certificate}.  On
+that simultaneous
+event, the empirical-minimizer comparison through \(\widehat L_N\) gives
+\[
+ L(\widehat\theta)-L(\theta^\star)
+ \leq [L-\widehat L_N](\widehat\theta)
+ +[\widehat L_N-L](\theta^\star)
+ \leq2\max_\theta u_\theta.
+\]
+Finally, the Gaussian KL formula differs from \(pL(\theta)\) only by terms
+independent of \(\theta\).  If
+\(c\Sigma_0\preceq\Sigma_\theta\), congruence after inversion gives
+\(A_\theta\preceq c^{-1}I_p\), hence
+\(\lVert A_\theta\rVert_{\rm op}\leq c^{-1}\) and
+\(\lVert A_\theta\rVert_F\leq\sqrt p/c\), which proves
+\eqref{eq:np-rate}.
+\end{proof}
 
 \end{document}

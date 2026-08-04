@@ -361,6 +361,34 @@ changed source table. The previously untracked clean phase-oracle CSV and
 quadrature metadata are promoted so that the audit also works from a clean
 clone. No reported number changed during this pass.
 
+## 2026-08-04 -- hostile-referee proof and priority pass
+
+The analytic chain was rederived from the exact pair target through the radial
+Hessian, noninteger Bessel series, the two integer expansions, inverse-map
+remainder orders, smooth-regime Bessel recurrence, directional cancellation,
+and Gaussian quadratic-form normalization. No theorem coefficient, sign, or
+remainder defect was found. This internal red team is evidence of consistency,
+not a substitute for the still-required independent human proof review.
+
+The older regularized-variogram search did find an omission in the literature
+positioning. Clark (1977) proves that sampling support geometrically extends a
+finite range of influence, and Bellehumeur and Legendre (1997) use analytical
+change-of-support relationships with an exponential variogram and report an
+increasing autocorrelation range. These are direct qualitative predecessors for
+apparent-range inflation. They do not derive the free-variance, fixed-lag
+Matérn KL pseudo-parameter: Matérn covariance has no finite range of influence,
+and the classical practical-range rules do not give the
+\(h^{2\nu}\), \(h^2\log(1/h)\), and \(h^2\) phase law. Both papers
+are now cited and this distinction is explicit in the introduction, comparison
+table, discussion, and prior-art audit.
+
+The workshop paper now uses the call's optional post-reference allowance for a
+one-page appendix. It supplies proof details for the phase theorem,
+smoothness-one cancellation, directional contrast, and finite-library
+certificate. The main paper remains ten pages before references; the appendix
+is one page after them. No reported numerical value or promoted artifact
+changed.
+
 ## Entry template
 
 ```text

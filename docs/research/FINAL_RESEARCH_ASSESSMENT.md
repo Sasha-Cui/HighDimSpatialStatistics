@@ -107,6 +107,12 @@ Patch release `supportshift-geosim-v1.1.1` promotes the phase-oracle provenance,
 adds a 100-check manuscript-claim audit with a negative mutation test, and
 foregrounds simulation and model verification in the ACM classification and
 abstract. It changes no reported numerical value.
+Patch release `supportshift-geosim-v1.1.2` adds the complete one-page proof
+appendix permitted by the GeoSim call and repairs the closest-prior-art map:
+Clark (1977) and Bellehumeur and Legendre (1997) are now cited as qualitative
+predecessors for support-induced apparent-range inflation and distinguished
+from the variance-refitted, infinite-range Matérn KL target. It changes no
+theorem statement or reported numerical value.
 
 The pre-audit history consisted of four bulk commits made on one day and did not
 record a theorem or experiment-development trail. The research branch now has
@@ -827,6 +833,7 @@ distinguish those ingredients from the surviving contribution.
 | Area and nearest work | What is established | What may be new here |
 |---|---|---|
 | Change of support: [Gelfand, Zhu and Carlin (2001)](https://doi.org/10.1093/biostatistics/2.1.31), [Gotway and Young (2002)](https://doi.org/10.1198/016214502760047140), [Kyriakidis and Yoo (2005)](https://doi.org/10.1111/j.1538-4632.2005.00633.x), Chilès and Delfiner (2012) | Block covariance, areal-to-point prediction, and support integration | Explicit point-fit pseudo-range phase law and sign |
+| Classical apparent-range regularization: [Clark (1977)](https://doi.org/10.1016/0098-3004(77)90010-3), [Bellehumeur and Legendre (1997)](https://doi.org/10.1111/j.1538-4632.1997.tb00961.x) | Support can enlarge a finite range of influence or a model-specific practical variogram range | Variance-refitted fixed-lag Matérn KL parameter, its smoothness-dependent order, and its coefficient; Matérn covariance has no finite range of influence |
 | Closest Matérn block likelihood: [Fuentes (2007)](https://doi.org/10.1198/016214506000000852) | Correct approximate likelihood for irregular block averages, including Matérn examples | Parameter selected when those averages are incorrectly fitted as points |
 | Modern aggregated GPs: [Tanaka et al. (2019)](https://proceedings.neurips.cc/paper/2019/hash/a941493eeea57ede8214fd77d41806bc-Abstract.html), [Chacón-Montalván et al. (2024)](https://doi.org/10.48550/arXiv.2403.08514), [Zheng et al. (2026)](https://doi.org/10.1016/j.spasta.2026.100998) | Observation operators, aggregation, and point-grid fusion | No identified all-\(\nu\) ignored-support coefficient in these works |
 | Temporal aggregation: [Amemiya and Wu (1972)](https://doi.org/10.1080/01621459.1972.10481264), [Stram and Wei (1986)](https://doi.org/10.1111/j.1467-9892.1986.tb00495.x), [Folia and Rattray (2018)](https://doi.org/10.1007/s11222-017-9779-x) | Aggregation changes time-series and OU parameters | The one-dimensional exponential example is a check, not a novelty claim |
@@ -849,7 +856,9 @@ The cleanest novelty claim that may survive review is:
 The dated screening protocol and source-by-source comparisons are recorded in
 `docs/research/PRIOR_ART_SEARCH.md`. Targeted searches did not locate this exact
 conjunction of rate transition, coefficient, sign, and directional contrast.
-That is not an exhaustive proof of priority. A human reviewer should still
+The search did locate direct qualitative predecessors for apparent-range
+inflation, which are now cited and distinguished by estimand. That is not an
+exhaustive proof of priority. A human reviewer should still
 search older change-of-support monographs,
 block-variogram expansions, image-resolution geostatistics, and nonstandard
 Matérn parameter-estimation papers before the manuscript uses “first” or

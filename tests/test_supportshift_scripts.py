@@ -1,6 +1,7 @@
 import csv
 import hashlib
 import json
+import runpy
 import shutil
 import subprocess
 import sys
@@ -16,6 +17,43 @@ def _sha256(path: Path) -> str:
     digest = hashlib.sha256()
     digest.update(path.read_bytes())
     return digest.hexdigest()
+
+
+def test_release_identity_requires_one_public_tag(tmp_path: Path) -> None:
+    scripts_directory = REPO_ROOT / "scripts/research"
+    sys.path.insert(0, str(scripts_directory))
+    try:
+        verifier = runpy.run_path(str(scripts_directory / "verify_supportshift_release.py"))
+    finally:
+        sys.path.remove(str(scripts_directory))
+    verify_release_identity = verifier["verify_release_identity"]
+
+    paper_directory = tmp_path / "paper"
+    paper_directory.mkdir()
+    release_tag = "supportshift-geosim-v1.2.3"
+    surfaces = [
+        tmp_path / "README.md",
+        paper_directory / "geosim2026.tex",
+        paper_directory / "manuscript.tex",
+        tmp_path / "docs/research/ARTIFACT_DATA_CARD.md",
+        tmp_path / "docs/research/GEOSIM_SUBMISSION_CHECKLIST.md",
+    ]
+    for path in surfaces:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(release_tag, encoding="utf-8")
+    (tmp_path / "CITATION.cff").write_text(
+        f"version: 1.2.3\nurl: https://example.test/tree/{release_tag}\n",
+        encoding="utf-8",
+    )
+
+    observed_tag, failures = verify_release_identity(tmp_path, paper_directory)
+    assert observed_tag == release_tag
+    assert failures == []
+
+    surfaces[0].write_text("supportshift-geosim-v1.2.2", encoding="utf-8")
+    _, failures = verify_release_identity(tmp_path, paper_directory)
+    assert len(failures) == 1
+    assert "release tag mismatch" in failures[0]
 
 
 def test_highdimensional_driver_shakedown_is_self_auditing(tmp_path: Path) -> None:

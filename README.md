@@ -123,7 +123,7 @@ $161\times101=16{,}261$-candidate variance--decay library. The clean final
 run is Slurm job `21081491`, generated at commit `d5207fb` with all validation
 gates passing. The threshold audit was generated from clean commit `34a2603`
 and passed all sign, approximation-error, and quadrature-refinement gates. The
-audited paper package is frozen at tag `supportshift-geosim-v1.1.1`.
+audited paper package is frozen at tag `supportshift-geosim-v1.1.2`.
 
 Verify the promoted run, every paper-artifact hash, and all 100 numerical claims
 reported in the manuscripts in one command:
