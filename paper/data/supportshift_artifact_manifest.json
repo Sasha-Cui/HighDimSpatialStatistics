@@ -8,6 +8,10 @@
       "path": "outputs/smoothing_bias/supportshift_anisotropic_final_20260803.csv",
       "sha256": "cdd7b0fdb760c8e3178c4b573b6f6d776ce2a13569cb0249cab8d06cf4e9f1e9"
     },
+    "dimension_kernel_robustness": {
+      "path": "outputs/smoothing_bias/supportshift_dimension_kernel_robustness_20260804.csv",
+      "sha256": "175ac2ca3417002f69dde1746165d4fd576ae80ae1e727f1da58913d89867516"
+    },
     "finite_summary": {
       "path": "paper/data/finite_summary.csv",
       "sha256": "15f535aeb85c5fbb160430da761ef75b710e3b6a8894c7a261131d9d6ca38b53"
@@ -30,12 +34,13 @@
     }
   },
   "outputs": {
-    "data/anisotropic_phase.csv": "40ed12305947cd86b081fbe3999440b0ab63f9db58e8dd3a957c5ba1654548a7",
+    "data/anisotropic_phase.csv": "cdd7b0fdb760c8e3178c4b573b6f6d776ce2a13569cb0249cab8d06cf4e9f1e9",
+    "data/dimension_kernel_robustness.csv": "175ac2ca3417002f69dde1746165d4fd576ae80ae1e727f1da58913d89867516",
     "data/finite_summary.csv": "15f535aeb85c5fbb160430da761ef75b710e3b6a8894c7a261131d9d6ca38b53",
     "data/phase_oracle_d2.csv": "900d028eadaf67d5d9daced382f2c3cd63d382724d88adae4594e8a9f1ba3329",
     "data/supportshift_highdim_summary.csv": "6f8fa4eb22cf98a8fa750772f620a77000bd9eab73b134d8532dc35a23bed681",
-    "data/supportshift_raw_example.csv": "f7a6512234c4264ffb82c8f501773a738e8d999fb166a1b083a182785e760b53",
-    "data/transition_stress.csv": "9e1def6feb48a7ed5cfde684578aa9181779110b63777e42d15ddfde07b92ab7",
+    "data/supportshift_raw_example.csv": "ac5cd1543a77766789b1f4768185aa63aae0d6ae5c61f81a0fa6363139965c18",
+    "data/transition_stress.csv": "61537589aa30ee8a67f7970125a2aec2ddc23742661e0d75abebfba0a00873a9",
     "figures/anisotropic_support.pdf": "13d26c45ff6f22ebe8d966287f739d447c86a396150767b70273bb2777521c2f",
     "figures/anisotropic_support.png": "fe66b720e4c50aada6ebc23350170a042e7eecdc8d6dad1844386691f3a3a04e",
     "figures/finite_convergence.pdf": "dc1595fc561cf1f9a3ce944233ccaaf1c694d7a5c9e02b5f8c44b3c88b0ff3a2",
@@ -50,6 +55,7 @@
     "figures/supportshift_raw_example.png": "3e048ac929bcc180c830cd82246af1a9cc3edbed77fe445410a9f4dcc5b85720",
     "figures/transition_stress.pdf": "58f0659f25adf89949d87404fe18755c1637bb7d25306aef17b46a6144d7f1c2",
     "figures/transition_stress.png": "bd6f4513e8edba98fd2977617975cae3c2a379aad43eaee0373236c32ac64b7e",
+    "tables/dimension_kernel_robustness.tex": "90d1f021914d794a9d9c5858af0f5980e29acf1a3d00e8653ae346ead21c46d9",
     "tables/finite_summary.tex": "8ec55b77cc723148af27cbe6b79e4fd91327f52745f758f049833dd0079bee45"
   },
   "runtime": {
@@ -58,5 +64,5 @@
     "pandas": "2.2.3",
     "python": "3.12.8"
   },
-  "schema_version": "1.1"
+  "schema_version": "1.2"
 }

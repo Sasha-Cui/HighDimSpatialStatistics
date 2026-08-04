@@ -1,3 +1,7 @@
 # Promoted Monte Carlo CSVs retain their generator's byte representation so
 # recorded SHA-256 hashes remain stable across clones.
 outputs/smoothing_bias/*.csv binary
+
+# Paper-facing source extracts are byte-for-byte copies of promoted CSVs.
+# Preserve their recorded manifest hashes across platforms and clean clones.
+paper/data/*.csv binary
