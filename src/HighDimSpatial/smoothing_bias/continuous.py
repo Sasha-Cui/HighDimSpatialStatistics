@@ -15,10 +15,13 @@ from dataclasses import dataclass
 
 import numpy as np
 from numpy.polynomial.legendre import leggauss
-from scipy.optimize import brentq
+from scipy.optimize import brentq, minimize_scalar
 from scipy.special import gamma, kve
 
-from HighDimSpatial.smoothing_bias.kl import matern_correlation
+from HighDimSpatial.smoothing_bias.kl import (
+    gaussian_kl_divergence,
+    matern_correlation,
+)
 from HighDimSpatial.smoothing_bias.theory import epanechnikov_difference_density
 
 
@@ -52,6 +55,71 @@ class TransitionPairApproximation:
     variance_factor: float
     covariance_factor: float
     correlation: float
+    quadrature_order: int
+    kernel_family: str
+
+
+@dataclass(frozen=True)
+class PairCompositeAsymptotics:
+    """Leading multi-lag pair-composite target and misspecification constants."""
+
+    smoothness: float
+    true_decay: float
+    lags: tuple[float, ...]
+    weights: tuple[float, ...]
+    pair_shift_coefficients: tuple[float, ...]
+    information_weights: tuple[float, ...]
+    decay_shift_coefficient: float
+    minimum_kl_coefficient: float
+
+
+@dataclass(frozen=True)
+class ContinuousMultiLagTarget:
+    """Exact quadrature target of a Gaussian correlation pair composite."""
+
+    dimension: int
+    smoothness: float
+    true_decay: float
+    pseudo_decay: float
+    bandwidth: float
+    lags: tuple[float, ...]
+    weights: tuple[float, ...]
+    pair_correlations: tuple[float, ...]
+    pair_pseudo_decays: tuple[float, ...]
+    minimum_kl: float
+    quadrature_order: int
+    kernel_family: str
+
+
+@dataclass(frozen=True)
+class FiniteDesignProjectionAsymptotics:
+    """Local full-likelihood projection of the support perturbation."""
+
+    smoothness: float
+    true_variance: float
+    true_decay: float
+    dimension: int
+    number_of_locations: int
+    log_variance_shift_coefficient: float
+    log_decay_shift_coefficient: float
+    decay_inflation_coefficient: float
+    minimum_kl_coefficient: float
+    information_condition_number: float
+
+
+@dataclass(frozen=True)
+class ContinuousFullLikelihoodTarget:
+    """Exact finite-design Gaussian KL target under continuous smoothing."""
+
+    smoothness: float
+    true_variance: float
+    true_decay: float
+    pseudo_variance: float
+    pseudo_decay: float
+    bandwidth: float
+    dimension: int
+    number_of_locations: int
+    minimum_kl: float
     quadrature_order: int
     kernel_family: str
 
@@ -321,6 +389,513 @@ def product_epanechnikov_decay_shift_coefficient(
         quadrature_order=quadrature_order,
         kernel_transform=kernel_transform,
         lag_direction=lag_direction,
+    )
+
+
+def _positive_lags_and_weights(
+    lags: np.ndarray,
+    weights: np.ndarray | None,
+) -> tuple[np.ndarray, np.ndarray]:
+    lag_values = np.asarray(lags, dtype=float)
+    if (
+        lag_values.ndim != 1
+        or lag_values.size == 0
+        or not np.all(np.isfinite(lag_values))
+        or np.any(lag_values <= 0.0)
+    ):
+        raise ValueError("lags must be a nonempty vector of positive finite values")
+    if weights is None:
+        weight_values = np.ones(lag_values.size, dtype=float)
+    else:
+        weight_values = np.asarray(weights, dtype=float)
+        if (
+            weight_values.shape != lag_values.shape
+            or not np.all(np.isfinite(weight_values))
+            or np.any(weight_values <= 0.0)
+        ):
+            raise ValueError("weights must be positive, finite, and match lags")
+    weight_values /= np.sum(weight_values)
+    return lag_values, weight_values
+
+
+def gaussian_correlation_kl(
+    true_correlation: np.ndarray | float,
+    candidate_correlation: np.ndarray | float,
+) -> np.ndarray | float:
+    """KL divergence between centered unit-variance Gaussian pairs.
+
+    Both arguments are correlations in ``(-1, 1)``. Array inputs broadcast in
+    the usual NumPy manner.
+    """
+    truth = np.asarray(true_correlation, dtype=float)
+    candidate = np.asarray(candidate_correlation, dtype=float)
+    if (
+        not np.all(np.isfinite(truth))
+        or not np.all(np.isfinite(candidate))
+        or np.any(np.abs(truth) >= 1.0)
+        or np.any(np.abs(candidate) >= 1.0)
+    ):
+        raise ValueError("pair correlations must be finite and strictly between -1 and 1")
+    value = 0.5 * (
+        np.log1p(-np.square(candidate))
+        - np.log1p(-np.square(truth))
+        - 2.0
+        + 2.0 * (1.0 - candidate * truth) / (1.0 - np.square(candidate))
+    )
+    value = np.maximum(value, 0.0)
+    return float(value) if value.ndim == 0 else value
+
+
+def product_kernel_multilag_asymptotics(
+    *,
+    dimension: int,
+    smoothness: float,
+    decay: float,
+    lags: np.ndarray,
+    weights: np.ndarray | None = None,
+    kernel_family: str = "epanechnikov",
+    quadrature_order: int = 96,
+    kernel_transform: np.ndarray | None = None,
+    lag_direction: np.ndarray | None = None,
+) -> PairCompositeAsymptotics:
+    r"""Return the multi-lag shift and irreducible-KL coefficients.
+
+    Let ``s_nu(h)`` equal ``h**(2*nu)`` below one,
+    ``h**2*log(1/h)`` at one, and ``h**2`` above one. For a weighted sum of
+    Gaussian KL divergences between smoothed and point-support correlations,
+    the population target satisfies
+
+    ``decay - pseudo_decay = C_bar * s_nu(h) + o(s_nu(h))``.
+
+    The minimum composite KL is
+
+    ``V_bar * s_nu(h)**2 + o(s_nu(h)**2)``.
+
+    ``C_bar`` is a positive information-weighted average of the single-lag
+    coefficients. ``V_bar`` is half their information-weighted dispersion and
+    is positive exactly when the leading single-lag coefficients are not all
+    equal.
+    """
+    if smoothness <= 0.0 or decay <= 0.0:
+        raise ValueError("smoothness and decay must be positive")
+    lag_values, weight_values = _positive_lags_and_weights(lags, weights)
+    base_correlations = np.asarray(
+        matern_correlation(lag_values, decay, smoothness),
+        dtype=float,
+    )
+    scaled_lags = decay * lag_values
+    decay_derivatives = -lag_values * base_correlations * np.asarray(
+        kve(smoothness - 1.0, scaled_lags) / kve(smoothness, scaled_lags),
+        dtype=float,
+    )
+    correlation_information = (1.0 + np.square(base_correlations)) / np.square(
+        1.0 - np.square(base_correlations)
+    )
+    information_weights = weight_values * correlation_information * np.square(
+        decay_derivatives
+    )
+    pair_coefficients = np.asarray(
+        [
+            product_kernel_decay_shift_coefficient(
+                dimension=dimension,
+                smoothness=smoothness,
+                decay=decay,
+                lag=float(lag),
+                kernel_family=kernel_family,
+                quadrature_order=quadrature_order,
+                kernel_transform=kernel_transform,
+                lag_direction=lag_direction,
+            )
+            for lag in lag_values
+        ],
+        dtype=float,
+    )
+    total_information = float(np.sum(information_weights))
+    if not np.isfinite(total_information) or total_information <= 0.0:
+        raise ValueError("the declared lag set has zero or invalid decay information")
+    shift_coefficient = float(
+        information_weights @ pair_coefficients / total_information
+    )
+    minimum_kl_coefficient = float(
+        0.5
+        * np.sum(
+            information_weights * np.square(pair_coefficients - shift_coefficient)
+        )
+    )
+    return PairCompositeAsymptotics(
+        smoothness=float(smoothness),
+        true_decay=float(decay),
+        lags=tuple(float(value) for value in lag_values),
+        weights=tuple(float(value) for value in weight_values),
+        pair_shift_coefficients=tuple(float(value) for value in pair_coefficients),
+        information_weights=tuple(float(value) for value in information_weights),
+        decay_shift_coefficient=shift_coefficient,
+        minimum_kl_coefficient=minimum_kl_coefficient,
+    )
+
+
+def continuous_matern_multilag_target(
+    *,
+    dimension: int,
+    smoothness: float,
+    decay: float,
+    bandwidth: float,
+    lags: np.ndarray,
+    weights: np.ndarray | None = None,
+    kernel_family: str = "epanechnikov",
+    quadrature_order: int = 64,
+    kernel_transform: np.ndarray | None = None,
+    lag_direction: np.ndarray | None = None,
+) -> ContinuousMultiLagTarget:
+    """Compute the exact Gaussian correlation pair-composite target.
+
+    Unlike the saturated single-lag fit, two or more lags generally cannot all
+    be represented by one point-support decay after smoothing. The returned
+    minimum KL therefore measures genuine population misspecification.
+    """
+    if smoothness <= 0.0 or decay <= 0.0 or bandwidth < 0.0:
+        raise ValueError(
+            "smoothness and decay must be positive; bandwidth must be nonnegative"
+        )
+    lag_values, weight_values = _positive_lags_and_weights(lags, weights)
+    pair_targets = [
+        continuous_matern_pair_target(
+            dimension=dimension,
+            smoothness=smoothness,
+            decay=decay,
+            bandwidth=bandwidth,
+            lag=float(lag),
+            kernel_family=kernel_family,
+            quadrature_order=quadrature_order,
+            kernel_transform=kernel_transform,
+            lag_direction=lag_direction,
+        )
+        for lag in lag_values
+    ]
+    true_correlations = np.asarray(
+        [target.correlation for target in pair_targets],
+        dtype=float,
+    )
+
+    def objective(log_decay: float) -> float:
+        candidate_decay = float(np.exp(log_decay))
+        candidate_correlations = np.asarray(
+            matern_correlation(lag_values, candidate_decay, smoothness),
+            dtype=float,
+        )
+        divergences = np.asarray(
+            gaussian_correlation_kl(true_correlations, candidate_correlations),
+            dtype=float,
+        )
+        return float(weight_values @ divergences)
+
+    log_bounds = (np.log(decay) - np.log(100.0), np.log(decay) + np.log(100.0))
+    result = minimize_scalar(
+        objective,
+        bounds=log_bounds,
+        method="bounded",
+        options={"xatol": 1e-13, "maxiter": 500},
+    )
+    if not result.success:
+        raise RuntimeError(f"multi-lag population optimization failed: {result.message}")
+    pseudo_decay = float(np.exp(result.x))
+    return ContinuousMultiLagTarget(
+        dimension=dimension,
+        smoothness=float(smoothness),
+        true_decay=float(decay),
+        pseudo_decay=pseudo_decay,
+        bandwidth=float(bandwidth),
+        lags=tuple(float(value) for value in lag_values),
+        weights=tuple(float(value) for value in weight_values),
+        pair_correlations=tuple(float(value) for value in true_correlations),
+        pair_pseudo_decays=tuple(target.pseudo_decay for target in pair_targets),
+        minimum_kl=objective(float(result.x)),
+        quadrature_order=int(quadrature_order),
+        kernel_family=kernel_family,
+    )
+
+
+def _finite_locations(locations: np.ndarray) -> np.ndarray:
+    values = np.asarray(locations, dtype=float)
+    if (
+        values.ndim != 2
+        or values.shape[0] < 2
+        or values.shape[1] not in (1, 2, 3)
+        or not np.all(np.isfinite(values))
+    ):
+        raise ValueError("locations must have shape (p, d), with p >= 2 and d in {1,2,3}")
+    if np.unique(values, axis=0).shape[0] != values.shape[0]:
+        raise ValueError("locations must be distinct")
+    return values
+
+
+def continuous_matern_covariance_matrix(
+    locations: np.ndarray,
+    *,
+    variance: float,
+    decay: float,
+    smoothness: float,
+    bandwidth: float,
+    kernel_family: str = "epanechnikov",
+    quadrature_order: int = 64,
+    kernel_transform: np.ndarray | None = None,
+) -> np.ndarray:
+    """Return the continuously smoothed covariance on a finite design."""
+    points = _finite_locations(locations)
+    if variance <= 0.0 or decay <= 0.0 or smoothness <= 0.0 or bandwidth < 0.0:
+        raise ValueError(
+            "variance, decay, and smoothness must be positive; bandwidth must be nonnegative"
+        )
+    kernel_family = _validate_product_kernel(kernel_family)
+    transform, _ = _kernel_geometry(points.shape[1], kernel_transform, None)
+    differences = points[:, None, :] - points[None, :, :]
+    if bandwidth == 0.0:
+        distances = np.linalg.norm(differences, axis=2)
+        return variance * np.asarray(
+            matern_correlation(distances, decay, smoothness), dtype=float
+        )
+    nodes, weights = _product_difference_quadrature(
+        points.shape[1], quadrature_order, kernel_family
+    )
+    transformed_nodes = nodes @ transform.T
+    covariance = np.zeros((points.shape[0], points.shape[0]), dtype=float)
+    chunk_size = max(1, min(512, transformed_nodes.shape[0]))
+    for start in range(0, transformed_nodes.shape[0], chunk_size):
+        stop = min(start + chunk_size, transformed_nodes.shape[0])
+        displaced = differences[None, :, :, :] + (
+            bandwidth * transformed_nodes[start:stop, None, None, :]
+        )
+        distances = np.linalg.norm(displaced, axis=3)
+        correlations = np.asarray(
+            matern_correlation(distances, decay, smoothness), dtype=float
+        )
+        covariance += np.einsum(
+            "q,qij->ij", weights[start:stop], correlations, optimize=True
+        )
+    covariance *= variance
+    return (covariance + covariance.T) / 2.0
+
+
+def matern_support_covariance_leading_matrix(
+    locations: np.ndarray,
+    *,
+    variance: float,
+    decay: float,
+    smoothness: float,
+    kernel_family: str = "epanechnikov",
+    quadrature_order: int = 96,
+    kernel_transform: np.ndarray | None = None,
+) -> np.ndarray:
+    r"""Return ``Gamma`` in ``Sigma_h = Sigma_0 + s_nu(h) Gamma + o(s_nu)``."""
+    points = _finite_locations(locations)
+    if variance <= 0.0 or decay <= 0.0 or smoothness <= 0.0:
+        raise ValueError("variance, decay, and smoothness must be positive")
+    kernel_family = _validate_product_kernel(kernel_family)
+    transform, _ = _kernel_geometry(points.shape[1], kernel_transform, None)
+    kernel_covariance = PRODUCT_KERNEL_VARIANCES[kernel_family] * (
+        transform @ transform.T
+    )
+    m2 = 2.0 * float(np.trace(kernel_covariance))
+    perturbation = np.zeros((points.shape[0], points.shape[0]), dtype=float)
+    if smoothness < 1.0:
+        c_nu = gamma(1.0 - smoothness) / (
+            smoothness * 2.0 ** (2.0 * smoothness) * gamma(smoothness)
+        )
+        nodes, weights = _product_difference_quadrature(
+            points.shape[1], quadrature_order, kernel_family
+        )
+        transformed_nodes = nodes @ transform.T
+        radial_moment = float(
+            weights @ np.linalg.norm(transformed_nodes, axis=1) ** (2.0 * smoothness)
+        )
+        diagonal = -c_nu * radial_moment * decay ** (2.0 * smoothness)
+    elif smoothness == 1.0:
+        diagonal = -0.5 * m2 * decay**2
+    else:
+        diagonal = -m2 * decay**2 / (4.0 * (smoothness - 1.0))
+        differences = points[:, None, :] - points[None, :, :]
+        distances = np.linalg.norm(differences, axis=2)
+        off_diagonal = ~np.eye(points.shape[0], dtype=bool)
+        directions = np.zeros_like(differences)
+        directions[off_diagonal] = (
+            differences[off_diagonal] / distances[off_diagonal, None]
+        )
+        z = decay * distances[off_diagonal]
+        base = np.asarray(
+            matern_correlation(distances[off_diagonal], decay, smoothness),
+            dtype=float,
+        )
+        first_derivative = -base * np.asarray(
+            kve(smoothness - 1.0, z) / kve(smoothness, z), dtype=float
+        )
+        second_derivative = base + (2.0 * smoothness - 1.0) * first_derivative / z
+        directional_variances = np.einsum(
+            "qi,ij,qj->q",
+            directions[off_diagonal],
+            kernel_covariance,
+            directions[off_diagonal],
+            optimize=True,
+        )
+        total_variance = float(np.trace(kernel_covariance))
+        perturbation[off_diagonal] = decay**2 * (
+            directional_variances * second_derivative
+            + (total_variance - directional_variances) * first_derivative / z
+        )
+    np.fill_diagonal(perturbation, diagonal)
+    perturbation *= variance
+    return (perturbation + perturbation.T) / 2.0
+
+
+def finite_design_full_likelihood_asymptotics(
+    locations: np.ndarray,
+    *,
+    variance: float,
+    decay: float,
+    smoothness: float,
+    kernel_family: str = "epanechnikov",
+    quadrature_order: int = 96,
+    kernel_transform: np.ndarray | None = None,
+) -> FiniteDesignProjectionAsymptotics:
+    r"""Project the leading support perturbation onto variance--decay scores.
+
+    Parameters are ``(log variance, log decay)``. The returned vector ``b``
+    satisfies ``theta_h - theta_0 = b s_nu(h) + o(s_nu(h))``. The minimum KL
+    coefficient is the squared Fisher-metric norm of the component of the
+    support perturbation orthogonal to the two-parameter Matérn tangent space.
+    """
+    points = _finite_locations(locations)
+    truth = continuous_matern_covariance_matrix(
+        points,
+        variance=variance,
+        decay=decay,
+        smoothness=smoothness,
+        bandwidth=0.0,
+        kernel_family=kernel_family,
+        quadrature_order=quadrature_order,
+        kernel_transform=kernel_transform,
+    )
+    precision = np.linalg.inv(truth)
+    distances = np.linalg.norm(points[:, None, :] - points[None, :, :], axis=2)
+    base_correlation = np.asarray(
+        matern_correlation(distances, decay, smoothness), dtype=float
+    )
+    decay_derivative = np.zeros_like(base_correlation)
+    off_diagonal = distances > 0.0
+    z = decay * distances[off_diagonal]
+    decay_derivative[off_diagonal] = -variance * z * base_correlation[
+        off_diagonal
+    ] * np.asarray(kve(smoothness - 1.0, z) / kve(smoothness, z), dtype=float)
+    derivatives = (truth, decay_derivative)
+    perturbation = matern_support_covariance_leading_matrix(
+        points,
+        variance=variance,
+        decay=decay,
+        smoothness=smoothness,
+        kernel_family=kernel_family,
+        quadrature_order=quadrature_order,
+        kernel_transform=kernel_transform,
+    )
+    information = np.asarray(
+        [
+            [
+                0.5 * np.trace(precision @ first @ precision @ second)
+                for second in derivatives
+            ]
+            for first in derivatives
+        ],
+        dtype=float,
+    )
+    forcing = np.asarray(
+        [
+            0.5 * np.trace(precision @ derivative @ precision @ perturbation)
+            for derivative in derivatives
+        ],
+        dtype=float,
+    )
+    coefficients = np.linalg.solve(information, forcing)
+    residual = perturbation - sum(
+        coefficient * derivative
+        for coefficient, derivative in zip(coefficients, derivatives)
+    )
+    minimum_kl_coefficient = float(
+        0.25 * np.trace(precision @ residual @ precision @ residual)
+    )
+    if minimum_kl_coefficient < -1e-10:
+        raise RuntimeError("the projected KL coefficient is numerically negative")
+    minimum_kl_coefficient = max(minimum_kl_coefficient, 0.0)
+    return FiniteDesignProjectionAsymptotics(
+        smoothness=float(smoothness),
+        true_variance=float(variance),
+        true_decay=float(decay),
+        dimension=points.shape[1],
+        number_of_locations=points.shape[0],
+        log_variance_shift_coefficient=float(coefficients[0]),
+        log_decay_shift_coefficient=float(coefficients[1]),
+        decay_inflation_coefficient=float(-decay * coefficients[1]),
+        minimum_kl_coefficient=minimum_kl_coefficient,
+        information_condition_number=float(np.linalg.cond(information)),
+    )
+
+
+def continuous_matern_full_likelihood_target(
+    locations: np.ndarray,
+    *,
+    variance: float,
+    decay: float,
+    smoothness: float,
+    bandwidth: float,
+    kernel_family: str = "epanechnikov",
+    quadrature_order: int = 64,
+    kernel_transform: np.ndarray | None = None,
+) -> ContinuousFullLikelihoodTarget:
+    """Compute the exact finite-design variance--decay Gaussian KL target."""
+    points = _finite_locations(locations)
+    truth = continuous_matern_covariance_matrix(
+        points,
+        variance=variance,
+        decay=decay,
+        smoothness=smoothness,
+        bandwidth=bandwidth,
+        kernel_family=kernel_family,
+        quadrature_order=quadrature_order,
+        kernel_transform=kernel_transform,
+    )
+    distances = np.linalg.norm(points[:, None, :] - points[None, :, :], axis=2)
+    dimension = points.shape[0]
+
+    def profile(log_decay: float) -> tuple[float, float, np.ndarray]:
+        candidate_decay = float(np.exp(log_decay))
+        base = np.asarray(
+            matern_correlation(distances, candidate_decay, smoothness), dtype=float
+        )
+        inverse_truth_trace = float(np.trace(np.linalg.solve(base, truth)))
+        candidate_variance = inverse_truth_trace / dimension
+        candidate = candidate_variance * base
+        divergence = gaussian_kl_divergence(truth, candidate)
+        return float(divergence), float(candidate_variance), candidate
+
+    log_bounds = (np.log(decay) - np.log(100.0), np.log(decay) + np.log(100.0))
+    result = minimize_scalar(
+        lambda value: profile(float(value))[0],
+        bounds=log_bounds,
+        method="bounded",
+        options={"xatol": 1e-13, "maxiter": 500},
+    )
+    if not result.success:
+        raise RuntimeError(f"full-likelihood population optimization failed: {result.message}")
+    minimum_kl, pseudo_variance, _ = profile(float(result.x))
+    return ContinuousFullLikelihoodTarget(
+        smoothness=float(smoothness),
+        true_variance=float(variance),
+        true_decay=float(decay),
+        pseudo_variance=pseudo_variance,
+        pseudo_decay=float(np.exp(result.x)),
+        bandwidth=float(bandwidth),
+        dimension=points.shape[1],
+        number_of_locations=points.shape[0],
+        minimum_kl=minimum_kl,
+        quadrature_order=int(quadrature_order),
+        kernel_family=kernel_family,
     )
 
 

@@ -2,9 +2,15 @@ import numpy as np
 import pytest
 
 from HighDimSpatial.smoothing_bias.continuous import (
+    continuous_matern_multilag_target,
+    continuous_matern_covariance_matrix,
+    continuous_matern_full_likelihood_target,
     continuous_matern_pair_target,
     epanechnikov_difference_radial_moment,
+    finite_design_full_likelihood_asymptotics,
+    gaussian_correlation_kl,
     product_kernel_decay_shift_coefficient,
+    product_kernel_multilag_asymptotics,
     product_epanechnikov_decay_shift_coefficient,
     product_epanechnikov_direction_contrast_coefficient,
     product_epanechnikov_difference_quadrature,
@@ -12,6 +18,7 @@ from HighDimSpatial.smoothing_bias.continuous import (
     transition_aware_matern_pair_approximation,
     transformed_epanechnikov_difference_radial_moment,
 )
+from HighDimSpatial.smoothing_bias.kl import matern_correlation
 from HighDimSpatial.smoothing_bias.theory import naive_exponential_pseudo_target
 
 
@@ -177,6 +184,168 @@ def test_zero_bandwidth_is_an_exact_no_shift_control() -> None:
     )
     assert target.variance_factor == 1.0
     assert target.pseudo_decay == 0.7
+
+
+def test_gaussian_correlation_kl_is_nonnegative_and_zero_only_at_match() -> None:
+    assert gaussian_correlation_kl(0.4, 0.4) == pytest.approx(0.0, abs=2e-16)
+    assert gaussian_correlation_kl(0.4, 0.2) > 0.0
+    vector = gaussian_correlation_kl(
+        np.array([0.2, 0.4]),
+        np.array([0.2, 0.3]),
+    )
+    assert vector[0] == pytest.approx(0.0, abs=2e-16)
+    assert vector[1] > 0.0
+    with pytest.raises(ValueError, match="strictly between"):
+        gaussian_correlation_kl(1.0, 0.5)
+
+
+def test_singleton_composite_target_reduces_to_saturated_pair_target() -> None:
+    pair = continuous_matern_pair_target(
+        dimension=2,
+        smoothness=1.5,
+        decay=0.8,
+        bandwidth=0.03,
+        lag=1.2,
+        quadrature_order=72,
+    )
+    composite = continuous_matern_multilag_target(
+        dimension=2,
+        smoothness=1.5,
+        decay=0.8,
+        bandwidth=0.03,
+        lags=np.array([1.2]),
+        quadrature_order=72,
+    )
+    asymptotics = product_kernel_multilag_asymptotics(
+        dimension=2,
+        smoothness=1.5,
+        decay=0.8,
+        lags=np.array([1.2]),
+    )
+    assert composite.pseudo_decay == pytest.approx(pair.pseudo_decay, rel=2e-8)
+    assert composite.minimum_kl == pytest.approx(0.0, abs=2e-15)
+    assert asymptotics.minimum_kl_coefficient == pytest.approx(0.0, abs=2e-15)
+
+
+@pytest.mark.parametrize("smoothness", [0.5, 1.0, 1.5, 2.5])
+def test_multilag_composite_has_predicted_shift_and_irreducible_kl(
+    smoothness: float,
+) -> None:
+    lags = np.array([0.5, 1.0, 1.5, 2.0])
+    bandwidth = 0.005
+    asymptotics = product_kernel_multilag_asymptotics(
+        dimension=2,
+        smoothness=smoothness,
+        decay=1.0,
+        lags=lags,
+        quadrature_order=96,
+    )
+    target = continuous_matern_multilag_target(
+        dimension=2,
+        smoothness=smoothness,
+        decay=1.0,
+        bandwidth=bandwidth,
+        lags=lags,
+        quadrature_order=96,
+    )
+    if smoothness < 1.0:
+        scale = bandwidth ** (2.0 * smoothness)
+    elif smoothness == 1.0:
+        scale = bandwidth**2 * np.log(1.0 / bandwidth)
+    else:
+        scale = bandwidth**2
+    shift_ratio = (1.0 - target.pseudo_decay) / (
+        asymptotics.decay_shift_coefficient * scale
+    )
+    kl_ratio = target.minimum_kl / (
+        asymptotics.minimum_kl_coefficient * scale**2
+    )
+    tolerance = 0.12 if smoothness == 1.0 else 0.035
+    assert target.pseudo_decay < 1.0
+    assert asymptotics.minimum_kl_coefficient > 0.0
+    assert np.ptp(asymptotics.pair_shift_coefficients) > 0.0
+    assert shift_ratio == pytest.approx(1.0, rel=tolerance)
+    assert kl_ratio == pytest.approx(1.0, rel=tolerance)
+
+
+def test_multilag_inputs_require_positive_matching_weights() -> None:
+    with pytest.raises(ValueError, match="match lags"):
+        product_kernel_multilag_asymptotics(
+            dimension=2,
+            smoothness=1.5,
+            decay=1.0,
+            lags=np.array([0.5, 1.0]),
+            weights=np.array([1.0]),
+        )
+    with pytest.raises(ValueError, match="positive finite"):
+        continuous_matern_multilag_target(
+            dimension=2,
+            smoothness=1.5,
+            decay=1.0,
+            bandwidth=0.01,
+            lags=np.array([0.0, 1.0]),
+        )
+
+
+def test_continuous_covariance_zero_support_matches_point_matern() -> None:
+    locations = np.array([(0.0, 0.0), (0.5, 0.0), (0.5, 1.0)])
+    covariance = continuous_matern_covariance_matrix(
+        locations,
+        variance=1.7,
+        decay=0.8,
+        smoothness=1.5,
+        bandwidth=0.0,
+    )
+    distances = np.linalg.norm(
+        locations[:, None, :] - locations[None, :, :], axis=2
+    )
+    expected = 1.7 * np.asarray(matern_correlation(distances, 0.8, 1.5))
+    np.testing.assert_allclose(covariance, expected, rtol=2e-13, atol=2e-13)
+
+
+@pytest.mark.parametrize("smoothness", [0.5, 1.0, 1.5, 2.5])
+def test_finite_design_full_likelihood_projection_predicts_target_and_kl(
+    smoothness: float,
+) -> None:
+    locations = np.asarray([(i, j) for i in range(3) for j in range(3)], dtype=float)
+    bandwidth = 0.005
+    asymptotics = finite_design_full_likelihood_asymptotics(
+        locations,
+        variance=1.0,
+        decay=1.0,
+        smoothness=smoothness,
+        quadrature_order=64,
+    )
+    target = continuous_matern_full_likelihood_target(
+        locations,
+        variance=1.0,
+        decay=1.0,
+        smoothness=smoothness,
+        bandwidth=bandwidth,
+        quadrature_order=64,
+    )
+    if smoothness < 1.0:
+        scale = bandwidth ** (2.0 * smoothness)
+    elif smoothness == 1.0:
+        scale = bandwidth**2 * np.log(1.0 / bandwidth)
+    else:
+        scale = bandwidth**2
+    decay_ratio = (1.0 - target.pseudo_decay) / (
+        asymptotics.decay_inflation_coefficient * scale
+    )
+    variance_ratio = np.log(target.pseudo_variance) / (
+        asymptotics.log_variance_shift_coefficient * scale
+    )
+    kl_ratio = target.minimum_kl / (
+        asymptotics.minimum_kl_coefficient * scale**2
+    )
+    tolerance = 0.15 if smoothness == 1.0 else 0.04
+    assert asymptotics.decay_inflation_coefficient > 0.0
+    assert asymptotics.minimum_kl_coefficient > 0.0
+    assert target.pseudo_decay < 1.0
+    assert decay_ratio == pytest.approx(1.0, rel=tolerance)
+    assert variance_ratio == pytest.approx(1.0, rel=tolerance)
+    assert kl_ratio == pytest.approx(1.0, rel=tolerance)
 
 
 def test_anisotropic_transform_second_moment_matches_covariance_trace() -> None:
