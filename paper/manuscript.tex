@@ -620,7 +620,8 @@ converging to \(\theta_0\). With \(\beta=J^{-1}b\),
  &=\tfrac14\tr(PE_\nu PE_\nu)s_\nu(h)^2+o\{s_\nu(h)^2\},
  \label{eq:finite-full-kl}
 \end{align}
-where \(E_\nu=\Gamma_\nu-\sum_{j=1}^2\beta_jD_j\). Thus the full
+where \(E_\nu=\Gamma_\nu-\sum_{j=1}^2\beta_jD_j\) satisfies
+\(\tr(PD_jPE_\nu)=0\) for \(j=1,2\). Thus the full
 likelihood is genuinely misspecified to leading order exactly when the support
 perturbation is not contained in the variance--decay covariance tangent space.
 \end{proposition}
@@ -1218,9 +1219,12 @@ the finite-library probability event and demonstrates why shrinking sampling
 error does not repair a displaced population target.
 
 Several limitations define the scope of the result. First, the universal sign
-and phase law hold at fixed \(\nu\). The joint finite-library experiment shows,
-but does not theorize, how nuisance movement can change the direction. Jointly
-estimating bandwidth, smoothness, variance, and range may be weakly identified.
+and phase law hold at fixed \(\nu\). This restriction is substantive because
+information about Mat\'ern smoothness can be both appreciable and
+design-dependent \citep{deoliveira2022information}. The joint finite-library
+experiment shows, but does not theorize, how nuisance movement can change the
+direction. Jointly estimating bandwidth, smoothness, variance, and range may be
+weakly identified.
 Second, Theorem~\ref{thm:multi-lag} concerns a declared pair-composite
 criterion. Proposition~\ref{prop:full-likelihood-projection} is a local
 finite-design result with a design-specific coefficient, not a universal
@@ -1648,7 +1652,11 @@ hash manifest, and closed exponential formulas are tested.  The reported
 implementation adds no adaptive diagonal jitter.  All paper figures and tables
 are regenerated from audited aggregate CSV files.
 
+\begingroup
+\small
+\setlength{\bibsep}{2pt plus 0.3ex}
 \bibliographystyle{plainnat}
 \bibliography{references}
+\endgroup
 
 \end{document}

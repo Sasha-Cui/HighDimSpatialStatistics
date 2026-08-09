@@ -41,6 +41,55 @@ factor grids, numerical gates, the 8,400 finite-grid fits, the 12,800
 replicated-field fits, and every manuscript number registered in the claim
 ledger.
 
+## Generate a custom synthetic benchmark
+
+The replicated-field driver is the fastest end-to-end entry point. This small
+example varies output dimension, replication, and Matérn smoothness while
+retaining the exact support-aware and point-support likelihood targets:
+
+```bash
+python scripts/research/run_supportshift_highdim.py \
+  --preset shakedown \
+  --grid-sides 4 6 \
+  --sample-sizes 1 4 \
+  --trials 10 \
+  --smoothness 0.5 1.5 \
+  --bandwidth 0.5 \
+  --decay-grid-size 21 \
+  --variance-grid-size 15 \
+  --root-seed 20260809 \
+  --output /tmp/supportshift_custom.csv \
+  --raw-example-output /tmp/supportshift_custom_field.csv
+```
+
+The command writes fit-level CSV data and a sibling metadata JSON containing
+the complete arguments, derived seeds, candidate grids, Git commit, dependency
+versions, output hash, and pass/fail gates. Run `python
+scripts/research/run_supportshift_highdim.py --help` for the full interface.
+
+The main controls have direct scientific meanings:
+
+| Control | What it changes |
+|---|---|
+| `--grid-sides` | Output dimension (p=q^2) and increasing-domain lattice size |
+| `--sample-sizes` | Number (N) of independent replicated spatial fields |
+| `--smoothness` | Matérn origin regularity and predicted support-shift phase |
+| `--bandwidth` | Observation-support width relative to the fixed lattice spacing |
+| `--fit-mode` | Joint variance--decay or fixed-variance candidate library |
+| decay/variance grid options | Candidate resolution and parameter-search domain |
+| `--root-seed` | Reproducible common-random-number streams |
+
+Every fit row records the physical parameter, the model-specific finite-grid KL
+target, the estimate, error to both targets, criterion deviation, theorem
+radius, and spectral diagnostics. This separation is the benchmark's central
+contract: a method can become more precise around its own KL target while
+remaining wrong for the physical parameter.
+
+For deterministic theorem oracles rather than Monte Carlo data, use
+`run_matern_phase_oracle.py`, `run_multilag_composite_audit.py`,
+`run_full_likelihood_phase_audit.py`, or
+`run_anisotropic_phase_oracle.py`.
+
 ## New referee-directed audits
 
 Each command refuses a dirty worktree by default and emits a CSV plus a JSON

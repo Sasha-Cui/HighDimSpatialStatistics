@@ -18,32 +18,28 @@ Observation Support
 
 Spatial measurements often represent pixels, footprints, or local averages
 but are fitted as point observations. We introduce SupportShift, a
-parameterized and scalable synthetic benchmark that separates the physical
-covariance parameter, the population Kullback-Leibler (KL) target, and
-finite-sample estimation error under this support misspecification. Users can
-vary support width and geometry, smoothness, lattice size, output dimension,
-replicate count, and covariance-library resolution. Its analytic anchor is a
-stationary Matérn Gaussian field in R^d observed through a compact symmetric
-averaging kernel of bandwidth h. For a fixed nonzero-lag two-point likelihood
-with known smoothness nu, the naive inverse-range shift has order h^(2 nu) for
-0 < nu < 1, h^2 log(1/h) at nu = 1, and h^2 for nu > 1. Explicit coefficients
-prove range inflation for every fixed nu > 0 at sufficiently small support. A
-weighted multi-lag composite retains an information-weighted shift and has a
-strictly positive first nonzero residual KL term whenever its lag coefficients
-differ. For an arbitrary fixed design, a second result gives the Fisher-metric
-projection of the support perturbation and its irreducible full-likelihood KL
-component. A transition-aware two-term approximation resolves the slow finite-bandwidth
-crossover at nu = 1, while a directional h^2 contrast handles elongated
-support. For N independent p-dimensional Gaussian fields and a deterministic
-finite covariance library, a simultaneous likelihood certificate scales as
-sqrt(log(M)/(N p)) + log(M)/(N p) under relative spectral control; spatial
-dependence within each field is unrestricted. Reproducible tracks pair
-these statements with deterministic quadrature, finite-grid likelihoods,
-directional support, joint smoothness--range fitting, partial-support and
-matched-boundary controls, and growing-p replicated fields. Released generators,
-source tables, seeds, metadata, and pass/fail gates make every reported number
-auditable. The benchmark exposes a sharp failure mode: likelihood noise can
-vanish while a point-support fit concentrates around the wrong range target.
+parameterized synthetic benchmark that separates physical covariance
+parameters, population Kullback-Leibler (KL) targets, and finite-sample error
+under this support misspecification. Its analytic anchor is a stationary Matérn
+Gaussian field observed through a compact averaging kernel of bandwidth h. For
+fixed smoothness nu, ignoring support shifts the fitted inverse range at order
+h^(2 nu) for 0 < nu < 1, h^2 log(1/h) at nu = 1, and h^2 for nu > 1, with
+explicit coefficients proving small-support range inflation. Because a
+variance-refitted two-point model is saturated, we extend the law to a weighted
+multi-lag composite and obtain both its information-weighted displacement and
+a strictly positive first nonzero residual-KL term. Under finite-design
+identifiability, a second result gives the Fisher-metric projection of the
+support perturbation onto the variance-decay tangent space and its irreducible
+full-likelihood KL component.
+
+The released tracks test these claims by deterministic quadrature, exact
+finite-design targets, joint smoothness-range fitting, a partially corrected
+support model, matched-size boundary comparisons, and growing-p replicated
+fields. Joint fitting can reverse the fixed-smoothness decay direction, while
+increasing replication can concentrate a point-support estimator around a
+displaced target. A finite-library likelihood certificate permits arbitrary
+spatial dependence within each field. Code, synthetic generators, source
+tables, seeds, hashes, and pass/fail gates make every reported number auditable.
 
 ## Keywords
 

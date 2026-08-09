@@ -39,37 +39,28 @@ Geospatial Simulation}{November 3, 2026}{Riverside, California, USA}
 \begin{abstract}
 Spatial measurements often represent pixels, footprints, or local averages but
 are fitted as point observations. We introduce \emph{SupportShift}, a
-parameterized and scalable synthetic benchmark that separates the physical
-covariance parameter, the population Kullback--Leibler (KL) target, and
-finite-sample estimation error under this support misspecification. Users can
-vary support width and geometry, smoothness, lattice size, output dimension,
-replicate count, and covariance-library resolution.
-Its analytic anchor is a
-stationary Matérn Gaussian field in \(\R^d\) observed through a compact
-symmetric averaging kernel of bandwidth \(h\). For a fixed nonzero-lag
-correlation match with known smoothness \(\nu\), the naive inverse-range
-shift has order \(h^{2\nu}\) for \(0<\nu<1\),
-\(h^2\log(1/h)\) at \(\nu=1\), and \(h^2\) for \(\nu>1\). Explicit
-coefficients prove range inflation for every fixed \(\nu>0\) at sufficiently
-small support. We then prove that a weighted multi-lag pair composite has the
-information-weighted average coefficient and a strictly positive
-order-\(s_\nu(h)^2\) minimum KL divergence whenever its lag coefficients differ.
-For an arbitrary fixed site design, a second result projects the support
-perturbation onto the variance--decay covariance tangent space and identifies
-the irreducible full-likelihood KL term. A transition-aware two-term
-approximation resolves the slow
-finite-bandwidth crossover at \(\nu=1\), while a directional \(h^2\) contrast
-handles elongated support.
-For \(N\) independent \(p\)-dimensional Gaussian fields and a deterministic
-finite covariance library, a simultaneous likelihood certificate scales as
-\(\sqrt{\log(M)/(Np)}+\log(M)/(Np)\) under relative spectral control; spatial
-dependence within each field is unrestricted. Reproducible tracks pair these
-statements with deterministic quadrature, genuine multi-lag and full-likelihood
-targets, joint smoothness--range fitting, matched-size boundary comparisons,
-and growing-\(p\) replicated fields. Released generators,
-source tables, seeds, metadata, and pass/fail gates make every reported number
-auditable. The benchmark exposes a sharp failure mode: likelihood noise can
-vanish while a point-support fit concentrates around the wrong range target.
+parameterized synthetic benchmark that separates physical covariance
+parameters, population Kullback--Leibler (KL) targets, and finite-sample error
+under this support misspecification. Its analytic anchor is a stationary Matérn
+Gaussian field observed through a compact averaging kernel of bandwidth \(h\).
+For fixed smoothness \(\nu\), ignoring support shifts the fitted inverse range
+at order \(h^{2\nu}\) for \(0<\nu<1\), \(h^2\log(1/h)\) at \(\nu=1\), and
+\(h^2\) for \(\nu>1\), with explicit coefficients proving small-support range
+inflation. Because a variance-refitted two-point model is saturated, we extend
+the law to a weighted multi-lag composite and obtain both its
+information-weighted displacement and a strictly positive first nonzero
+residual-KL term. Under finite-design identifiability, a second result gives the
+Fisher-metric projection of the support perturbation onto the variance--decay
+tangent space and its irreducible full-likelihood KL component.
+
+The released tracks test these claims by deterministic quadrature, exact
+finite-design targets, joint smoothness--range fitting, a partially corrected
+support model, matched-size boundary comparisons, and growing-\(p\) replicated
+fields. Joint fitting can reverse the fixed-smoothness decay direction, while
+increasing replication can concentrate a point-support estimator around a
+displaced target. A finite-library likelihood certificate permits arbitrary
+spatial dependence within each field. Code, synthetic generators, source
+tables, seeds, hashes, and pass/fail gates make every reported number auditable.
 \end{abstract}
 
 \begin{CCSXML}
@@ -172,9 +163,11 @@ change-of-support method:
   claim audit.
 \end{itemize}
 
-The universal sign theorem is conditional on fixed smoothness. The general
-full-grid projection has a design-specific coefficient and no universal sign;
-joint smoothness can also reverse the fixed-smoothness decay direction. The
+The fixed-smoothness restriction is substantive because information about
+Mat\'ern smoothness can be both appreciable and design-dependent
+\cite{deoliveira2022information}. The general full-grid projection has a
+design-specific coefficient and no universal sign; joint smoothness can also
+reverse the fixed-smoothness decay direction. The
 high-dimensional experiment grows domain at fixed
 lattice spacing and uses independent replicated fields. We do not claim
 separate fixed-domain consistency of Matérn variance and range, which would
@@ -606,7 +599,8 @@ KL criterion. With \(\beta=J^{-1}b\),
  +o\{s_\nu(h)^2\},
  \label{eq:full-kl}
 \end{align}
-where \(E_\nu=\Gamma_\nu-\sum_{j=1}^2\beta_jD_j\). Hence the full
+where \(E_\nu=\Gamma_\nu-\sum_{j=1}^2\beta_jD_j\) satisfies
+\(\tr(PD_jPE_\nu)=0\) for \(j=1,2\). Hence the full
 likelihood is genuinely misspecified to leading order exactly when the support
 perturbation has a nonzero component outside the variance--decay covariance
 tangent space.
@@ -1304,7 +1298,7 @@ four smoothness values, and \(h\in\{0.002,0.004,0.008\}\). Tensor quadrature
 used order 48 and was repeated at orders 32 and 64. Table~\ref{tab:dimension-kernel}
 reports the smallest-bandwidth ratio of the exact shift to its leading term.
 
-\begin{table}[h]
+\begin{table}[H]
 \centering
 \small
 \caption{Coefficient-ratio ranges in the 72-cell robustness audit.}
@@ -1316,5 +1310,27 @@ All 72 shifts were positive. The largest coefficient-ratio error was 0.169,
 below its 0.20 gate, and the largest quadrature-refinement change was
 \(3.92\times10^{-7}\), below its \(2\times10^{-4}\) gate. This finite audit is
 not a uniform guarantee over kernels or dimensions.
+
+\section{Artifact-level reproduction}
+\label{app:artifact-reproduction}
+
+The isolated artifact entry point is \path{supportshift/README.md}. From a
+clean checkout, its release-verification command checks the environment and
+provenance records, hashes every promoted input and paper artifact, validates
+all declared factor grids and schemas, reconstructs the finite-grid summary
+from fit-level records, and evaluates the machine-readable claim ledger. A
+successful full audit reports 12,800 replicated-field fits, 8,400 finite-grid
+fits, 64 candidatewise coverage cells, 23 hashed source inputs, 33 hashed paper
+artifacts, and 168 passed numerical claims.
+
+The same entry point gives a small custom-generation command for
+\path{run_supportshift_highdim.py}. Users can vary lattice side, independent
+field count, Mat\'ern smoothness, support bandwidth, and the variance--decay
+candidate library. Each generated row distinguishes the physical parameter,
+the model-specific finite-grid KL target, and the random estimate, and the
+sibling JSON records the complete arguments, derived seeds, dependency
+versions, Git state, output hash, and validation gates. The deterministic
+phase, multi-lag, full-likelihood, and directional drivers are listed there as
+theorem oracles rather than Monte Carlo substitutes.
 
 \end{document}
