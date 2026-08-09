@@ -46,9 +46,20 @@ def write_json_atomic(path: Path, value: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_name(f".{path.name}.{os.getpid()}.tmp")
     with temporary.open("w", encoding="utf-8") as handle:
-        json.dump(value, handle, indent=2, sort_keys=True)
+        json.dump(value, handle, indent=2, sort_keys=True, default=json_scalar)
         handle.write("\n")
     os.replace(temporary, path)
+
+
+def json_scalar(value: Any) -> Any:
+    """Convert NumPy scalar diagnostics without weakening JSON validation."""
+    if isinstance(value, np.bool_):
+        return bool(value)
+    if isinstance(value, np.integer):
+        return int(value)
+    if isinstance(value, np.floating):
+        return float(value)
+    raise TypeError(f"cannot serialize {type(value).__name__} as JSON")
 
 
 def _candidate_library(
