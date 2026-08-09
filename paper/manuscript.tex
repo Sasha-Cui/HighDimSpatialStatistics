@@ -29,6 +29,7 @@
 \newcommand{\R}{\mathbb R}
 \newcommand{\tr}{\operatorname{tr}}
 \newcommand{\KL}{D_{\mathrm{KL}}}
+\newcommand{\Normal}{\mathcal N}
 
 \title{SupportShift: Local KL Geometry of Ignored Mat\'ern Observation Support\\
 with Theorem-Linked High-Dimensional Simulations}
@@ -175,8 +176,8 @@ Let \(Y=\{Y(t):t\in\R^d\}\) be a mean-zero stationary Gaussian field with
 
 \begin{equation}
   \operatorname{Cov}\{Y(t),Y(t+r)\}
-  = C(r)=v\Matern_\nu(\alpha\lVert r\rVert),
-  \qquad v>0,\quad \alpha>0,\quad \nu>0,
+  = C(r)=\sigma^2\Matern_\nu(\alpha\lVert r\rVert),
+  \qquad \sigma^2>0,\quad \alpha>0,\quad \nu>0,
   \label{eq:matern-covariance}
 \end{equation}
 where
@@ -188,7 +189,8 @@ where
   \label{eq:matern-correlation}
 \end{equation}
 
-Thus \(\alpha\) is an inverse range; larger \(\alpha\) means shorter dependence.
+Thus \(\sigma^2\) is the marginal variance and \(\alpha\) is an inverse range;
+larger \(\alpha\) means shorter dependence.
 This convention must not be mixed with the common length-scale parameterization
 \(\alpha=\sqrt{2\nu}/\ell\).
 
@@ -206,7 +208,7 @@ theorem give the exact smoothed covariance
 
 \begin{equation}
   C_h(r)
-  =v\E\!\left[\Matern_\nu\{\alpha\lVert r+hD\rVert\}\right].
+  =\sigma^2\E\!\left[\Matern_\nu\{\alpha\lVert r+hD\rVert\}\right].
   \label{eq:smoothed-covariance}
 \end{equation}
 
@@ -219,6 +221,11 @@ Write
 \end{equation}
 so that \(m_2=2T_k\).  We assume \(T_k>0\).
 
+Throughout, \(\eta\) denotes a generic inverse-range candidate. A dagger marks
+an exact population KL target under the point-support family, a tilde marks an
+analytic approximation, and the superscript \(\mathrm C\) marks the weighted
+pair composite.
+
 \subsection{Naive Gaussian pair fit}
 
 Fix \(r=Re\), with \(R>0\) and \(\lVert e\rVert=1\).  The smoothed pair has
@@ -228,14 +235,14 @@ variance \(C_h(0)\) and correlation
   \rho_h(r)=\frac{C_h(r)}{C_h(0)}.
 \end{equation}
 
-A naive point-support model with the correct known \(\nu\) but unknown variance
-and decay uses covariance
+A naive point-support model with the correct known \(\nu\) and parameters
+\(\varsigma^2,\eta>0\) uses covariance
 
 \begin{equation}
-  v^\dagger
+  \varsigma^2
   \begin{pmatrix}
-    1 & \Matern_\nu(\alpha^\dagger R)\\
-    \Matern_\nu(\alpha^\dagger R) & 1
+    1 & \Matern_\nu(\eta R)\\
+    \Matern_\nu(\eta R) & 1
   \end{pmatrix}.
   \label{eq:naive-pair}
 \end{equation}
@@ -244,7 +251,7 @@ The true two-by-two covariance belongs to this family.  Therefore its Gaussian
 KL minimizer is exactly
 
 \begin{equation}
-  v_h^\dagger=C_h(0),
+  (\sigma_h^2)^\dagger=C_h(0),
   \qquad
   \Matern_\nu(\alpha_h^\dagger R)=\rho_h(r).
   \label{eq:exact-pseudo-target}
@@ -294,7 +301,7 @@ For \(z=\alpha R\), define the directional kernel variance
 For \(r\) in a compact annulus bounded away from zero and
 \(h\leq \lVert r\rVert/(4L)\),
 \begin{equation}
-  \frac{C_h(r)}{v}
+  \frac{C_h(r)}{\sigma^2}
   =\Matern_\nu(\alpha\lVert r\rVert)
   +h^2 B_{\nu,k}(r)+O(h^4).
   \label{eq:fixed-lag-expansion}
@@ -317,13 +324,13 @@ the origin.  Put
 \label{thm:pseudo-range-phase}
 Fix \(\nu>0\).  Under the preceding assumptions, as \(h\downarrow0\),
 \begin{align}
-  \frac{C_h(0)}{v}
+  \frac{C_h(0)}{\sigma^2}
   & =1-c_\nu m_{2\nu}(\alpha h)^{2\nu}+O(h^2),
   &&0<\nu<1,\label{eq:variance-rough}\\
-  \frac{C_h(0)}{v}
+  \frac{C_h(0)}{\sigma^2}
   & =1-\frac{m_2}{2}(\alpha h)^2\log\{1/(\alpha h)\}+O(h^2),
   &&\nu=1,\label{eq:variance-threshold}\\
-  \frac{C_h(0)}{v}
+  \frac{C_h(0)}{\sigma^2}
   & =1-\frac{m_2}{4(\nu-1)}(\alpha h)^2+o(h^2),
   &&\nu>1.\label{eq:variance-smooth}
 \end{align}
@@ -368,7 +375,7 @@ Every leading coefficient in
 \(\Matern_\nu'(z)<0\).  Thus, for sufficiently small positive \(h\),
 
 \begin{equation}
-  v_h^\dagger<v,\qquad
+  (\sigma_h^2)^\dagger<\sigma^2,\qquad
   \rho_h(r)>\Matern_\nu(\alpha R),\qquad
   \alpha_h^\dagger<\alpha.
   \label{eq:sign-conclusion}
@@ -388,12 +395,12 @@ in \eqref{eq:G-positive} remains positive.  For an isotropic kernel with
 The two-point model is saturated: after variance refitting, one smoothed
 correlation is represented exactly by one point-support decay. Let
 \(0<R_1<\cdots<R_J\), \(w_j>0\), and
-\(B(\rho)=\left(\begin{smallmatrix}1&\rho\\\rho&1\end{smallmatrix}\right)\).
-With \(\rho_{h,j}=C_h(R_je)/C_h(0)\), define
+\(\mathsf R(\rho)=\left(\begin{smallmatrix}1&\rho\\\rho&1\end{smallmatrix}\right)\).
+With \(\rho_{h,j}=C_h(R_j e)/C_h(0)\), define
 \begin{equation}
- Q_h^{\rm C}(a)=\sum_{j=1}^Jw_j
- \KL\!\left\{N(0,B(\rho_{h,j}))\,\middle\|\,
- N(0,B(\Matern_\nu(aR_j)))\right\}.
+ Q_h^{\mathrm C}(\eta)=\sum_{j=1}^J w_j
+ \KL\!\left\{\Normal(0,\mathsf R(\rho_{h,j}))\,\middle\|\,
+ \Normal(0,\mathsf R(\Matern_\nu(\eta R_j)))\right\}.
  \label{eq:multi-lag-composite}
 \end{equation}
 Write
@@ -405,27 +412,27 @@ Write
  h^2,&\nu>1,
  \end{cases}
 \end{equation}
-and define \(C_j>0\) from Theorem~\ref{thm:pseudo-range-phase} by
-\(\alpha-\alpha_{h,j}^\dagger=C_js_\nu(h)+o\{s_\nu(h)\}\).
+and define \(\kappa_j>0\) from Theorem~\ref{thm:pseudo-range-phase} by
+\(\alpha-\alpha_{h,j}^\dagger=\kappa_j s_\nu(h)+o\{s_\nu(h)\}\).
 
 \begin{theorem}[Multi-lag composite target and residual KL]
 \label{thm:multi-lag}
 Let \(\alpha\) be interior to a compact positive parameter interval, and let
-\(a_h^{\rm C}\) minimize \eqref{eq:multi-lag-composite} there. Put
+\(\alpha_h^{\mathrm C}\) minimize \eqref{eq:multi-lag-composite} there. Put
 \begin{align}
  \rho_j&=\Matern_\nu(\alpha R_j),&
- I_j&=\frac{1+\rho_j^2}{(1-\rho_j^2)^2},\\
- \lambda_j&=w_jI_j\{R_j\Matern_\nu'(\alpha R_j)\}^2,&
- \bar C&=\frac{\sum_j\lambda_jC_j}{\sum_j\lambda_j}.
+ \mathcal I_j&=\frac{1+\rho_j^2}{(1-\rho_j^2)^2},\\
+ \lambda_j&=w_j\mathcal I_j\{R_j\Matern_\nu'(\alpha R_j)\}^2,&
+ \bar\kappa&=\frac{\sum_j\lambda_j\kappa_j}{\sum_j\lambda_j}.
 \end{align}
 Then
 \begin{align}
- \alpha-a_h^{\rm C}
- &=\bar C s_\nu(h)+o\{s_\nu(h)\},
+ \alpha-\alpha_h^{\mathrm C}
+ &=\bar\kappa s_\nu(h)+o\{s_\nu(h)\},
  \label{eq:multi-lag-shift}\\
- \min_aQ_h^{\rm C}(a)
+ \min_\eta Q_h^{\mathrm C}(\eta)
  &=\frac{s_\nu(h)^2}{2}\sum_{j=1}^J
- \lambda_j(C_j-\bar C)^2+o\{s_\nu(h)^2\}.
+ \lambda_j(\kappa_j-\bar\kappa)^2+o\{s_\nu(h)^2\}.
  \label{eq:multi-lag-kl}
 \end{align}
 Consequently, range inflation persists for the composite target, and the
@@ -460,7 +467,7 @@ where \(0\log0=0\).  For sufficiently small \(h>0\), let
 \begin{equation}
   \widetilde\rho_h(r)
   =\frac{\Matern_\nu(z)+h^2B_{\nu,k}(r)}{1+W_{\nu,k}(h)},\qquad
-  \Matern_\nu(\widetilde\alpha_hR)=\widetilde\rho_h(r).
+  \Matern_\nu(\widetilde\alpha_h R)=\widetilde\rho_h(r).
   \label{eq:transition-target}
 \end{equation}
 
@@ -551,8 +558,8 @@ finite experiment starts from raw sites
 smoothing,
 
 \begin{equation}
-  y=S_h\{Y(X_{\mathrm{in}})+\epsilon\},
-  \qquad \epsilon\sim N(0,\tau^2I_n),
+  \mathbf y=S_h\{Y(X_{\mathrm{in}})+\boldsymbol\varepsilon\},
+  \qquad \boldsymbol\varepsilon\sim\Normal_n(0,\tau^2I_n),
 \end{equation}
 then the correct covariance is
 
@@ -592,44 +599,49 @@ separate combined-misspecification run with \(\tau^2=0.05\) is retained as a
 reproducibility stress artifact but is not used for the principal claims.
 
 For a local full-likelihood result, let \(x_1,\ldots,x_p\) be distinct
-interior sites, let \(\theta=(\log v,\log\alpha)\), and write
+interior sites, let \(\theta=(\log\sigma^2,\log\alpha)^\top\), and write
 \(\Sigma(\theta)\) for their point-support Matérn covariance at fixed
 smoothness. The entrywise origin and fixed-lag expansions imply
 \begin{equation}
  \Sigma_h=\Sigma_0+s_\nu(h)\Gamma_\nu+o\{s_\nu(h)\}.
  \label{eq:finite-matrix-perturbation}
 \end{equation}
-Let \(P=\Sigma_0^{-1}\),
-\(D_j=\partial\Sigma(\theta_0)/\partial\theta_j\), and
+Let \(P=\Sigma_0^{-1}\), define the Fisher inner product
 \begin{equation}
- J_{jk}=\tfrac12\tr(PD_jPD_k),\qquad
- b_j=\tfrac12\tr(PD_jP\Gamma_\nu).
+ \langle A,B\rangle_P:=\tfrac12\tr(PAPB),
+ \label{eq:finite-fisher-inner-product}
+\end{equation}
+and let \(\dot\Sigma_j=\partial_j\Sigma(\theta_0)\). Define
+\begin{equation}
+ \mathcal J_{jk}=\langle\dot\Sigma_j,\dot\Sigma_k\rangle_P,
+ \qquad g_{\nu,j}=\langle\dot\Sigma_j,\Gamma_\nu\rangle_P.
  \label{eq:projection-information}
 \end{equation}
 
 \begin{proposition}[Finite-design full-likelihood projection]
 \label{prop:full-likelihood-projection}
-Suppose \(\theta_0\) is interior to a compact parameter set, \(J\) is
+Suppose \(\theta_0\) is interior to a compact parameter set, \(\mathcal J\) is
 nonsingular, and \(\theta_h^\dagger\) is the local Gaussian KL minimizer
-converging to \(\theta_0\). With \(\beta=J^{-1}b\),
+converging to \(\theta_0\). With \(\beta_\nu=\mathcal J^{-1}g_\nu\),
 \begin{align}
  \theta_h^\dagger-\theta_0
- &=\beta s_\nu(h)+o\{s_\nu(h)\},
+ &=\beta_\nu s_\nu(h)+o\{s_\nu(h)\},
  \label{eq:finite-full-shift}\\
- \min_\theta\KL\{N(0,\Sigma_h)\|N(0,\Sigma(\theta))\}
+ \min_\theta\KL\!\left\{\Normal_p(0,\Sigma_h)\,\middle\|\,
+ \Normal_p(0,\Sigma(\theta))\right\}
  &=\tfrac14\tr(PE_\nu PE_\nu)s_\nu(h)^2+o\{s_\nu(h)^2\},
  \label{eq:finite-full-kl}
 \end{align}
-where \(E_\nu=\Gamma_\nu-\sum_{j=1}^2\beta_jD_j\) satisfies
-\(\tr(PD_jPE_\nu)=0\) for \(j=1,2\). Thus the full
+where \(E_\nu=\Gamma_\nu-\sum_{j=1}^2\beta_{\nu,j}\dot\Sigma_j\) satisfies
+\(\langle\dot\Sigma_j,E_\nu\rangle_P=0\) for \(j=1,2\). Thus the full
 likelihood is genuinely misspecified to leading order exactly when the support
 perturbation is not contained in the variance--decay covariance tangent space.
 \end{proposition}
 
-The decay coordinate of \(J^{-1}b\) is design specific, so the proposition
-does not assert a universal full-likelihood sign. It is a finite-design local
+The decay coordinate of \(\mathcal J^{-1}g_\nu\) is design specific, so the
+proposition does not assert a universal full-likelihood sign. It is a finite-design local
 result, not a fixed- or increasing-domain consistency theorem. Its assumptions
-make identifiability explicit through nonsingularity of \(J\).
+make identifiability explicit through nonsingularity of \(\mathcal J\).
 
 A rectangular \(S_h\) is intentional.  If a square parameter-independent
 smoother is invertible, the exact transformed likelihood is merely a change of
@@ -660,12 +672,12 @@ concentration inequality.
 
 \begin{proposition}[Gaussian finite-library certificate]
 \label{prop:finite-library}
-Let \(X_1,\ldots,X_N\overset{\mathrm{iid}}{\sim}N_p(0,\Sigma_0)\), where
+Let \(X_1,\ldots,X_N\overset{\mathrm{iid}}{\sim}\Normal_p(0,\Sigma_0)\), where
 \(\Sigma_0\) is positive definite, and let
 \(\{\Sigma_\theta:\theta\in\mathcal G\}\) be a deterministic library of
 \(M<\infty\) positive-definite covariance matrices.  Define
 \begin{align}
-  \widehat\Sigma_N&=\frac1N\sum_{i=1}^NX_iX_i^\top,\nonumber\\
+  \widehat\Sigma_N&=\frac1N\sum_{i=1}^N X_iX_i^\top,\nonumber\\
   \widehat L_N(\theta)
   &=\frac1{2p}\left\{\log\det\Sigma_\theta
     +\tr(\Sigma_\theta^{-1}\widehat\Sigma_N)\right\},
@@ -693,8 +705,8 @@ If \(\widehat\theta\) and \(\theta^\star\) minimize \(\widehat L_N\) and
 \end{equation}
 Moreover, \(L(\theta)\) differs by a constant independent of \(\theta\) from
 \begin{equation}
-  \frac1p\KL\!\left\{N_p(0,\Sigma_0)\,\middle\|\,
-  N_p(0,\Sigma_\theta)\right\}.
+  \frac1p\KL\!\left\{\Normal_p(0,\Sigma_0)\,\middle\|\,
+  \Normal_p(0,\Sigma_\theta)\right\}.
   \label{eq:library-kl-relation}
 \end{equation}
 \end{proposition}
@@ -863,7 +875,7 @@ We evaluated Theorem~\ref{thm:multi-lag} with equal weights at
 \(\alpha R\in\{0.5,1,1.5,2\}\),
 \(\nu\in\{0.5,1,1.5,2.5\}\), and
 \(h\in\{0.005,0.01,0.02\}\). All 12 composite targets had positive
-\(\alpha-a_h^{\rm C}\) and strictly positive minimum KL. At \(h=0.005\),
+\(\alpha-\alpha_h^{\mathrm C}\) and strictly positive minimum KL. At \(h=0.005\),
 the largest relative errors in the leading shift and minimum-KL formulas were
 1.41\% and 9.85\%. The lag coefficients are materially different: for
 \(\nu=0.5\), they decrease from 1.61 at \(\alpha R=0.5\) to 0.40 at
@@ -933,7 +945,7 @@ directional contrast by at most \(1.2\times10^{-9}\) of that contrast.
 
 The core design uses a \(19\times19\) input lattice with spacing 0.25 and every
 second location as a candidate output center.  Interior outputs are trimmed by
-0.75 in each coordinate.  We set \(v=\alpha=1\), \(\tau^2=0\),
+0.75 in each coordinate.  We set \(\sigma^2=\alpha=1\), \(\tau^2=0\),
 \(\nu\in\{0.5,1,1.5,2.5\}\), and
 \(h\in\{0,0.3,0.5,0.7\}\).  Radial Epanechnikov rows are normalized exactly.
 The zero-bandwidth operator is an exact rectangular selector.  Stress panels
@@ -1045,7 +1057,7 @@ respectively, of their population targets
 
 \subsection{Joint smoothness--decay and partial-support comparison}
 
-We jointly selected \((\nu,\alpha,v)\) from a fixed library with 18 smoothness
+We jointly selected \((\nu,\alpha,\sigma^2)\) from a fixed library with 18 smoothness
 values, 52 log-spaced decay values, and analytically profiled variance. The
 design has an \(11\times11\) latent grid and 16 interior outputs, with true
 \(\nu\in\{0.5,1,1.5,2.5\}\), \(h\in\{0.35,0.5\}\), \(N=16\) independent
@@ -1088,7 +1100,7 @@ lattice spacing.  For
 spacing 0.25 was mapped by a full-row-rank radial Epanechnikov operator of
 bandwidth 0.5 to a \(q\times q\) output lattice, giving
 \(p=q^2\in\{16,36,64,100\}\).  The mean was known to be zero.  We used
-\(\nu\in\{0.5,1.5\}\), \(v=\alpha=1\), and
+\(\nu\in\{0.5,1.5\}\), \(\sigma^2=\alpha=1\), and
 \(N\in\{1,4,16,64\}\) independent fields.  The candidate set was an explicit
 deterministic \(101\times161=16{,}261\) Cartesian library of variance and
 inverse-range values spanning
@@ -1096,7 +1108,8 @@ inverse-range values spanning
 \((1,1)\) exactly.  This truth anchoring is an oracle benchmark control, not a
 deployable rule for choosing a data-analysis grid.  The complete library was
 fixed before the final Monte Carlo run.  Corrected candidates were
-\(vS_hR_\alpha S_h^\top\); naive candidates were \(vR_\alpha\) at the declared
+\(\sigma^2 S_h R_\alpha S_h^\top\); naive candidates were
+\(\sigma^2 R_\alpha\) at the declared
 output centers.  Thus only the corrected covariance library contained the data
 law.  Every empirical minimizer was obtained by exact finite-library
 enumeration, without continuous interpolation.
@@ -1162,7 +1175,7 @@ ERM inequality
 \(L(\widehat\theta)-L(\theta^\star)\leq
 2\max_\theta|\widehat L_N(\theta)-L(\theta)|\) held for every fitted trial.
 
-The support-aware library had population target \((v,\alpha)=(1,1)\) in every
+The support-aware library had population target \((\sigma^2,\alpha)=(1,1)\) in every
 design.  In contrast, at \(p=100\) the naive finite-grid inverse-range targets
 were 0.320 for \(\nu=0.5\) and 0.594 for \(\nu=1.5\), close to continuously
 profiled targets 0.318 and 0.589.  For \(p=100,\nu=1.5\), increasing \(N\)
@@ -1375,7 +1388,8 @@ and \(z>0\), together with \eqref{eq:matern-derivative}, proves the sign.
 \begin{proof}[Proof of Theorem~\ref{thm:multi-lag}]
 For \(|\rho|,|q|<1\), direct Gaussian calculation gives
 \begin{equation}
- d(\rho,q)=\KL\{N(0,B(\rho))\|N(0,B(q))\}
+ d(\rho,q)=\KL\!\left\{\Normal(0,\mathsf R(\rho))\,\middle\|\,
+ \Normal(0,\mathsf R(q))\right\}
  =\frac12\left[
  \log\frac{1-q^2}{1-\rho^2}-2+
  \frac{2(1-q\rho)}{1-q^2}\right].
@@ -1385,21 +1399,21 @@ At \(q=\rho\), \(d=\partial_qd=0\) and
 \(\partial_q^2d=(1+\rho^2)/(1-\rho^2)^2\). By the pair phase law,
 \begin{align*}
  \rho_{h,j}
- &=\Matern_\nu\{(\alpha-C_js_\nu(h)+o(s_\nu))R_j\}\\
- &=\rho_j-C_j\dot\rho_js_\nu(h)+o\{s_\nu(h)\},
+ &=\Matern_\nu\{(\alpha-\kappa_j s_\nu(h)+o\{s_\nu(h)\})R_j\}\\
+ &=\rho_j-\kappa_j\dot\rho_j s_\nu(h)+o\{s_\nu(h)\},
  \quad \dot\rho_j=R_j\Matern_\nu'(\alpha R_j).
 \end{align*}
-For \(a=\alpha-\gamma s_\nu(h)\), the candidate correlation is
-\(\rho_j-\gamma\dot\rho_js_\nu(h)+o(s_\nu)\). Expanding
+For \(\eta=\alpha-\gamma s_\nu(h)\), the candidate correlation is
+\(\rho_j-\gamma\dot\rho_j s_\nu(h)+o\{s_\nu(h)\}\). Expanding
 \eqref{eq:pair-correlation-kl} uniformly over the finite lag set yields
 \begin{equation}
- Q_h^{\rm C}(a)=\frac{s_\nu(h)^2}{2}
- \sum_j\lambda_j(C_j-\gamma)^2+o\{s_\nu(h)^2\}.
+ Q_h^{\mathrm C}(\eta)=\frac{s_\nu(h)^2}{2}
+ \sum_j\lambda_j(\kappa_j-\gamma)^2+o\{s_\nu(h)^2\}.
 \end{equation}
 At \(h=0\), the criterion is uniquely minimized by \(\alpha\), and its
 second derivative is \(\sum_j\lambda_j>0\). Compactness, uniform convergence,
 and the implicit function theorem localize the minimizer. Completing the square
-gives \(\gamma=\bar C\), \eqref{eq:multi-lag-shift}, and
+gives \(\gamma=\bar\kappa\), \eqref{eq:multi-lag-shift}, and
 \eqref{eq:multi-lag-kl}.
 \end{proof}
 
@@ -1413,17 +1427,19 @@ The Gaussian criterion is
 The identities \(\partial\Sigma^{-1}=-\Sigma^{-1}(\partial\Sigma)
 \Sigma^{-1}\) and \eqref{eq:finite-matrix-perturbation} give
 \[
- \partial_jK_h(\theta_0)
- =-\tfrac12s_\nu(h)\tr(PD_jP\Gamma_\nu)+o\{s_\nu(h)\}
- =-b_js_\nu(h)+o\{s_\nu(h)\}.
+ \partial_j K_h(\theta_0)
+ =-s_\nu(h)\langle\dot\Sigma_j,\Gamma_\nu\rangle_P+o\{s_\nu(h)\}
+ =-g_{\nu,j}s_\nu(h)+o\{s_\nu(h)\}.
 \]
-At \(h=0\), the Hessian equals \(J\). The implicit function theorem thus
-gives \(\theta_h^\dagger-\theta_0=J^{-1}b\,s_\nu(h)+o(s_\nu)\).
+At \(h=0\), the Hessian equals \(\mathcal J\). The implicit function theorem thus
+gives \(\theta_h^\dagger-\theta_0=\mathcal J^{-1}g_\nu\,s_\nu(h)
++o\{s_\nu(h)\}\).
 For a covariance perturbation \(H\), Gaussian KL has quadratic term
 \(\tfrac14\tr(PHPH)\). Taking
-\(H=s_\nu(h)(\Gamma_\nu-\sum_j\beta_jD_j)+o(s_\nu)\) proves
+\(H=s_\nu(h)(\Gamma_\nu-\sum_j\beta_{\nu,j}\dot\Sigma_j)
++o\{s_\nu(h)\}\) proves
 \eqref{eq:finite-full-kl}. Moreover,
-\(\tr(PE_\nu PE_\nu)=\|P^{1/2}E_\nu P^{1/2}\|_F^2\), so the coefficient is
+\(\tr(PE_\nu PE_\nu)=\|P^{1/2}E_\nu P^{1/2}\|_{\mathrm F}^2\), so the coefficient is
 zero exactly when the support perturbation belongs to the tangent space.
 \end{proof}
 
@@ -1434,7 +1450,7 @@ For noninteger \(0<\nu<2\), retain the quadratic analytic term and the
 leading fractional term in \eqref{eq:bessel-series}.  Compact support permits
 termwise expectation and gives
 \begin{equation}
-  \frac{C_h(0)}v=1+W_{\nu,k}(h)+
+  \frac{C_h(0)}{\sigma^2}=1+W_{\nu,k}(h)+
   \begin{cases}
     O(h^{2\nu+2}), & 0<\nu<1,\\
     O(h^4), & 1<\nu<2.
@@ -1470,9 +1486,9 @@ The pole cancels the first term in
 \begin{proof}
 For brevity, write \(B_e=B_{\nu,k}(Re)\).  The fixed-lag expansion gives
 \begin{equation}
-  \frac{C_h(Re)}v=\Matern_\nu(z)+h^2B_e+O(h^4).
+  \frac{C_h(Re)}{\sigma^2}=\Matern_\nu(z)+h^2B_e+O(h^4).
 \end{equation}
-The zero-lag denominator \(d_h=C_h(0)/v\) is common to all lag directions and
+The zero-lag denominator \(d_h=C_h(0)/\sigma^2\) is common to all lag directions and
 satisfies \(d_h\to1\).  Consequently,
 \begin{equation}
   \rho_h(Re_1)-\rho_h(Re_2)
@@ -1515,7 +1531,7 @@ Substitution into \eqref{eq:direction-proof-inverse} proves
 
 \begin{proof}
 Write \(X_i=\Sigma_0^{1/2}Z_i\), where the \(Z_i\) are independent
-\(N_p(0,I_p)\) vectors, and stack them into
+\(\Normal_p(0,I_p)\) vectors, and stack them into
 \(Z=(Z_1^\top,\ldots,Z_N^\top)^\top\).  For a fixed candidate \(\theta\),
 \begin{equation}
   \sum_{i=1}^N X_i^\top\Sigma_\theta^{-1}X_i
@@ -1554,8 +1570,8 @@ On the simultaneous event,
 \end{align}
 which proves \eqref{eq:finite-library-erm}.  Finally,
 \begin{equation}
-  \KL\!\left\{N_p(0,\Sigma_0)\,\middle\|\,
-  N_p(0,\Sigma_\theta)\right\}
+  \KL\!\left\{\Normal_p(0,\Sigma_0)\,\middle\|\,
+  \Normal_p(0,\Sigma_\theta)\right\}
   =\frac12\left[
   \tr(\Sigma_\theta^{-1}\Sigma_0)-p
   +\log\frac{\det\Sigma_\theta}{\det\Sigma_0}
@@ -1573,7 +1589,7 @@ For \(d=1\), \(\nu=1/2\), and the Epanechnikov density
 \(k(u)=\tfrac34(1-u^2)\mathbf 1\{|u|\leq1\}\), the density of \(D=U-V\) is
 
 \begin{equation}
-  g(w)=\frac35-\frac34|w|^2+\frac38|w|^3-\frac{3}{160}|w|^5,
+  f_D(w)=\frac35-\frac34|w|^2+\frac38|w|^3-\frac{3}{160}|w|^5,
   \qquad |w|\leq2.
 \end{equation}
 
@@ -1585,16 +1601,16 @@ With \(x=\alpha h\), define
   q(x)=M_k(x)^2.
 \end{equation}
 
-Then \(C_h(0)=v s(x)\), and for \(R\geq2h\),
+Then \(C_h(0)=\sigma^2 s(x)\), and for \(R\geq2h\),
 
 \begin{equation}
-  C_h(R)=vq(x)e^{-\alpha R}.
+  C_h(R)=\sigma^2q(x)e^{-\alpha R}.
 \end{equation}
 
 The exact naive pair target is
 
 \begin{equation}
-  v_h^\dagger=vs(x),\qquad
+  (\sigma_h^2)^\dagger=\sigma^2s(x),\qquad
   \alpha_h^\dagger
   =\alpha-\frac1R\log\frac{q(x)}{s(x)}.
 \end{equation}

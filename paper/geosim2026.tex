@@ -18,6 +18,8 @@
 \newcommand{\E}{\mathbb E}
 \newcommand{\R}{\mathbb R}
 \newcommand{\tr}{\operatorname{tr}}
+\newcommand{\KL}{D_{\mathrm{KL}}}
+\newcommand{\Normal}{\mathcal N}
 
 \title{SupportShift: A Theory-Linked Spatial Simulation Benchmark
 for Ignored Matérn Observation Support}
@@ -215,12 +217,13 @@ Spatial benchmarks \cite{heaton2019competition}
 
 Let \(Y=\{Y(t):t\in\R^d\}\) be a mean-zero stationary Gaussian field with
 \begin{equation}
-  C(r)=v\Matern_\nu(\alpha\lVert r\rVert),\qquad
+  C(r)=\sigma^2\Matern_\nu(\alpha\lVert r\rVert),\qquad
   \Matern_\nu(x)=\frac{2^{1-\nu}}{\Gamma(\nu)}x^\nu K_\nu(x),
   \label{eq:cov}
 \end{equation}
-where \(v,\alpha,\nu>0\) and \(\Matern_\nu(0)=1\). Thus \(\alpha\) is inverse
-range. Let \(k\) be a symmetric probability density supported on
+where \(\sigma^2,\alpha,\nu>0\) and \(\Matern_\nu(0)=1\). Thus \(\sigma^2\)
+is the marginal variance and \(\alpha\) is inverse range. Let \(k\) be a
+symmetric probability density supported on
 \(B(0,L)\), set \(k_h(u)=h^{-d}k(u/h)\), and observe
 \begin{equation}
   Z_h(t)=\int k_h(u)Y(t-u)\,du.
@@ -229,18 +232,23 @@ For independent \(U,V\sim k\), write \(D=U-V\),
 \(\Sigma_k=\E(UU^\top)\), \(T_k=\tr(\Sigma_k)\), and
 \(m_q=\E\lVert D\rVert^q\). Then \(m_2=2T_k\), and stationarity gives
 \begin{equation}
-  C_h(r)=v\E\!\left[\Matern_\nu\{\alpha\lVert r+hD\rVert\}\right].
+  C_h(r)=\sigma^2\E\!\left[\Matern_\nu\{\alpha\lVert r+hD\rVert\}\right].
   \label{eq:smoothcov}
 \end{equation}
 Assume \(T_k>0\).
 
+We reserve \(\eta\) for a generic inverse-range candidate. A dagger denotes an
+exact population KL target under the point-support family, a tilde denotes an
+analytic approximation, and the superscript \(\mathrm C\) denotes the
+weighted pair composite.
+
 Fix \(r=Re\), \(R>0\), and \(\lVert e\rVert=1\). A naive point-support pair
-model with known \(\nu\) and unknown variance and inverse range uses
+model with known \(\nu\) and parameters \(\varsigma^2,\eta>0\) uses
 \begin{equation}
-  v^\dagger
+  \varsigma^2
   \begin{pmatrix}
-  1 & \Matern_\nu(\alpha^\dagger R)\\
-  \Matern_\nu(\alpha^\dagger R)&1
+  1 & \Matern_\nu(\eta R)\\
+  \Matern_\nu(\eta R)&1
   \end{pmatrix}.
 \end{equation}
 The smoothed two-by-two covariance lies in this family. Moreover,
@@ -248,7 +256,7 @@ The smoothed two-by-two covariance lies in this family. Moreover,
 \(\Matern_\nu>0\), while strict inequality follows from the positive smoothed
 spectral density near the origin. Hence the exact Gaussian KL target is
 \begin{equation}
-  v_h^\dagger=C_h(0),\qquad
+  (\sigma_h^2)^\dagger=C_h(0),\qquad
   \Matern_\nu(\alpha_h^\dagger R)=\rho_h(r)
   :=\frac{C_h(r)}{C_h(0)}.
   \label{eq:target}
@@ -268,7 +276,7 @@ independence Hessian.
 
 \section{Smoothness-dependent phase law}
 
-Put \(z=\alpha R\), \(a_k(e)=e^\top\Sigma_ke\), and
+Put \(z=\alpha R\), \(a_k(e)=e^\top\Sigma_k e\), and
 \begin{equation}
  B_{\nu,k}(r)=\alpha^2\left[
  a_k(e)\Matern_\nu''(z)
@@ -281,7 +289,7 @@ Uniformly for \(r\) in a compact annulus bounded away from zero, for
 \(h\leq\lVert r\rVert/(4L)\), and for \(\alpha\) in a compact subset of
 \((0,\infty)\),
 \begin{equation}
-  \frac{C_h(r)}{v}
+  \frac{C_h(r)}{\sigma^2}
   =\Matern_\nu(\alpha\lVert r\rVert)+h^2B_{\nu,k}(r)+O(h^4).
   \label{eq:lag}
 \end{equation}
@@ -299,7 +307,7 @@ c_\nu=\frac{\Gamma(1-\nu)}
 \]
 Under the preceding assumptions, as \(h\downarrow0\),
 \begin{align}
-\frac{C_h(0)}v
+\frac{C_h(0)}{\sigma^2}
 &=1-c_\nu m_{2\nu}(\alpha h)^{2\nu}+O(h^2),
 &&0<\nu<1, \label{eq:vrough}\\
 &=1-\frac{m_2}{2}(\alpha h)^2\log\{1/(\alpha h)\}+O(h^2),
@@ -337,7 +345,8 @@ For fixed \(\nu\), the remainders are uniform over compact positive decay sets
 and lag annuli bounded away from zero, but not as \(\nu\) approaches one or two.
 Consequently, for every \(\nu>0\) and all sufficiently small \(h>0\),
 \[
-v_h^\dagger<v,\qquad \rho_h(r)>\Matern_\nu(\alpha R),\qquad
+(\sigma_h^2)^\dagger<\sigma^2,\qquad
+\rho_h(r)>\Matern_\nu(\alpha R),\qquad
 \alpha_h^\dagger<\alpha.
 \]
 \end{theorem}
@@ -345,36 +354,44 @@ v_h^\dagger<v,\qquad \rho_h(r)>\Matern_\nu(\alpha R),\qquad
 The two-point family in \eqref{eq:target} is saturated: after refitting variance,
 one correlation determines one decay exactly. To obtain a genuine
 misspecification result, let \(0<R_1<\cdots<R_J\), \(w_j>0\), and
-\(B(\rho)=\left(\begin{smallmatrix}1&\rho\\\rho&1\end{smallmatrix}\right)\).
-Write \(\rho_{h,j}=C_h(R_je)/C_h(0)\) and define the Gaussian pair composite
+\(\mathsf R(\rho)=\left(\begin{smallmatrix}1&\rho\\\rho&1\end{smallmatrix}\right)\).
+Write \(\rho_{h,j}=C_h(R_j e)/C_h(0)\) and define the Gaussian pair composite
 \begin{equation}
- Q_h^{\rm C}(a)=\sum_{j=1}^Jw_j
- D_{\rm KL}\!\left\{N(0,B(\rho_{h,j}))\,\|\,
- N(0,B(\Matern_\nu(aR_j)))\right\}.
+ Q_h^{\mathrm C}(\eta)=\sum_{j=1}^J w_j
+ \KL\!\left\{\Normal(0,\mathsf R(\rho_{h,j}))\,\middle\|\,
+ \Normal(0,\mathsf R(\Matern_\nu(\eta R_j)))\right\}.
  \label{eq:composite}
 \end{equation}
-Let \(s_\nu(h)=h^{2\nu}\), \(h^2\log(1/h)\), or \(h^2\) in the rough,
-threshold, or smooth regime. Theorem~\ref{thm:phase-law} defines positive
-coefficients \(C_j\) by
-\(\alpha-\alpha_{h,j}^\dagger=C_js_\nu(h)+o\{s_\nu(h)\}\).
+Define the regime-dependent scale
+\begin{equation}
+s_\nu(h)=
+\begin{cases}
+h^{2\nu},&0<\nu<1,\\
+h^2\log(1/h),&\nu=1,\\
+h^2,&\nu>1.
+\end{cases}
+\label{eq:phase-scale}
+\end{equation}
+Theorem~\ref{thm:phase-law} defines positive lag coefficients \(\kappa_j\) by
+\(\alpha-\alpha_{h,j}^\dagger=\kappa_j s_\nu(h)+o\{s_\nu(h)\}\).
 
 \begin{theorem}[Genuinely misspecified multi-lag target]
 \label{thm:multilag}
 Let \(\alpha\) be interior to a compact positive parameter interval and let
-\(a_h^{\rm C}\) minimize \eqref{eq:composite} on that interval. Put
+\(\alpha_h^{\mathrm C}\) minimize \eqref{eq:composite} on that interval. Put
 \begin{align}
  \rho_j&=\Matern_\nu(\alpha R_j),&
- I_j&=\frac{1+\rho_j^2}{(1-\rho_j^2)^2},\\
- \lambda_j&=w_jI_j\{R_j\Matern_\nu'(\alpha R_j)\}^2,&
- \bar C&=\frac{\sum_j\lambda_jC_j}{\sum_j\lambda_j}.
+ \mathcal I_j&=\frac{1+\rho_j^2}{(1-\rho_j^2)^2},\\
+ \lambda_j&=w_j\mathcal I_j\{R_j\Matern_\nu'(\alpha R_j)\}^2,&
+ \bar\kappa&=\frac{\sum_j\lambda_j\kappa_j}{\sum_j\lambda_j}.
 \end{align}
 Then
 \begin{align}
- \alpha-a_h^{\rm C}&=\bar C s_\nu(h)+o\{s_\nu(h)\},
+ \alpha-\alpha_h^{\mathrm C}&=\bar\kappa s_\nu(h)+o\{s_\nu(h)\},
  \label{eq:multilag-shift}\\
- \min_aQ_h^{\rm C}(a)
+ \min_\eta Q_h^{\mathrm C}(\eta)
  &=\frac{s_\nu(h)^2}{2}
- \sum_{j=1}^J\lambda_j(C_j-\bar C)^2+o\{s_\nu(h)^2\}.
+ \sum_{j=1}^J\lambda_j(\kappa_j-\bar\kappa)^2+o\{s_\nu(h)^2\}.
  \label{eq:multilag-kl}
 \end{align}
 Thus the composite still has apparent range inflation, and its minimum KL is
@@ -382,8 +399,8 @@ strictly positive to leading order whenever the lag-specific coefficients are
 not all equal.
 \end{theorem}
 
-The coefficient is explicitly lag-sensitive through both \(C_j\) and the
-Gaussian correlation information \(I_j\). It is neither the coefficient at a
+The coefficient is explicitly lag-sensitive through both \(\kappa_j\) and the
+Gaussian correlation information \(\mathcal I_j\). It is neither the coefficient at a
 representative lag nor an unweighted average. This answers the pairwise versus
 multi-location objection without treating overlapping pairs as independent for
 uncertainty quantification.
@@ -397,7 +414,7 @@ W_{\nu,k}(h)=
 \dfrac{m_2(\alpha h)^2}{4(1-\nu)}
 +b_\nu m_{2\nu}(\alpha h)^{2\nu},&\nu\ne1,\\[3pt]
 \dfrac{(\alpha h)^2}{2}\left[m_2\{\log(\alpha h/2)
-+\gamma_{\rm E}-1/2\}+\ell_{2,k}\right],&\nu=1,
++\gamma_{\mathrm E}-1/2\}+\ell_{2,k}\right],&\nu=1,
 \end{cases}
 \label{eq:transitionW}
 \end{equation}
@@ -406,7 +423,7 @@ Set
 \begin{equation}
 \widetilde\rho_h=
 \frac{\Matern_\nu(z)+h^2B_{\nu,k}(r)}{1+W_{\nu,k}(h)},\qquad
-\Matern_\nu(\widetilde\alpha_hR)=\widetilde\rho_h.
+\Matern_\nu(\widetilde\alpha_h R)=\widetilde\rho_h.
 \label{eq:transitiontarget}
 \end{equation}
 
@@ -488,7 +505,7 @@ Taking expectations at \(x=\alpha h\lVert D\rVert\) proves
 \eqref{eq:vrough} and \eqref{eq:vsmooth}. At \(\nu=1\),
 \[
 \Matern_1(x)=1+\frac{x^2}{2}
-\{\log(x/2)+\gamma_{\rm E}-1/2\}
+\{\log(x/2)+\gamma_{\mathrm E}-1/2\}
 +O\{x^4(1+|\log x|)\},
 \]
 which proves \eqref{eq:vone}. Divide \eqref{eq:lag} by the relevant variance
@@ -516,7 +533,7 @@ For Theorem~\ref{thm:multilag}, the KL divergence between unit-variance
 Gaussian pairs with correlations \(\rho\) and \(q\) has second derivative
 \(I(\rho)=(1+\rho^2)/(1-\rho^2)^2\) at \(q=\rho\). Also,
 \[
- \rho_{h,j}=\rho_j-C_js_\nu(h)R_j\Matern_\nu'(\alpha R_j)
+ \rho_{h,j}=\rho_j-\kappa_j s_\nu(h)R_j\Matern_\nu'(\alpha R_j)
  +o\{s_\nu(h)\}.
 \]
 A second-order expansion of \eqref{eq:composite}, followed by completing the
@@ -528,7 +545,7 @@ At the remaining integer transition,
 \[
 \Matern_2(x)=1-\frac{x^2}{4}
 +x^4\left\{\frac{3}{64}
--\frac{\log(x/2)+\gamma_{\rm E}}{16}\right\}
+-\frac{\log(x/2)+\gamma_{\mathrm E}}{16}\right\}
 +O\{x^6(1+|\log x|)\}.
 \]
 For fixed \(\nu>2\), four-times differentiability yields
@@ -539,23 +556,23 @@ remainders after division and inverse expansion.
 \section{Finite-grid support-aware likelihood}
 
 The theorem covers translation-invariant interior averaging. For a finite
-simulation, let \(X_{\rm in}\) denote raw sites and let
+simulation, let \(X_{\mathrm{in}}\) denote raw sites and let
 \(S_h\in\R^{m\times n}\) be a rectangular row-stochastic observation operator.
 With noise present before smoothing,
 \begin{equation}
-y=S_h\{Y(X_{\rm in})+\epsilon\},\qquad
-\epsilon\sim N(0,\tau^2I_n),
+\mathbf y=S_h\{Y(X_{\mathrm{in}})+\boldsymbol\varepsilon\},\qquad
+\boldsymbol\varepsilon\sim\Normal_n(0,\tau^2I_n),
 \end{equation}
 the support-aware covariance is
 \begin{equation}
-\Sigma_{\rm corr}(\alpha)
-=S_h\{K_\alpha(X_{\rm in},X_{\rm in})+\tau^2I_n\}S_h^\top.
+\Sigma_{\mathrm{corr}}(\alpha)
+=S_h\{K_\alpha(X_{\mathrm{in}},X_{\mathrm{in}})+\tau^2I_n\}S_h^\top.
 \label{eq:corr}
 \end{equation}
 The naive declared-center point-support covariance is instead
 \begin{equation}
-\Sigma_{\rm naive}(\alpha)
-=K_\alpha(X_{\rm out},X_{\rm out})+\tau^2I_m.
+\Sigma_{\mathrm{naive}}(\alpha)
+=K_\alpha(X_{\mathrm{out}},X_{\mathrm{out}})+\tau^2I_m.
 \label{eq:naive}
 \end{equation}
 Besides ignoring support, \eqref{eq:naive} treats pre-smoothing noise as
@@ -572,35 +589,39 @@ Q_n(\alpha)=\frac12\left[
 
 The multi-lag result has an exact full-Gaussian analogue on any fixed interior
 site design. Let \(x_1,\ldots,x_p\) be distinct, let
-\(\theta=(\log v,\log\alpha)\), and write \(\Sigma(\theta)\) for the
+\(\theta=(\log\sigma^2,\log\alpha)^\top\), and write \(\Sigma(\theta)\) for the
 point-support Matérn covariance at those sites with fixed \(\nu\). Entrywise
 application of the zero- and nonzero-lag expansions gives
 \begin{equation}
  \Sigma_h=\Sigma_0+s_\nu(h)\Gamma_\nu+o\{s_\nu(h)\}.
  \label{eq:matrix-perturbation}
 \end{equation}
-Put \(P=\Sigma_0^{-1}\),
-\(D_j=\partial\Sigma(\theta_0)/\partial\theta_j\), and
+Put \(P=\Sigma_0^{-1}\), define the Fisher inner product
 \begin{equation}
- J_{jk}=\tfrac12\tr(PD_jPD_k),\qquad
- b_j=\tfrac12\tr(PD_jP\Gamma_\nu).
+ \langle A,B\rangle_P:=\tfrac12\tr(PAPB),
+ \label{eq:fisher-inner-product}
+\end{equation}
+and let \(\dot\Sigma_j=\partial_j\Sigma(\theta_0)\). Define
+\begin{equation}
+ \mathcal J_{jk}=\langle\dot\Sigma_j,\dot\Sigma_k\rangle_P,
+ \qquad g_{\nu,j}=\langle\dot\Sigma_j,\Gamma_\nu\rangle_P.
 \end{equation}
 
 \begin{proposition}[Finite-design full-likelihood projection]
 \label{prop:full-projection}
-Suppose \(\theta_0\) is interior to a compact parameter set, \(J\) is
+Suppose \(\theta_0\) is interior to a compact parameter set, \(\mathcal J\) is
 nonsingular, and the KL target \(\theta_h^\dagger\) is the local minimizer
 converging to \(\theta_0\). Let \(K_h^\star\) denote the minimum full Gaussian
-KL criterion. With \(\beta=J^{-1}b\),
+KL criterion. With \(\beta_\nu=\mathcal J^{-1}g_\nu\),
 \begin{align}
- \theta_h^\dagger-\theta_0&=\beta s_\nu(h)+o\{s_\nu(h)\},
+ \theta_h^\dagger-\theta_0&=\beta_\nu s_\nu(h)+o\{s_\nu(h)\},
  \label{eq:full-shift}\\
  K_h^\star&=\tfrac14\tr(PE_\nu PE_\nu)s_\nu(h)^2
  +o\{s_\nu(h)^2\},
  \label{eq:full-kl}
 \end{align}
-where \(E_\nu=\Gamma_\nu-\sum_{j=1}^2\beta_jD_j\) satisfies
-\(\tr(PD_jPE_\nu)=0\) for \(j=1,2\). Hence the full
+where \(E_\nu=\Gamma_\nu-\sum_{j=1}^2\beta_{\nu,j}\dot\Sigma_j\) satisfies
+\(\langle\dot\Sigma_j,E_\nu\rangle_P=0\) for \(j=1,2\). Hence the full
 likelihood is genuinely misspecified to leading order exactly when the support
 perturbation has a nonzero component outside the variance--decay covariance
 tangent space.
@@ -608,18 +629,18 @@ tangent space.
 
 To prove Proposition~\ref{prop:full-projection}, differentiate the Gaussian KL
 criterion at \(\theta_0\). Equations \eqref{eq:matrix-perturbation} and the
-matrix inverse derivative give score \(-b\,s_\nu(h)+o\{s_\nu(h)\}\) and
-Hessian \(J+o(1)\). The implicit function theorem yields
+matrix inverse derivative give score \(-g_\nu s_\nu(h)+o\{s_\nu(h)\}\) and
+Hessian \(\mathcal J+o(1)\). The implicit function theorem yields
 \eqref{eq:full-shift}. The local Gaussian KL expansion is
-\(\tfrac14\tr\{P(\Gamma_\nu-\sum_j\beta_jD_j)
-P(\Gamma_\nu-\sum_j\beta_jD_j)\}s_\nu(h)^2\), which proves
-\eqref{eq:full-kl}. Nonsingularity of \(J\), rather than increasing- or
+\(\tfrac14\tr\{P(\Gamma_\nu-\sum_j\beta_{\nu,j}\dot\Sigma_j)
+P(\Gamma_\nu-\sum_j\beta_{\nu,j}\dot\Sigma_j)\}s_\nu(h)^2\), which proves
+\eqref{eq:full-kl}. Nonsingularity of \(\mathcal J\), rather than increasing- or
 fixed-domain asymptotics, is the required finite-design identifiability
 condition.
 
 Unlike Theorem~\ref{thm:multilag}, this general projection does not imply a
-universal sign for the decay coordinate: \(J^{-1}b\) depends on the complete
-site design. The selected \(3\times3\) regular-grid audit below has range
+universal sign for the decay coordinate: \(\mathcal J^{-1}g_\nu\) depends on
+the complete site design. The selected \(3\times3\) regular-grid audit below has range
 inflation for all four tested smoothnesses, but that fact is numerical, not an
 extra theorem.
 
@@ -653,11 +674,11 @@ a new concentration inequality.
 \label{prop:certificate}
 Let \(0<\delta<1\),
 \(\Sigma_0\in\mathbb S_{++}^p\), and
-\(X_1,\ldots,X_N\overset{\mathrm{iid}}\sim N_p(0,\Sigma_0)\). Let
+\(X_1,\ldots,X_N\overset{\mathrm{iid}}\sim \Normal_p(0,\Sigma_0)\). Let
 \(\{\Sigma_\theta:\theta\in\mathcal G\}\) be a deterministic library of
 \(M\) covariances in \(\mathbb S_{++}^p\). Define
 \begin{align}
- \widehat\Sigma_N&=N^{-1}\sum_{i=1}^NX_iX_i^\top,\\
+ \widehat\Sigma_N&=N^{-1}\sum_{i=1}^N X_iX_i^\top,\\
  \widehat L_N(\theta)&=\frac1{2p}\left\{\log\det\Sigma_\theta+
  \tr(\Sigma_\theta^{-1}\widehat\Sigma_N)\right\},
  \label{eq:empiricalrisk}\\
@@ -668,8 +689,8 @@ For \(t=\log(2M/\delta)\), with probability at least \(1-\delta\),
 simultaneously for every \(\theta\in\mathcal G\),
 \begin{equation}
  |\widehat L_N(\theta)-L(\theta)|\leq
- \frac{\lVert A_\theta\rVert_F}{p}\sqrt{\frac tN}
- +\frac{\lVert A_\theta\rVert_{\rm op}}p\frac tN
+ \frac{\lVert A_\theta\rVert_{\mathrm F}}{p}\sqrt{\frac tN}
+ +\frac{\lVert A_\theta\rVert_{\mathrm{op}}}p\frac tN
  =:u_\theta.
  \label{eq:certificate}
 \end{equation}
@@ -682,16 +703,16 @@ population criteria, respectively, then
 \end{equation}
 Moreover, \(L(\theta)\) differs by a candidate-independent constant from
 \begin{equation}
- p^{-1}D_{\rm KL}\!\left\{N(0,\Sigma_0)\,\middle\|\,
- N(0,\Sigma_\theta)\right\}.
+ p^{-1}\KL\!\left\{\Normal_p(0,\Sigma_0)\,\middle\|\,
+ \Normal_p(0,\Sigma_\theta)\right\}.
 \end{equation}
 \end{proposition}
 
 To prove \eqref{eq:certificate}, write \(X_i=\Sigma_0^{1/2}Z_i\), stack the
 standard Gaussian vectors, and apply the Gaussian quadratic-form inequality to
 \(I_N\otimes A_\theta\). Its Frobenius and operator norms are
-\(\sqrt N\lVert A_\theta\rVert_F\) and
-\(\lVert A_\theta\rVert_{\rm op}\); division by \(2Np\) and a union bound
+\(\sqrt N\lVert A_\theta\rVert_{\mathrm F}\) and
+\(\lVert A_\theta\rVert_{\mathrm{op}}\); division by \(2Np\) and a union bound
 give the displayed constants \cite{laurent2000quadratic,hsu2012quadratic}.
 The ERM result is the usual three-term comparison through
 \(\widehat L_N\).
@@ -700,11 +721,11 @@ No coordinate independence is used: all within-field spatial dependence is in
 \(\Sigma_0\). Writing
 \[
  r_2(A_\theta)=
- \frac{\lVert A_\theta\rVert_F^2}{\lVert A_\theta\rVert_{\rm op}^2},
+ \frac{\lVert A_\theta\rVert_{\mathrm F}^2}{\lVert A_\theta\rVert_{\mathrm{op}}^2},
 \]
 the radius in \eqref{eq:certificate} is
 \[
- \frac{\lVert A_\theta\rVert_{\rm op}}p
+ \frac{\lVert A_\theta\rVert_{\mathrm{op}}}p
  \left\{\sqrt{\frac{r_2(A_\theta)t}{N}}+\frac tN\right\}.
 \]
 Thus the relevant dimension is spectral: increasing \(p\) helps only when
@@ -835,7 +856,7 @@ We evaluated Theorem~\ref{thm:multilag} at
 \(\alpha R\in\{0.5,1,1.5,2\}\), equal weights,
 \(\nu\in\{0.5,1,1.5,2.5\}\), and
 \(h\in\{0.005,0.01,0.02\}\). All 12 composite targets had
-\(\alpha-a_h^{\rm C}>0\) and strictly positive minimum KL. At the smallest
+\(\alpha-\alpha_h^{\mathrm C}>0\) and strictly positive minimum KL. At the smallest
 bandwidth, the maximum relative errors of the leading shift and minimum-KL
 terms were 1.41\% and 9.85\%, respectively. The lag coefficients vary
 substantially---for \(\nu=0.5\), from 1.61 at \(\alpha R=0.5\) to 0.40 at
@@ -898,7 +919,7 @@ Left: apparent range inflation versus lag angle at support aspect four and
 
 The core design uses a \(19\times19\) input lattice with spacing 0.25 and every
 second site as a candidate output center, trimmed by 0.75 in each coordinate.
-We set \(v=\alpha=1\), \(\tau^2=0\),
+We set \(\sigma^2=\alpha=1\), \(\tau^2=0\),
 \(\nu\in\{0.5,1,1.5,2.5\}\), and \(h\in\{0,0.3,0.5,0.7\}\).
 Radial Epanechnikov rows are normalized exactly. Stress designs retain boundary
 centers, perturb each coordinate uniformly in \([-0.04,0.04]\) before clipping,
@@ -970,7 +991,7 @@ interior and boundary blocks. The KL columns report the intermediate
 \subsection{Joint smoothness--decay and partial-support fits}
 
 To test the known-smoothness restriction, we jointly selected
-\((\nu,\alpha,v)\) from a fixed library with 18 smoothness values,
+\((\nu,\alpha,\sigma^2)\) from a fixed library with 18 smoothness values,
 52 log-spaced decay values, and analytically profiled variance. The data use an
 \(11\times11\) latent grid, 16 interior outputs, true
 \(\nu\in\{0.5,1,1.5,2.5\}\), \(h\in\{0.35,0.5\}\), \(N=16\) independent
@@ -995,9 +1016,9 @@ For \(q\in\{4,6,8,10\}\), a padded latent lattice with spacing 0.25 was mapped
 by a full-row-rank radial Epanechnikov operator with \(h=0.5\) to a
 \(q\times q\) output lattice, giving
 \(p\in\{16,36,64,100\}\). We used \(\nu\in\{0.5,1.5\}\),
-\(v=\alpha=1\), and \(N\in\{1,4,16,64\}\) independent fields. Corrected
-candidates were \(vS_hR_\alpha S_h^\top\); naive candidates were
-\(vR_\alpha\) at output centers. The deterministic
+\(\sigma^2=\alpha=1\), and \(N\in\{1,4,16,64\}\) independent fields. Corrected
+candidates were \(\sigma^2 S_h R_\alpha S_h^\top\); naive candidates were
+\(\sigma^2 R_\alpha\) at output centers. The deterministic
 \(101\times161=16{,}261\) variance--decay library spans
 \([0.35,2.5]\times[0.15,1.6]\) and contains \((1,1)\). This truth anchoring
 is an oracle benchmark control, not a deployable grid-selection rule; the
@@ -1089,7 +1110,7 @@ available in release \href{https://github.com/Sasha-Cui/HighDimSpatialStatistics
 \label{app:analytic-proof}
 
 \begin{proof}[Proof of Theorem~\ref{thm:phase-law}]
-Set \(f(x)=C(x)/v\). Its first four
+Set \(f(x)=C(x)/\sigma^2\). Its first four
 derivatives are uniformly bounded on the declared annulus.  Since
 \(D=U-V\) is centrally symmetric and
 \(\E(DD^\top)=2\Sigma_k\), Taylor's theorem gives
@@ -1123,17 +1144,17 @@ term is leading and the fractional remainder is \(O(h^{2\nu})\).  For fixed
 remainder.  At the two integer transitions,
 \begin{align}
  \Matern_1(x)
- &=1+\frac{x^2}{2}\{\log(x/2)+\gamma_{\rm E}-1/2\}
+ &=1+\frac{x^2}{2}\{\log(x/2)+\gamma_{\mathrm E}-1/2\}
    +O\{x^4(1+|\log x|)\},\\
  \Matern_2(x)
  &=1-\frac{x^2}{4}
-   -\frac{x^4}{16}\{\log(x/2)+\gamma_{\rm E}-3/4\}
+   -\frac{x^4}{16}\{\log(x/2)+\gamma_{\mathrm E}-3/4\}
    +O\{x^6(1+|\log x|)\}.
 \end{align}
 These formulas prove \eqref{eq:vrough}--\eqref{eq:vsmooth}, including the
 stated remainders.
 
-Write \(d_h=C_h(0)/v\).  Dividing
+Write \(d_h=C_h(0)/\sigma^2\).  Dividing
 \eqref{eq:appendix-taylor} by \(d_h\), then applying the local inverse of
 \(\alpha\mapsto\Matern_\nu(\alpha R)\), is valid because
 \[
@@ -1156,9 +1177,10 @@ negative
 \end{proof}
 
 \begin{proof}[Proof of Theorem~\ref{thm:multilag}]
-For \(|\rho|,|q|<1\), put \(P_\rho=N\{0,B(\rho)\}\). Direct evaluation gives
+For \(|\rho|,|q|<1\), put
+\(P_\rho=\Normal(0,\mathsf R(\rho))\). Direct evaluation gives
 \begin{equation}
- d(\rho,q):=D_{\rm KL}(P_\rho\|P_q)
+ d(\rho,q):=\KL(P_\rho\,\|\,P_q)
  =\frac12\left[
  \log\frac{1-q^2}{1-\rho^2}-2+
  \frac{2(1-q\rho)}{1-q^2}\right].
@@ -1170,22 +1192,22 @@ Theorem~\ref{thm:phase-law} and differentiability of the Matérn correlation
 at positive lags give, uniformly over the finite lag set,
 \begin{align*}
  \rho_{h,j}
- &=\Matern_\nu\{(\alpha-C_js_\nu(h)+o(s_\nu))R_j\}\\
- &=\rho_j-C_j\dot\rho_js_\nu(h)+o\{s_\nu(h)\},
+ &=\Matern_\nu\{(\alpha-\kappa_j s_\nu(h)+o\{s_\nu(h)\})R_j\}\\
+ &=\rho_j-\kappa_j\dot\rho_j s_\nu(h)+o\{s_\nu(h)\},
  \qquad \dot\rho_j=R_j\Matern_\nu'(\alpha R_j).
 \end{align*}
-For \(a=\alpha-\gamma s_\nu(h)\), the candidate correlation is
-\(\rho_j-\gamma\dot\rho_js_\nu(h)+o(s_\nu)\). Taylor expansion of
+For \(\eta=\alpha-\gamma s_\nu(h)\), the candidate correlation is
+\(\rho_j-\gamma\dot\rho_j s_\nu(h)+o\{s_\nu(h)\}\). Taylor expansion of
 \eqref{eq:pair-kl-exact} therefore yields
 \[
- Q_h^{\rm C}(a)=\frac{s_\nu(h)^2}{2}
- \sum_j\lambda_j(C_j-\gamma)^2+o\{s_\nu(h)^2\}.
+ Q_h^{\mathrm C}(\eta)=\frac{s_\nu(h)^2}{2}
+ \sum_j\lambda_j(\kappa_j-\gamma)^2+o\{s_\nu(h)^2\}.
 \]
-The criterion at \(h=0\) is uniquely minimized by \(a=\alpha\), and its
+The criterion at \(h=0\) is uniquely minimized by \(\eta=\alpha\), and its
 second derivative there is \(\sum_j\lambda_j>0\). Compactness and uniform
 convergence place every global minimizer near \(\alpha\); the implicit function
 theorem then gives the displayed local expansion. Minimizing the quadratic in
-\(\gamma\) gives \(\gamma=\bar C\) and proves both claims.
+\(\gamma\) gives \(\gamma=\bar\kappa\) and proves both claims.
 \end{proof}
 
 \begin{proof}[Proof of Proposition~\ref{prop:full-projection}]
@@ -1198,18 +1220,20 @@ Let
 Using \(\partial\Sigma^{-1}=-\Sigma^{-1}(\partial\Sigma)\Sigma^{-1}\),
 the score at \(\theta_0\) is
 \[
- \partial_jK_h(\theta_0)
- =-\tfrac12s_\nu(h)\tr(PD_jP\Gamma_\nu)+o\{s_\nu(h)\}
- =-b_js_\nu(h)+o\{s_\nu(h)\}.
+ \partial_j K_h(\theta_0)
+ =-s_\nu(h)\langle\dot\Sigma_j,\Gamma_\nu\rangle_P+o\{s_\nu(h)\}
+ =-g_{\nu,j}s_\nu(h)+o\{s_\nu(h)\}.
 \]
-At \(h=0\), the Hessian is the Fisher information \(J\). Nonsingularity and
+At \(h=0\), the Hessian is the Fisher information \(\mathcal J\). Nonsingularity and
 the implicit function theorem give
-\(\theta_h^\dagger-\theta_0=J^{-1}b\,s_\nu(h)+o(s_\nu)\).
+\(\theta_h^\dagger-\theta_0=\mathcal J^{-1}g_\nu\,s_\nu(h)
++o\{s_\nu(h)\}\).
 Finally, for a covariance perturbation \(H\), Gaussian KL has quadratic term
 \(\tfrac14\tr(PHPH)\). Substitution of
-\(H=s_\nu(h)(\Gamma_\nu-\sum_j\beta_jD_j)+o(s_\nu)\) proves
+\(H=s_\nu(h)(\Gamma_\nu-\sum_j\beta_{\nu,j}\dot\Sigma_j)
++o\{s_\nu(h)\}\) proves
 \eqref{eq:full-kl}. The coefficient vanishes exactly when \(E_\nu=0\), because
-\(\tr(PE_\nu PE_\nu)=\|P^{1/2}E_\nu P^{1/2}\|_F^2\).
+\(\tr(PE_\nu PE_\nu)=\|P^{1/2}E_\nu P^{1/2}\|_{\mathrm F}^2\).
 \end{proof}
 
 \begin{proof}[Proof of Propositions~\ref{prop:transition}--\ref{prop:direction}]
@@ -1229,7 +1253,7 @@ Matérn map proves \eqref{eq:transitionerror}.  For
 \begin{align}
  b_{1+\varepsilon}
  &=\frac1{4\varepsilon}
-   +\frac{2\gamma_{\rm E}-1-2\log2}{4}+O(\varepsilon),\\
+   +\frac{2\gamma_{\mathrm E}-1-2\log2}{4}+O(\varepsilon),\\
  m_{2+2\varepsilon}(\alpha h)^{2+2\varepsilon}
  &=(\alpha h)^2\Big[m_2+2\varepsilon
  \{\ell_{2,k}+m_2\log(\alpha h)\}+O(\varepsilon^2)\Big].
@@ -1255,7 +1279,7 @@ then give \eqref{eq:direction} for every fixed \(\nu>0\).
 
 \begin{proof}[Proof of Proposition~\ref{prop:certificate}]
 Write \(X_i=\Sigma_0^{1/2}Z_i\), stack the independent
-\(Z_i\sim N_p(0,I_p)\), and put
+\(Z_i\sim\Normal_p(0,I_p)\), and put
 \(A_\theta=\Sigma_0^{1/2}\Sigma_\theta^{-1}\Sigma_0^{1/2}\).
 The random likelihood term is the quadratic form associated with
 \(I_N\otimes A_\theta\).  The two-sided Gaussian quadratic-form inequality
@@ -1263,13 +1287,13 @@ gives, for \(t>0\),
 \begin{align}
  \Pr\Big(&\Big|\sum_{i=1}^N
  X_i^\top\Sigma_\theta^{-1}X_i-N\tr(A_\theta)\Big|
- >2\sqrt N\lVert A_\theta\rVert_F\sqrt t
- +2\lVert A_\theta\rVert_{\rm op}t\Big)\notag\\
+ >2\sqrt N\lVert A_\theta\rVert_{\mathrm F}\sqrt t
+ +2\lVert A_\theta\rVert_{\mathrm{op}}t\Big)\notag\\
  &\leq2e^{-t}.
 \end{align}
 Indeed, the Frobenius and operator norms of the Kronecker matrix are
-\(\sqrt N\lVert A_\theta\rVert_F\) and
-\(\lVert A_\theta\rVert_{\rm op}\).  The log determinant is
+\(\sqrt N\lVert A_\theta\rVert_{\mathrm F}\) and
+\(\lVert A_\theta\rVert_{\mathrm{op}}\).  The log determinant is
 deterministic.  Divide by \(2Np\), take \(t=\log(2M/\delta)\), and union
 bound over the deterministic library to obtain \eqref{eq:certificate}.  On
 that simultaneous
@@ -1284,8 +1308,8 @@ Finally, the Gaussian KL formula differs from \(pL(\theta)\) only by terms
 independent of \(\theta\).  If
 \(c\Sigma_0\preceq\Sigma_\theta\), congruence after inversion gives
 \(A_\theta\preceq c^{-1}I_p\), hence
-\(\lVert A_\theta\rVert_{\rm op}\leq c^{-1}\) and
-\(\lVert A_\theta\rVert_F\leq\sqrt p/c\), which proves
+\(\lVert A_\theta\rVert_{\mathrm{op}}\leq c^{-1}\) and
+\(\lVert A_\theta\rVert_{\mathrm F}\leq\sqrt p/c\), which proves
 \eqref{eq:np-rate}.
 \end{proof}
 
