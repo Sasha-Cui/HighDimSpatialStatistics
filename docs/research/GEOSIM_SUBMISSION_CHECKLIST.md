@@ -6,7 +6,7 @@
 **Notification:** 2026-09-15<br>
 **Official call:** <https://geosim.org/2026/cfp/><br>
 **Submission site:** <https://easychair.org/conferences/?conf=geosim2026><br>
-**Artifact candidate:** `supportshift-geosim-v1.3.1`
+**Artifact candidate:** `supportshift-geosim-v1.3.2`
 
 The official call lists parameterizable and scalable spatial-simulation data
 sets made available to the community as an in-scope topic. Full papers may use
@@ -23,6 +23,9 @@ references. Review is single-blind and uses the ACM `sigconf` format.
   projection and irreducible KL component.
 - [x] The projection residual is stated as Fisher-orthogonal to the fitted
   covariance tangent space and its implementation is invariant to site order.
+- [x] Mathematical notation distinguishes physical variance, smoothness,
+  generic candidates, composite targets, lag coefficients, and Fisher
+  projection objects without symbol collisions.
 - [x] Joint smoothness--decay and partial-support experiments test the two main
   known-smoothness and exact-versus-naive limitations.
 - [x] Fixed-domain and increasing-domain statements are not conflated.

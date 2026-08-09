@@ -15,7 +15,7 @@ archived numerical claims are not paper evidence.
 ## SupportShift reviewer quick start
 
 The audited artifact is frozen at
-[`supportshift-geosim-v1.3.1`](https://github.com/Sasha-Cui/HighDimSpatialStatistics/tree/supportshift-geosim-v1.3.1).
+[`supportshift-geosim-v1.3.2`](https://github.com/Sasha-Cui/HighDimSpatialStatistics/tree/supportshift-geosim-v1.3.2).
 Start with:
 
 - the [GeoSim submission PDF](output/pdf/supportshift_geosim2026.pdf);
@@ -186,7 +186,7 @@ gates passing. The threshold audit was generated from clean commit `34a2603`
 and passed all sign, approximation-error, and quadrature-refinement gates. The
 dimension--kernel audit was generated from clean commit `2fc7040` and passed its
 predeclared sign, coefficient, and quadrature gates. The audited paper package
-is frozen at tag `supportshift-geosim-v1.3.1`.
+is frozen at tag `supportshift-geosim-v1.3.2`.
 
 Verify the promoted run, every paper-artifact hash, and all 168 numerical claims
 reported in the manuscripts in one command:

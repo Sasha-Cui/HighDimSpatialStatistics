@@ -586,6 +586,35 @@ Carlo experiment is required for a manuscript claim. The remaining scientific
 gate is independent expert proof and priority review; the remaining submission
 gates require author metadata and the live EasyChair form.
 
+## 2026-08-09 -- mathematical notation and presentation audit
+
+**Problem.** The paper used Latin \(v\) adjacent to Mat\'ern smoothness
+\(\nu\), plain epsilon for vector noise, and overloaded \(a\), \(C\), \(J\),
+and \(b\) across covariance, composite-likelihood, and projection arguments.
+Although the derivations were correct, these collisions made the mathematics
+look less disciplined and increased the cost of checking proofs.
+
+**Notation repair.** Both manuscripts now use \(\sigma^2\) for physical
+variance, \(\boldsymbol\varepsilon\) for measurement noise, \(\eta\) for a
+generic inverse-range candidate, \(\kappa_j\) for lag displacement
+coefficients, and \(\alpha_h^{\mathrm C}\) for the composite KL target.
+Gaussian laws use \(\mathcal N\), and KL notation, matrix norms, roman
+subscripts, and multiplication spacing are consistent. The finite-design
+result now defines the Fisher inner product explicitly and uses
+\((\mathcal J,g_\nu,\beta_\nu)\) for information, perturbation score, and
+projected shift, with the residual stated directly as Fisher-orthogonal to the
+covariance tangent space.
+
+**Verification.** All 156 tests and all 168 numerical claim checks pass. Both
+papers compile without unresolved citations, unresolved references, or
+overfull boxes. A fresh page-by-page render preserves the 13-page GeoSim and
+26-page technical layouts with no clipped equations, collisions, or illegible
+symbols.
+
+**Decision.** Publish the presentation-only patch as
+`supportshift-geosim-v1.3.2`. The theorem assumptions, coefficients, rates,
+simulation outputs, and acceptance claims are unchanged.
+
 ## Entry template
 
 ```text

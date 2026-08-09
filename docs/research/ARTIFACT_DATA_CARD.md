@@ -15,7 +15,7 @@ be used to make scientific claims about one.
 ## Versioned release
 
 - Repository: <https://github.com/Sasha-Cui/HighDimSpatialStatistics>
-- Artifact release: `supportshift-geosim-v1.3.1`
+- Artifact release: `supportshift-geosim-v1.3.2`
 - Artifact-manifest schema: `1.4`
 - Replicated-field benchmark schema: `1.1`
 - Promoted high-dimensional run: Slurm job `21081491`
@@ -155,8 +155,8 @@ python scripts/research/verify_supportshift_release.py \
 ```
 
 A valid full release has 12,800 replicated-field fits, 8,400 finite-grid fits,
-64 candidatewise-coverage cells, all predeclared statistical gates passing, 15
-matching source-input hashes, 23 matching paper-artifact hashes, and 113
+64 candidatewise-coverage cells, all predeclared statistical gates passing, 23
+matching source-input hashes, 33 matching paper-artifact hashes, and 168
 machine-checked manuscript claims. The verifier independently reconstructs all
 42 finite-grid summary rows from the fit-level table and checks exact task keys,
 configuration hashes, deterministic seeds, numerical identities, and clean
