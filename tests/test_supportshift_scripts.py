@@ -241,7 +241,7 @@ def test_paper_artifact_builder_records_input_and_output_hashes(tmp_path: Path) 
 
     manifest_path = paper_directory / "data" / "supportshift_artifact_manifest.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    assert manifest["schema_version"] == "1.3"
+    assert manifest["schema_version"] == "1.4"
     assert manifest["inputs"]["highdim"]["sha256"] == _sha256(result)
     assert manifest["inputs"]["highdim_metadata"]["sha256"] == _sha256(
         result.with_suffix(".metadata.json")

@@ -119,7 +119,7 @@ def verify_paper_artifacts(
     manifest_path = paper_directory / "data" / "supportshift_artifact_manifest.json"
     manifest = load_json(manifest_path)
     failures: list[str] = []
-    require(manifest.get("schema_version") == "1.3", "wrong manifest schema", failures)
+    require(manifest.get("schema_version") == "1.4", "wrong manifest schema", failures)
     for name, record in manifest.get("inputs", {}).items():
         path = resolve_recorded_path(str(record["path"]), repository_root)
         require(path.is_file(), f"missing manifest input {name}: {path}", failures)

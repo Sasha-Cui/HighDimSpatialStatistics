@@ -19,6 +19,7 @@ BACKGROUND = "#FFFFFF"
 GRID = "#D1D5DB"
 CORRECTED = "#0072B2"
 NAIVE = "#D55E00"
+PARTIAL = "#009E73"
 NU_COLORS = ["#332288", "#117733", "#44AA99", "#DDCC77", "#CC6677", "#882255"]
 
 
@@ -397,6 +398,226 @@ def anisotropy_figure(data: pd.DataFrame, output: Path) -> None:
     save_figure(figure, output / "anisotropic_support")
 
 
+def likelihood_projection_figure(
+    multilag: pd.DataFrame,
+    full_likelihood: pd.DataFrame,
+    output: Path,
+) -> None:
+    """Show lag sensitivity and convergence for the two new likelihood results."""
+    multilag_required = {
+        "smoothness",
+        "bandwidth",
+        "lag",
+        "pair_shift_coefficient",
+        "composite_shift_coefficient",
+        "composite_shift_ratio",
+        "minimum_kl_ratio",
+    }
+    full_required = {
+        "smoothness",
+        "bandwidth",
+        "decay_shift_ratio",
+        "minimum_kl_ratio",
+    }
+    if missing := multilag_required.difference(multilag.columns):
+        raise ValueError(f"multi-lag data are missing columns: {sorted(missing)}")
+    if missing := full_required.difference(full_likelihood.columns):
+        raise ValueError(f"full-likelihood data are missing columns: {sorted(missing)}")
+
+    smoothness_values = sorted(multilag["smoothness"].unique())
+    figure, axes = plt.subplots(1, 3, figsize=(10.4, 3.45))
+    lag_axis, composite_axis, full_axis = axes
+    for color, smoothness in zip(NU_COLORS, smoothness_values, strict=False):
+        group = multilag[multilag["smoothness"] == smoothness]
+        coefficients = group.drop_duplicates("lag").sort_values("lag")
+        label = rf"$\nu={smoothness:g}$"
+        lag_axis.plot(
+            coefficients["lag"],
+            coefficients["pair_shift_coefficient"],
+            color=color,
+            marker="o",
+            markersize=3.5,
+            linewidth=1.5,
+            label=label,
+        )
+        composite_coefficient = float(group["composite_shift_coefficient"].iloc[0])
+        lag_axis.hlines(
+            composite_coefficient,
+            float(coefficients["lag"].min()),
+            float(coefficients["lag"].max()),
+            color=color,
+            linestyle=":",
+            linewidth=1.0,
+        )
+        composite_cells = group.drop_duplicates("bandwidth").sort_values("bandwidth")
+        composite_axis.plot(
+            composite_cells["bandwidth"],
+            composite_cells["composite_shift_ratio"],
+            color=color,
+            marker="o",
+            markersize=3.2,
+            linewidth=1.4,
+        )
+        composite_axis.plot(
+            composite_cells["bandwidth"],
+            composite_cells["minimum_kl_ratio"],
+            color=color,
+            marker="s",
+            markersize=3.0,
+            linestyle="--",
+            linewidth=1.1,
+        )
+        full_cells = full_likelihood[
+            full_likelihood["smoothness"] == smoothness
+        ].sort_values("bandwidth")
+        full_axis.plot(
+            full_cells["bandwidth"],
+            full_cells["decay_shift_ratio"],
+            color=color,
+            marker="o",
+            markersize=3.2,
+            linewidth=1.4,
+        )
+        full_axis.plot(
+            full_cells["bandwidth"],
+            full_cells["minimum_kl_ratio"],
+            color=color,
+            marker="s",
+            markersize=3.0,
+            linestyle="--",
+            linewidth=1.1,
+        )
+
+    lag_axis.set_xlabel(r"Dimensionless lag $\alpha R$")
+    lag_axis.set_ylabel(r"Pair coefficient $C_\nu(R)$")
+    lag_axis.set_title("Lag-specific shifts")
+    lag_axis.grid(True, color=GRID, linewidth=0.6, alpha=0.8)
+    lag_axis.legend(
+        frameon=True,
+        facecolor=BACKGROUND,
+        edgecolor=GRID,
+        fontsize=7.5,
+        ncol=2,
+    )
+    for axis, title in (
+        (composite_axis, "Multi-lag composite"),
+        (full_axis, "Full Gaussian likelihood"),
+    ):
+        axis.axhline(1.0, color=TEXT, linestyle=":", linewidth=1.0)
+        axis.set_xscale("log")
+        axis.set_xlabel(r"Bandwidth $h$")
+        axis.set_ylabel("Exact / leading term")
+        axis.set_title(title)
+        axis.grid(True, which="both", color=GRID, linewidth=0.6, alpha=0.8)
+        axis.plot([], [], color=TEXT, marker="o", linewidth=1.4, label="Decay shift")
+        axis.plot(
+            [], [], color=TEXT, marker="s", linestyle="--", linewidth=1.1,
+            label="Minimum KL",
+        )
+        legend = axis.legend(
+            frameon=True,
+            facecolor=BACKGROUND,
+            edgecolor=GRID,
+            fontsize=7.5,
+        )
+        legend.get_frame().set_alpha(1.0)
+    figure.suptitle("Genuine likelihood misspecification has the predicted local geometry")
+    figure.subplots_adjust(bottom=0.18, top=0.82, wspace=0.36)
+    save_figure(figure, output / "likelihood_projection")
+
+
+def joint_smoothness_figure(summary: pd.DataFrame, output: Path) -> None:
+    """Plot population targets and Monte Carlo medians in the joint library."""
+    required = {
+        "bandwidth",
+        "smoothness_true",
+        "model",
+        "population_smoothness_target",
+        "population_decay_target",
+        "median_smoothness_estimate",
+        "median_decay_estimate",
+    }
+    if missing := required.difference(summary.columns):
+        raise ValueError(f"joint smoothness summary is missing columns: {sorted(missing)}")
+    bandwidths = sorted(summary["bandwidth"].unique())
+    if len(bandwidths) != 2:
+        raise ValueError("the joint-smoothness paper figure requires exactly two bandwidths")
+    styles = {
+        "support_aware": (CORRECTED, "Support-aware"),
+        "partial_support": (PARTIAL, "75% bandwidth"),
+        "point_support": (NAIVE, "Point-support"),
+    }
+    figure, axes = plt.subplots(1, 2, figsize=(7.7, 3.85), sharex=True, sharey=True)
+    for axis, bandwidth in zip(axes, bandwidths, strict=True):
+        panel = summary[np.isclose(summary["bandwidth"], bandwidth)]
+        for model, (color, _) in styles.items():
+            group = panel[panel["model"] == model].sort_values("smoothness_true")
+            for row in group.itertuples(index=False):
+                axis.plot(
+                    [row.smoothness_true, row.population_smoothness_target],
+                    [1.0, row.population_decay_target],
+                    color=color,
+                    linewidth=1.0,
+                    alpha=0.65,
+                )
+            axis.scatter(
+                group["population_smoothness_target"],
+                group["population_decay_target"],
+                color=color,
+                marker="o",
+                s=27,
+                zorder=3,
+            )
+            axis.scatter(
+                group["median_smoothness_estimate"],
+                group["median_decay_estimate"],
+                color=color,
+                marker="x",
+                s=29,
+                linewidths=1.2,
+                zorder=4,
+            )
+        truths = sorted(panel["smoothness_true"].unique())
+        axis.scatter(
+            truths,
+            np.ones(len(truths)),
+            color=TEXT,
+            marker="*",
+            s=42,
+            zorder=5,
+        )
+        axis.axhline(1.0, color=GRID, linestyle=":", linewidth=0.9)
+        axis.set_title(rf"True bandwidth $h={bandwidth:g}$")
+        axis.set_xlabel(r"Fitted smoothness $\nu$")
+        axis.grid(True, color=GRID, linewidth=0.6, alpha=0.65)
+    axes[0].set_ylabel(r"Fitted inverse range $\alpha$")
+    from matplotlib.lines import Line2D
+
+    handles = [
+        Line2D([0], [0], color=color, marker="o", linewidth=1.1, label=label)
+        for color, label in styles.values()
+    ]
+    handles.extend(
+        [
+            Line2D([0], [0], color=TEXT, marker="*", linestyle="none", label="Truth"),
+            Line2D([0], [0], color=TEXT, marker="x", linestyle="none", label="MC median"),
+        ]
+    )
+    legend = figure.legend(
+        handles=handles,
+        loc="outside lower center",
+        ncol=5,
+        frameon=True,
+        facecolor=BACKGROUND,
+        edgecolor=GRID,
+        fontsize=7.5,
+    )
+    legend.get_frame().set_alpha(1.0)
+    figure.suptitle("Ignored support moves both Matérn smoothness and range")
+    figure.subplots_adjust(bottom=0.22, top=0.82, wspace=0.12)
+    save_figure(figure, output / "joint_smoothness_targets")
+
+
 def raw_support_figure(data: pd.DataFrame, output: Path) -> None:
     required = {"field_stage", "replicate", "x", "y", "value", "bandwidth"}
     missing = required.difference(data.columns)
@@ -683,6 +904,44 @@ def dimension_kernel_table(data: pd.DataFrame, path: Path) -> None:
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
+def matched_boundary_table(data: pd.DataFrame, path: Path) -> None:
+    """Write the matched-size boundary and intermediate-method comparison."""
+    required = {
+        "region", "output_dimension", "bandwidth", "smoothness", "model",
+        "decay_target", "minimum_kl",
+    }
+    if missing := required.difference(data.columns):
+        raise ValueError(f"matched boundary data are missing columns: {sorted(missing)}")
+    selected = data[np.isclose(data["bandwidth"], data["bandwidth"].max())]
+    if selected["output_dimension"].nunique() != 1:
+        raise ValueError("matched boundary table requires a fixed output dimension")
+    lookup = {
+        (float(row.smoothness), str(row.region), str(row.model)): row
+        for row in selected.itertuples(index=False)
+    }
+    lines = [
+        r"\begin{tabular}{rrrrrr}",
+        r"\toprule",
+        r"$\nu$ & $\alpha^*_{\rm point,I}$ & $\alpha^*_{\rm point,B}$ & "
+        r"KL$_{.75h}$/KL$_{\rm point,I}$ & KL$_{.75h}$/KL$_{\rm point,B}$ & $p$\\",
+        r"\midrule",
+    ]
+    for smoothness in sorted(selected["smoothness"].unique()):
+        interior_point = lookup[(smoothness, "interior", "point_support")]
+        boundary_point = lookup[(smoothness, "boundary", "point_support")]
+        interior_partial = lookup[(smoothness, "interior", "partial_support")]
+        boundary_partial = lookup[(smoothness, "boundary", "partial_support")]
+        lines.append(
+            f"{smoothness:g} & {interior_point.decay_target:.3f} & "
+            f"{boundary_point.decay_target:.3f} & "
+            f"{interior_partial.minimum_kl / interior_point.minimum_kl:.3f} & "
+            f"{boundary_partial.minimum_kl / boundary_point.minimum_kl:.3f} & "
+            f"{int(interior_point.output_dimension)}\\\\"
+        )
+    lines.extend([r"\bottomrule", r"\end{tabular}"])
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
 def write_source_extract(
     source_path: Path,
     destination_path: Path,
@@ -710,6 +969,14 @@ def main() -> None:
     parser.add_argument("--raw-example", type=Path)
     parser.add_argument("--highdim", type=Path)
     parser.add_argument("--highdim-metadata", type=Path)
+    parser.add_argument("--multilag", type=Path)
+    parser.add_argument("--multilag-metadata", type=Path)
+    parser.add_argument("--full-likelihood", type=Path)
+    parser.add_argument("--full-likelihood-metadata", type=Path)
+    parser.add_argument("--joint-smoothness", type=Path)
+    parser.add_argument("--joint-smoothness-metadata", type=Path)
+    parser.add_argument("--matched-boundary", type=Path)
+    parser.add_argument("--matched-boundary-metadata", type=Path)
     parser.add_argument("--paper-directory", type=Path, required=True)
     args = parser.parse_args()
     input_paths = {
@@ -730,6 +997,14 @@ def main() -> None:
             "raw_example": args.raw_example,
             "highdim": args.highdim,
             "highdim_metadata": args.highdim_metadata,
+            "multilag": args.multilag,
+            "multilag_metadata": args.multilag_metadata,
+            "full_likelihood": args.full_likelihood,
+            "full_likelihood_metadata": args.full_likelihood_metadata,
+            "joint_smoothness": args.joint_smoothness,
+            "joint_smoothness_metadata": args.joint_smoothness_metadata,
+            "matched_boundary": args.matched_boundary,
+            "matched_boundary_metadata": args.matched_boundary_metadata,
         }.items()
         if path is not None
     }
@@ -738,6 +1013,10 @@ def main() -> None:
         ("dimension_kernel_robustness", "dimension_kernel_robustness_metadata"),
         ("anisotropy", "anisotropy_metadata"),
         ("highdim", "highdim_metadata"),
+        ("multilag", "multilag_metadata"),
+        ("full_likelihood", "full_likelihood_metadata"),
+        ("joint_smoothness", "joint_smoothness_metadata"),
+        ("matched_boundary", "matched_boundary_metadata"),
     )
     for data_name, metadata_name in paired_inputs:
         if (data_name in input_paths) != (metadata_name in input_paths):
@@ -799,6 +1078,39 @@ def main() -> None:
             data_directory / "supportshift_highdim_summary.csv",
             index=False,
         )
+    if args.multilag is not None and args.full_likelihood is not None:
+        likelihood_projection_figure(
+            pd.read_csv(args.multilag),
+            pd.read_csv(args.full_likelihood),
+            figures,
+        )
+        write_source_extract(
+            args.multilag, data_directory / "multilag_composite.csv"
+        )
+        write_source_extract(
+            args.full_likelihood, data_directory / "full_likelihood_phase.csv"
+        )
+    elif (args.multilag is None) != (args.full_likelihood is None):
+        raise ValueError("multi-lag and full-likelihood inputs must be supplied together")
+    if args.joint_smoothness is not None:
+        joint_summary_path = args.joint_smoothness.with_name(
+            f"{args.joint_smoothness.stem}.summary.csv"
+        )
+        joint_smoothness_figure(pd.read_csv(joint_summary_path), figures)
+        write_source_extract(
+            args.joint_smoothness, data_directory / "joint_smoothness.csv"
+        )
+        write_source_extract(
+            joint_summary_path, data_directory / "joint_smoothness_summary.csv"
+        )
+    if args.matched_boundary is not None:
+        matched_boundary = pd.read_csv(args.matched_boundary)
+        matched_boundary_table(
+            matched_boundary, tables / "matched_boundary.tex"
+        )
+        write_source_extract(
+            args.matched_boundary, data_directory / "matched_boundary.csv"
+        )
     write_source_extract(
         args.phase,
         data_directory / "phase_oracle_d2.csv",
@@ -857,6 +1169,31 @@ def main() -> None:
                 data_directory / "supportshift_highdim_summary.csv",
             ]
         )
+    if args.multilag is not None:
+        artifact_paths.extend(
+            [
+                figures / "likelihood_projection.pdf",
+                figures / "likelihood_projection.png",
+                data_directory / "multilag_composite.csv",
+                data_directory / "full_likelihood_phase.csv",
+            ]
+        )
+    if args.joint_smoothness is not None:
+        artifact_paths.extend(
+            [
+                figures / "joint_smoothness_targets.pdf",
+                figures / "joint_smoothness_targets.png",
+                data_directory / "joint_smoothness.csv",
+                data_directory / "joint_smoothness_summary.csv",
+            ]
+        )
+    if args.matched_boundary is not None:
+        artifact_paths.extend(
+            [
+                tables / "matched_boundary.tex",
+                data_directory / "matched_boundary.csv",
+            ]
+        )
     missing_artifacts = [str(path) for path in artifact_paths if not path.is_file()]
     if missing_artifacts:
         raise RuntimeError(f"artifact generation omitted expected files: {missing_artifacts}")
@@ -870,12 +1207,16 @@ def main() -> None:
             "finite_summary": data_directory / "finite_summary.csv",
             "anisotropy": data_directory / "anisotropic_phase.csv",
             "raw_example": data_directory / "supportshift_raw_example.csv",
+            "multilag": data_directory / "multilag_composite.csv",
+            "full_likelihood": data_directory / "full_likelihood_phase.csv",
+            "joint_smoothness": data_directory / "joint_smoothness.csv",
+            "matched_boundary": data_directory / "matched_boundary.csv",
         }.items()
         if name in input_paths
         and input_paths[name].resolve() == destination.resolve()
     }
     manifest = {
-        "schema_version": "1.3",
+        "schema_version": "1.4",
         "inputs": input_manifest,
         "input_output_aliases": output_aliases,
         "outputs": {

@@ -1,0 +1,150 @@
+{
+  "arguments": {
+    "allow_dirty": false,
+    "bandwidths": [
+      0.35,
+      0.5
+    ],
+    "boundary_trim": 0.5,
+    "input_side": 11,
+    "output": "/Users/cui/Documents/GitHub/HighDimSpatialStatistics/outputs/smoothing_bias/supportshift_joint_smoothness.csv",
+    "partial_bandwidth_fraction": 0.75,
+    "replicates": 100,
+    "sample_size": 16,
+    "seed": 20260809,
+    "spacing": 0.25,
+    "true_smoothness": [
+      0.5,
+      1.0,
+      1.5,
+      2.5
+    ]
+  },
+  "benchmark": "SupportShift joint smoothness--decay finite library",
+  "created_utc": "2026-08-09T04:42:21.717143+00:00",
+  "design": {
+    "candidate_count_per_model": 936,
+    "decay_grid": [
+      0.7,
+      0.719156407894156,
+      0.7388370557360368,
+      0.7590562900317465,
+      0.7798288498981364,
+      0.8011698778071068,
+      0.8230949306239412,
+      0.8456199909477188,
+      0.8687614787620717,
+      0.8925362634047809,
+      0.9169616758649349,
+      0.9420555214166172,
+      0.9678360925983294,
+      0.9943221825476148,
+      1.0,
+      1.0215330987006,
+      1.0494886768664426,
+      1.078209295686945,
+      1.1077158914918732,
+      1.138029973560812,
+      1.1691736398026784,
+      1.2011695928643287,
+      1.234041156679995,
+      1.2678122934736207,
+      1.3025076212264866,
+      1.3381524316228601,
+      1.374772708486752,
+      1.4123951467232176,
+      1.4510471717780122,
+      1.4907569596297852,
+      1.5315534573293854,
+      1.573466404101252,
+      1.6165263530222729,
+      1.6607646932939115,
+      1.7062136731238415,
+      1.7529064232337652,
+      1.800876981010554,
+      1.8501603153183177,
+      1.9007923519894863,
+      1.9528100000134903,
+      2.006251178442126,
+      2.0611548440312246,
+      2.1175610196387638,
+      2.175510823400143,
+      2.235046498701863,
+      2.296211444975489,
+      2.3590502493343175,
+      2.4236087190758298,
+      2.489933915073615,
+      2.558074186083105,
+      2.628079203986133,
+      2.7
+    ],
+    "latent_locations": 121,
+    "output_locations": 16,
+    "smoothness_grid": [
+      0.4,
+      0.5,
+      0.6,
+      0.75,
+      0.9,
+      1.0,
+      1.1,
+      1.25,
+      1.5,
+      1.75,
+      2.0,
+      2.25,
+      2.5,
+      2.75,
+      3.0,
+      3.25,
+      3.5,
+      4.0
+    ]
+  },
+  "provenance": {
+    "git_commit": "8505a378ec13cedbe24d75178be34bd495f154d8",
+    "git_dirty": false,
+    "numpy": "1.26.4",
+    "python": "3.11.8",
+    "scipy": "1.10.1"
+  },
+  "result_csv": {
+    "path": "/Users/cui/Documents/GitHub/HighDimSpatialStatistics/outputs/smoothing_bias/supportshift_joint_smoothness.csv",
+    "sha256": "1f8a35ea7380cb771f49a55e1716e4f8832563326039f16ab1e08f6e9a20905e"
+  },
+  "rows": 2400,
+  "schema_version": "1.0",
+  "summary_csv": {
+    "path": "/Users/cui/Documents/GitHub/HighDimSpatialStatistics/outputs/smoothing_bias/supportshift_joint_smoothness.summary.csv",
+    "sha256": "4bfbbdd9e3e50332b64440b90d503ed08cb31b6e9b58e3e6526b07cd7deb6dd1"
+  },
+  "summary_rows": 24,
+  "validation_gates": {
+    "all_passed": true,
+    "candidate_conditioning": {
+      "observed_maximum": 487389705.1175863,
+      "passed": true,
+      "predeclared_maximum": 10000000000.0
+    },
+    "complete_fit_grid": {
+      "observed": 2400,
+      "passed": true,
+      "required": 2400
+    },
+    "joint_fit_can_reverse_fixed_smoothness_decay_direction": {
+      "passed": true,
+      "reversed_cells": 8
+    },
+    "partial_support_improves_population_criterion": {
+      "passed": true
+    },
+    "point_support_changes_joint_smoothness_target": {
+      "changed_cells": 8,
+      "passed": true,
+      "required": 8
+    },
+    "support_aware_population_target_is_truth": {
+      "passed": true
+    }
+  }
+}

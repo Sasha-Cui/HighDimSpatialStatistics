@@ -1,0 +1,89 @@
+{
+  "arguments": {
+    "allow_dirty": false,
+    "bandwidths": [
+      0.005,
+      0.01,
+      0.02
+    ],
+    "coefficient_relative_tolerance": 0.12,
+    "decay": 1.0,
+    "dimension": 2,
+    "kernel_family": "epanechnikov",
+    "lags": [
+      0.5,
+      1.0,
+      1.5,
+      2.0
+    ],
+    "output": "/Users/cui/Documents/GitHub/HighDimSpatialStatistics/outputs/smoothing_bias/supportshift_multilag_composite.csv",
+    "quadrature_order": 96,
+    "smoothness": [
+      0.5,
+      1.0,
+      1.5,
+      2.5
+    ]
+  },
+  "benchmark": "SupportShift multi-lag Gaussian pair composite",
+  "created_utc": "2026-08-09T04:42:06.295541+00:00",
+  "expected_rows": 48,
+  "factor_grid": {
+    "bandwidths": [
+      0.005,
+      0.01,
+      0.02
+    ],
+    "lags": [
+      0.5,
+      1.0,
+      1.5,
+      2.0
+    ],
+    "smoothness": [
+      0.5,
+      1.0,
+      1.5,
+      2.5
+    ]
+  },
+  "provenance": {
+    "git_commit": "8505a378ec13cedbe24d75178be34bd495f154d8",
+    "git_dirty": false,
+    "numpy": "1.26.4",
+    "python": "3.11.8",
+    "scipy": "1.10.1"
+  },
+  "result_csv": {
+    "path": "/Users/cui/Documents/GitHub/HighDimSpatialStatistics/outputs/smoothing_bias/supportshift_multilag_composite.csv",
+    "sha256": "0c9d30ef16a02638eb8d6668d47dcf0012e4d2667ee21e9583536ffd6b4d86a6"
+  },
+  "rows": 48,
+  "schema_version": "1.0",
+  "validation_gates": {
+    "all_composite_shifts_positive": {
+      "observed_minimum": 4.203521182466474e-06,
+      "passed": true
+    },
+    "all_passed": true,
+    "complete_factor_grid": {
+      "observed": 48,
+      "passed": true,
+      "required": 48
+    },
+    "genuine_multilag_misspecification": {
+      "observed_minimum_kl": 7.624179065857106e-13,
+      "passed": true
+    },
+    "smallest_bandwidth_kl_coefficient_error": {
+      "observed_maximum": 0.09850913221262692,
+      "passed": true,
+      "predeclared_maximum": 0.12
+    },
+    "smallest_bandwidth_shift_coefficient_error": {
+      "observed_maximum": 0.014055271071365949,
+      "passed": true,
+      "predeclared_maximum": 0.12
+    }
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "arguments": {
+    "allow_dirty": false,
+    "bandwidths": [
+      0.005,
+      0.01,
+      0.02
+    ],
+    "coefficient_relative_tolerance": 0.16,
+    "decay": 1.0,
+    "grid_side": 3,
+    "output": "/Users/cui/Documents/GitHub/HighDimSpatialStatistics/outputs/smoothing_bias/supportshift_full_likelihood_phase.csv",
+    "quadrature_order": 96,
+    "smoothness": [
+      0.5,
+      1.0,
+      1.5,
+      2.5
+    ],
+    "spacing": 1.0,
+    "variance": 1.0
+  },
+  "benchmark": "SupportShift finite-design full-likelihood phase",
+  "created_utc": "2026-08-09T04:42:07.468093+00:00",
+  "expected_rows": 12,
+  "provenance": {
+    "git_commit": "8505a378ec13cedbe24d75178be34bd495f154d8",
+    "git_dirty": false,
+    "numpy": "1.26.4",
+    "python": "3.11.8",
+    "scipy": "1.10.1"
+  },
+  "result_csv": {
+    "path": "/Users/cui/Documents/GitHub/HighDimSpatialStatistics/outputs/smoothing_bias/supportshift_full_likelihood_phase.csv",
+    "sha256": "3385a2c6ba037300ea72f427c54f923c81fee5d99d7856a242a9f71ffbdceb76"
+  },
+  "rows": 12,
+  "schema_version": "1.0",
+  "validation_gates": {
+    "all_passed": true,
+    "complete_factor_grid": {
+      "observed": 12,
+      "passed": true,
+      "required": 12
+    },
+    "genuine_full_likelihood_misspecification": {
+      "observed_minimum_kl": 1.674624883207798e-10,
+      "passed": true
+    },
+    "selected_design_decay_inflation": {
+      "observed_minimum_shift": 9.131245913063246e-06,
+      "passed": true
+    },
+    "smallest_bandwidth_coefficient_error": {
+      "observed": {
+        "decay": 0.05413657529307159,
+        "minimum_kl": 0.017664972375698973,
+        "variance": 0.12674100577045255
+      },
+      "passed": true,
+      "predeclared_maximum": 0.16
+    }
+  }
+}

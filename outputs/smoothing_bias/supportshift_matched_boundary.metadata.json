@@ -1,0 +1,74 @@
+{
+  "arguments": {
+    "allow_dirty": false,
+    "bandwidths": [
+      0.5,
+      0.7
+    ],
+    "block_side": 4,
+    "block_spacing": 0.5,
+    "decay": 1.0,
+    "decay_bounds": [
+      0.08,
+      3.0
+    ],
+    "interior_origin": 1.5,
+    "latent_side": 19,
+    "output": "/Users/cui/Documents/GitHub/HighDimSpatialStatistics/outputs/smoothing_bias/supportshift_matched_boundary.csv",
+    "partial_bandwidth_fraction": 0.75,
+    "smoothness": [
+      0.5,
+      1.0,
+      1.5,
+      2.5
+    ],
+    "spacing": 0.25,
+    "variance": 1.0
+  },
+  "benchmark": "SupportShift matched-dimension boundary audit",
+  "created_utc": "2026-08-09T04:42:19.028269+00:00",
+  "provenance": {
+    "git_commit": "8505a378ec13cedbe24d75178be34bd495f154d8",
+    "git_dirty": false,
+    "numpy": "1.26.4",
+    "python": "3.11.8",
+    "scipy": "1.10.1"
+  },
+  "result_csv": {
+    "path": "/Users/cui/Documents/GitHub/HighDimSpatialStatistics/outputs/smoothing_bias/supportshift_matched_boundary.csv",
+    "sha256": "838c42e1a7968f83f79414f8acbc3c521e628cfae15227f808e15f9701445040"
+  },
+  "rows": 48,
+  "schema_version": "1.0",
+  "validation_gates": {
+    "all_passed": true,
+    "boundary_effect_at_matched_dimension": {
+      "maximum_target_difference": 0.061806563156344474,
+      "passed": true
+    },
+    "complete_matched_grid": {
+      "observed": 48,
+      "passed": true,
+      "required": 48
+    },
+    "identical_output_dimension": {
+      "dimensions": {
+        "boundary": 16,
+        "interior": 16
+      },
+      "passed": true
+    },
+    "optimizer_and_conditioning": {
+      "maximum_condition_number": 16967856.604818255,
+      "passed": true
+    },
+    "partial_support_beats_point_support": {
+      "passed": true
+    },
+    "support_aware_recovers_truth": {
+      "maximum_decay_error": 4.060103919734104e-07,
+      "maximum_kl": 7.241141020131181e-11,
+      "passed": true
+    }
+  }
+}

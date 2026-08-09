@@ -1,7 +1,6 @@
 {
   "input_output_aliases": {
-    "finite_summary": "data/finite_summary.csv",
-    "phase": "data/phase_oracle_d2.csv"
+    "finite_summary": "data/finite_summary.csv"
   },
   "inputs": {
     "anisotropy": {
@@ -36,6 +35,14 @@
       "path": "paper/data/finite_summary.csv",
       "sha256": "15f535aeb85c5fbb160430da761ef75b710e3b6a8894c7a261131d9d6ca38b53"
     },
+    "full_likelihood": {
+      "path": "outputs/smoothing_bias/supportshift_full_likelihood_phase.csv",
+      "sha256": "3385a2c6ba037300ea72f427c54f923c81fee5d99d7856a242a9f71ffbdceb76"
+    },
+    "full_likelihood_metadata": {
+      "path": "outputs/smoothing_bias/supportshift_full_likelihood_phase.metadata.json",
+      "sha256": "d664f498c523cbd3af0910cee0d265217af899cf30b3efeb4820a888d4a3ba2b"
+    },
     "highdim": {
       "path": "outputs/smoothing_bias/supportshift_highdim_final_v2_20260803.csv",
       "sha256": "247db5e6f09f95f303195d813dbdc60cbf164c1abc4e1da09634d5630e8a6856"
@@ -44,9 +51,33 @@
       "path": "outputs/smoothing_bias/supportshift_highdim_final_v2_20260803.metadata.json",
       "sha256": "e8b924ea036a0511e5b4a3daea22f39069ed7ed3db4aeb90cfb9a08f8a46f560"
     },
+    "joint_smoothness": {
+      "path": "outputs/smoothing_bias/supportshift_joint_smoothness.csv",
+      "sha256": "1f8a35ea7380cb771f49a55e1716e4f8832563326039f16ab1e08f6e9a20905e"
+    },
+    "joint_smoothness_metadata": {
+      "path": "outputs/smoothing_bias/supportshift_joint_smoothness.metadata.json",
+      "sha256": "66080a1150d73bcd1cb1199cb41b6d0b8cdc264901328a98b11c0c2a1c47970c"
+    },
+    "matched_boundary": {
+      "path": "outputs/smoothing_bias/supportshift_matched_boundary.csv",
+      "sha256": "838c42e1a7968f83f79414f8acbc3c521e628cfae15227f808e15f9701445040"
+    },
+    "matched_boundary_metadata": {
+      "path": "outputs/smoothing_bias/supportshift_matched_boundary.metadata.json",
+      "sha256": "9e3b3158bd80de7aa30bd442ac60cee137498ebf77981100ee40547169673915"
+    },
+    "multilag": {
+      "path": "outputs/smoothing_bias/supportshift_multilag_composite.csv",
+      "sha256": "0c9d30ef16a02638eb8d6668d47dcf0012e4d2667ee21e9583536ffd6b4d86a6"
+    },
+    "multilag_metadata": {
+      "path": "outputs/smoothing_bias/supportshift_multilag_composite.metadata.json",
+      "sha256": "0a02ff0e05f6b2e88beb61e7f629ce75705dd19518775e4faaca0faaa0c51a69"
+    },
     "phase": {
-      "path": "paper/data/phase_oracle_d2.csv",
-      "sha256": "900d028eadaf67d5d9daced382f2c3cd63d382724d88adae4594e8a9f1ba3329"
+      "path": "outputs/smoothing_bias/phase_oracle_d2_v2.csv",
+      "sha256": "3c1a772fcbaba476df96e9ffe5a0ecdb0ab48279efe6ada33c7a6b2457dae1f5"
     },
     "phase_metadata": {
       "path": "outputs/smoothing_bias/phase_oracle_d2_v2.metadata.json",
@@ -69,32 +100,42 @@
     "data/anisotropic_phase.csv": "cdd7b0fdb760c8e3178c4b573b6f6d776ce2a13569cb0249cab8d06cf4e9f1e9",
     "data/dimension_kernel_robustness.csv": "175ac2ca3417002f69dde1746165d4fd576ae80ae1e727f1da58913d89867516",
     "data/finite_summary.csv": "15f535aeb85c5fbb160430da761ef75b710e3b6a8894c7a261131d9d6ca38b53",
-    "data/phase_oracle_d2.csv": "900d028eadaf67d5d9daced382f2c3cd63d382724d88adae4594e8a9f1ba3329",
-    "data/supportshift_highdim_summary.csv": "6f8fa4eb22cf98a8fa750772f620a77000bd9eab73b134d8532dc35a23bed681",
+    "data/full_likelihood_phase.csv": "3385a2c6ba037300ea72f427c54f923c81fee5d99d7856a242a9f71ffbdceb76",
+    "data/joint_smoothness.csv": "1f8a35ea7380cb771f49a55e1716e4f8832563326039f16ab1e08f6e9a20905e",
+    "data/joint_smoothness_summary.csv": "4bfbbdd9e3e50332b64440b90d503ed08cb31b6e9b58e3e6526b07cd7deb6dd1",
+    "data/matched_boundary.csv": "838c42e1a7968f83f79414f8acbc3c521e628cfae15227f808e15f9701445040",
+    "data/multilag_composite.csv": "0c9d30ef16a02638eb8d6668d47dcf0012e4d2667ee21e9583536ffd6b4d86a6",
+    "data/phase_oracle_d2.csv": "3c1a772fcbaba476df96e9ffe5a0ecdb0ab48279efe6ada33c7a6b2457dae1f5",
+    "data/supportshift_highdim_summary.csv": "8e488e63d9bc068028723ae6f59a150f52e9b6a117a6d1579ed88175352c374f",
     "data/supportshift_raw_example.csv": "ac5cd1543a77766789b1f4768185aa63aae0d6ae5c61f81a0fa6363139965c18",
     "data/transition_stress.csv": "61537589aa30ee8a67f7970125a2aec2ddc23742661e0d75abebfba0a00873a9",
-    "figures/anisotropic_support.pdf": "13d26c45ff6f22ebe8d966287f739d447c86a396150767b70273bb2777521c2f",
-    "figures/anisotropic_support.png": "fe66b720e4c50aada6ebc23350170a042e7eecdc8d6dad1844386691f3a3a04e",
-    "figures/finite_convergence.pdf": "dc1595fc561cf1f9a3ce944233ccaaf1c694d7a5c9e02b5f8c44b3c88b0ff3a2",
-    "figures/finite_convergence.png": "d0aa66d6e0967f54a9c46b5995608082eef7df79866321346e8c4bc578a01ce6",
-    "figures/finite_targets.pdf": "1e2d69f5b9d20c644a043942ff82212be3fb007084cb93435235f5a343b6ccc5",
-    "figures/finite_targets.png": "e438e6de39f383df6c499d83673985cb8641633515ee67d9793734a0aa2775ae",
-    "figures/phase_law.pdf": "cccacd04a834da32af89546cd52d40c3b9f436476a2e46a694421e2b8821d014",
-    "figures/phase_law.png": "0f51fe3e5dd8ca27955fa1efc641d94ca784ab967c73b1a526f478a3486b7537",
-    "figures/supportshift_highdim.pdf": "b4b74e79bce8521eec279bd133986897c076f7431225b10e01388862db5db030",
-    "figures/supportshift_highdim.png": "e61226c7cb24aa65742362c71b482c3e58c7cc10f7c265a2e699c482b6e7e037",
-    "figures/supportshift_raw_example.pdf": "e9e712d617095b9f3a99b4837c3bac78701061a09dc329b71873307bbbd9cf57",
-    "figures/supportshift_raw_example.png": "3e048ac929bcc180c830cd82246af1a9cc3edbed77fe445410a9f4dcc5b85720",
-    "figures/transition_stress.pdf": "58f0659f25adf89949d87404fe18755c1637bb7d25306aef17b46a6144d7f1c2",
-    "figures/transition_stress.png": "bd6f4513e8edba98fd2977617975cae3c2a379aad43eaee0373236c32ac64b7e",
+    "figures/anisotropic_support.pdf": "b6bc86c647ab8f5dee1cae172b1d0806c8db04dbbf99971112993ec0b8f6e0fb",
+    "figures/anisotropic_support.png": "2b9ad5611d724272ac99ec391b0c779bdc8f2362fb2cab5619933fb2b5ff9808",
+    "figures/finite_convergence.pdf": "166612095a51eafd1d15a0015165399ace28541c6d7d75f95104922967fdb5c1",
+    "figures/finite_convergence.png": "9ed419da2b0c29a4c08c1d4aa685eb4c587b22652886ca3c58f15acae3c52aa7",
+    "figures/finite_targets.pdf": "1ee675492099793002d858b8ec554ace2fb63788da9ad2671f207175aa2bc31b",
+    "figures/finite_targets.png": "1f05158837bd81ac14eed9af7e553896cabaf7704de4b2ffcd92adf657ae001f",
+    "figures/joint_smoothness_targets.pdf": "9d2b98fe02f76454c3286ea20f95f1f561c2e0eeee749611ac5116e243ee84f5",
+    "figures/joint_smoothness_targets.png": "ecaee9e52946b71bc86f1ced2d05a583c5178c4064827303995516b4162c7867",
+    "figures/likelihood_projection.pdf": "1dbf5ebbb2ea8a560f5cf6434fd2157a9b23729fc6157a8eab38fcdfcbad3e4c",
+    "figures/likelihood_projection.png": "cec0ad75d7dc4c5611c03b8d9f0a85b0dd096f4e139f8fa130b31b1dba90adef",
+    "figures/phase_law.pdf": "b976478de147c5d4f183edbd636df601a79c326441d0025c3a0ca323ec7ce6af",
+    "figures/phase_law.png": "61b51c744337e7e6c4a33697eede77b5af6eb9ba14a3d1b545864a65e2646b1a",
+    "figures/supportshift_highdim.pdf": "4bbe8841e0fcdf2149cfbeed88d038efbc2e5b8b47f90853a9ebcd85a3775bd7",
+    "figures/supportshift_highdim.png": "4096d120881659ad1b5bb51ca3bce29923b4d3631b3988ae558fb1a229693e12",
+    "figures/supportshift_raw_example.pdf": "25bccc5c9cbacb283278c42dbbc02321ab022aa5ed6fd5cb707492cfa5c9021f",
+    "figures/supportshift_raw_example.png": "3fddf30efb23734d3fc2e0b4c2b074ada45c7a805747722ae0a80f4b3cbab24a",
+    "figures/transition_stress.pdf": "c656ba76d98cd5b9797b65447ece3c63c13c9337d7e43bb9453a1c105c12be5a",
+    "figures/transition_stress.png": "99fe8d20968310b22785c18f50eb2abea60bc4a100786c53e28799909536d3bd",
     "tables/dimension_kernel_robustness.tex": "90d1f021914d794a9d9c5858af0f5980e29acf1a3d00e8653ae346ead21c46d9",
-    "tables/finite_summary.tex": "8ec55b77cc723148af27cbe6b79e4fd91327f52745f758f049833dd0079bee45"
+    "tables/finite_summary.tex": "8ec55b77cc723148af27cbe6b79e4fd91327f52745f758f049833dd0079bee45",
+    "tables/matched_boundary.tex": "7e50cbddc4f9e4dcf858fd61c7cba395d32c433ca0367d4f892d41d024d75e42"
   },
   "runtime": {
-    "matplotlib": "3.10.9",
-    "numpy": "2.3.5",
+    "matplotlib": "3.9.2",
+    "numpy": "1.26.4",
     "pandas": "2.2.3",
-    "python": "3.12.8"
+    "python": "3.11.8"
   },
-  "schema_version": "1.3"
+  "schema_version": "1.4"
 }
