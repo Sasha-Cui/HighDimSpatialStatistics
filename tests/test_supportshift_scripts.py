@@ -378,6 +378,182 @@ def test_dimension_kernel_driver_records_gates_and_hash(tmp_path: Path) -> None:
     assert min(float(row["decay_shift"]) for row in rows) > 0.0
 
 
+def test_multilag_composite_driver_records_genuine_misspecification(
+    tmp_path: Path,
+) -> None:
+    result = tmp_path / "multilag.csv"
+    subprocess.run(
+        [
+            sys.executable,
+            "scripts/research/run_multilag_composite_audit.py",
+            "--lags",
+            "0.5",
+            "1.0",
+            "--smoothness",
+            "0.5",
+            "1.5",
+            "--bandwidths",
+            "0.005",
+            "0.01",
+            "--quadrature-order",
+            "48",
+            "--allow-dirty",
+            "--output",
+            str(result),
+        ],
+        cwd=REPO_ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    metadata = json.loads(
+        result.with_suffix(".metadata.json").read_text(encoding="utf-8")
+    )
+    with result.open(encoding="utf-8", newline="") as handle:
+        rows = list(csv.DictReader(handle))
+
+    assert metadata["schema_version"] == "1.0"
+    assert metadata["rows"] == metadata["expected_rows"] == len(rows) == 8
+    assert metadata["validation_gates"]["all_passed"]
+    assert metadata["validation_gates"]["genuine_multilag_misspecification"][
+        "passed"
+    ]
+    assert metadata["result_csv"]["sha256"] == _sha256(result)
+    assert min(float(row["minimum_composite_kl"]) for row in rows) > 0.0
+
+
+def test_full_likelihood_driver_records_genuine_misspecification(
+    tmp_path: Path,
+) -> None:
+    result = tmp_path / "full_likelihood.csv"
+    subprocess.run(
+        [
+            sys.executable,
+            "scripts/research/run_full_likelihood_phase_audit.py",
+            "--smoothness",
+            "0.5",
+            "1.5",
+            "--bandwidths",
+            "0.005",
+            "0.01",
+            "--quadrature-order",
+            "48",
+            "--allow-dirty",
+            "--output",
+            str(result),
+        ],
+        cwd=REPO_ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    metadata = json.loads(
+        result.with_suffix(".metadata.json").read_text(encoding="utf-8")
+    )
+    with result.open(encoding="utf-8", newline="") as handle:
+        rows = list(csv.DictReader(handle))
+
+    assert metadata["rows"] == metadata["expected_rows"] == len(rows) == 4
+    assert metadata["validation_gates"]["all_passed"]
+    assert metadata["validation_gates"]["genuine_full_likelihood_misspecification"][
+        "passed"
+    ]
+    assert metadata["result_csv"]["sha256"] == _sha256(result)
+
+
+def test_joint_smoothness_driver_includes_partial_support_model(
+    tmp_path: Path,
+) -> None:
+    result = tmp_path / "joint.csv"
+    subprocess.run(
+        [
+            sys.executable,
+            "scripts/research/run_joint_smoothness_audit.py",
+            "--input-side",
+            "7",
+            "--true-smoothness",
+            "0.5",
+            "--bandwidths",
+            "0.35",
+            "--sample-size",
+            "2",
+            "--replicates",
+            "3",
+            "--allow-dirty",
+            "--output",
+            str(result),
+        ],
+        cwd=REPO_ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    metadata = json.loads(
+        result.with_suffix(".metadata.json").read_text(encoding="utf-8")
+    )
+    summary = result.with_name(f"{result.stem}.summary.csv")
+    with result.open(encoding="utf-8", newline="") as handle:
+        rows = list(csv.DictReader(handle))
+
+    assert metadata["rows"] == len(rows) == 9
+    assert metadata["summary_rows"] == 3
+    assert metadata["validation_gates"]["all_passed"]
+    assert metadata["validation_gates"][
+        "partial_support_improves_population_criterion"
+    ]["passed"]
+    assert {row["model"] for row in rows} == {
+        "support_aware",
+        "partial_support",
+        "point_support",
+    }
+    assert metadata["result_csv"]["sha256"] == _sha256(result)
+    assert metadata["summary_csv"]["sha256"] == _sha256(summary)
+
+
+def test_matched_boundary_driver_holds_output_dimension_fixed(
+    tmp_path: Path,
+) -> None:
+    result = tmp_path / "matched_boundary.csv"
+    subprocess.run(
+        [
+            sys.executable,
+            "scripts/research/run_matched_boundary_audit.py",
+            "--latent-side",
+            "11",
+            "--block-side",
+            "3",
+            "--interior-origin",
+            "1.0",
+            "--smoothness",
+            "0.5",
+            "--bandwidths",
+            "0.5",
+            "--allow-dirty",
+            "--output",
+            str(result),
+        ],
+        cwd=REPO_ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    metadata = json.loads(
+        result.with_suffix(".metadata.json").read_text(encoding="utf-8")
+    )
+    with result.open(encoding="utf-8", newline="") as handle:
+        rows = list(csv.DictReader(handle))
+
+    assert metadata["rows"] == len(rows) == 6
+    assert metadata["validation_gates"]["all_passed"]
+    dimensions = {int(row["output_dimension"]) for row in rows}
+    assert dimensions == {9}
+    assert {row["region"] for row in rows} == {"boundary", "interior"}
+    assert metadata["validation_gates"]["boundary_effect_at_matched_dimension"][
+        "passed"
+    ]
+    assert metadata["result_csv"]["sha256"] == _sha256(result)
+
+
 def test_paper_claim_audit_matches_promoted_artifacts() -> None:
     result = subprocess.run(
         [
