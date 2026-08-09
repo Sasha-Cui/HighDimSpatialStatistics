@@ -1,5 +1,10 @@
 # HighDimSpatialStatistics
 
+> **SupportShift reviewers and users:** start with the isolated
+> [SupportShift entry point](supportshift/README.md). It lists only the paper,
+> generators, promoted artifacts, and verification commands in the evidence
+> contract; historical pipelines are out of scope.
+
 This repository now has two clearly separated layers: a preserved legacy
 high-dimensional spatial pipeline and the audited **SupportShift** research
 artifact. SupportShift is a theorem-linked synthetic benchmark for range
@@ -10,7 +15,7 @@ archived numerical claims are not paper evidence.
 ## SupportShift reviewer quick start
 
 The audited artifact is frozen at
-[`supportshift-geosim-v1.2.1`](https://github.com/Sasha-Cui/HighDimSpatialStatistics/tree/supportshift-geosim-v1.2.1).
+[`supportshift-geosim-v1.3.0`](https://github.com/Sasha-Cui/HighDimSpatialStatistics/tree/supportshift-geosim-v1.3.0).
 Start with:
 
 - the [GeoSim submission PDF](output/pdf/supportshift_geosim2026.pdf);
@@ -33,7 +38,7 @@ python scripts/research/verify_supportshift_release.py \
 ```
 
 A valid release reports 12,800 replicated-field fits, 8,400 finite-grid fits,
-64 coverage cells, 15 hashed source inputs, 23 hashed paper artifacts, and 113
+64 coverage cells, 23 hashed source inputs, 33 hashed paper artifacts, and 168
 passed paper claims. Verification reconstructs the finite-grid summary from its
 fit-level records; it does not require rerunning either Monte Carlo experiment.
 
@@ -161,10 +166,18 @@ python scripts/research/make_support_paper_artifacts.py \
   --highdim outputs/smoothing_bias/supportshift_highdim_final_v2_20260803.csv \
   --highdim-metadata outputs/smoothing_bias/supportshift_highdim_final_v2_20260803.metadata.json \
   --raw-example outputs/smoothing_bias/supportshift_raw_final_v2_20260803.csv \
+  --multilag outputs/smoothing_bias/supportshift_multilag_composite.csv \
+  --multilag-metadata outputs/smoothing_bias/supportshift_multilag_composite.metadata.json \
+  --full-likelihood outputs/smoothing_bias/supportshift_full_likelihood_phase.csv \
+  --full-likelihood-metadata outputs/smoothing_bias/supportshift_full_likelihood_phase.metadata.json \
+  --joint-smoothness outputs/smoothing_bias/supportshift_joint_smoothness.csv \
+  --joint-smoothness-metadata outputs/smoothing_bias/supportshift_joint_smoothness.metadata.json \
+  --matched-boundary outputs/smoothing_bias/supportshift_matched_boundary.csv \
+  --matched-boundary-metadata outputs/smoothing_bias/supportshift_matched_boundary.metadata.json \
   --paper-directory paper
 ```
 
-The promoted artifact-manifest schema is 1.3. Its replicated-field component remains
+The promoted artifact-manifest schema is 1.4. Its replicated-field component remains
 benchmark schema 1.1 with $p\in\{16,36,64,100\}$,
 $N\in\{1,4,16,64\}$, 200 trials per design, and a fixed
 $161\times101=16{,}261$-candidate variance--decay library. The clean final
@@ -173,9 +186,9 @@ gates passing. The threshold audit was generated from clean commit `34a2603`
 and passed all sign, approximation-error, and quadrature-refinement gates. The
 dimension--kernel audit was generated from clean commit `2fc7040` and passed its
 predeclared sign, coefficient, and quadrature gates. The audited paper package
-is frozen at tag `supportshift-geosim-v1.2.1`.
+is frozen at tag `supportshift-geosim-v1.3.0`.
 
-Verify the promoted run, every paper-artifact hash, and all 113 numerical claims
+Verify the promoted run, every paper-artifact hash, and all 168 numerical claims
 reported in the manuscripts in one command:
 
 ```bash

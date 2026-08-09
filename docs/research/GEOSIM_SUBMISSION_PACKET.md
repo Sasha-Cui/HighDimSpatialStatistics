@@ -1,9 +1,9 @@
 # GeoSim 2026 submission packet
 
-- **Prepared:** 2026-08-04
+- **Prepared:** 2026-08-04; referee-directed revision 2026-08-09
 - **Official call:** <https://geosim.org/2026/cfp/>
 - **Paper type:** Full paper
-- **Artifact candidate:** `supportshift-geosim-v1.2.1`
+- **Artifact candidate:** `supportshift-geosim-v1.3.0`
 
 This file stages copy-ready submission metadata and records the fields that
 still require the author or the live EasyChair portal. It is not evidence that
@@ -28,14 +28,19 @@ averaging kernel of bandwidth h. For a fixed nonzero-lag two-point likelihood
 with known smoothness nu, the naive inverse-range shift has order h^(2 nu) for
 0 < nu < 1, h^2 log(1/h) at nu = 1, and h^2 for nu > 1. Explicit coefficients
 prove range inflation for every fixed nu > 0 at sufficiently small support. A
-transition-aware two-term approximation resolves the slow finite-bandwidth
+weighted multi-lag composite retains an information-weighted shift and has a
+strictly positive first nonzero residual KL term whenever its lag coefficients
+differ. For an arbitrary fixed design, a second result gives the Fisher-metric
+projection of the support perturbation and its irreducible full-likelihood KL
+component. A transition-aware two-term approximation resolves the slow finite-bandwidth
 crossover at nu = 1, while a directional h^2 contrast handles elongated
 support. For N independent p-dimensional Gaussian fields and a deterministic
 finite covariance library, a simultaneous likelihood certificate scales as
 sqrt(log(M)/(N p)) + log(M)/(N p) under relative spectral control; spatial
-dependence within each field is unrestricted. Four reproducible tracks pair
+dependence within each field is unrestricted. Reproducible tracks pair
 these statements with deterministic quadrature, finite-grid likelihoods,
-directional support, and growing-p replicated fields. Released generators,
+directional support, joint smoothness--range fitting, partial-support and
+matched-boundary controls, and growing-p replicated fields. Released generators,
 source tables, seeds, metadata, and pass/fail gates make every reported number
 auditable. The benchmark exposes a sharp failure mode: likelihood noise can
 vanish while a point-support fit concentrates around the wrong range target.
@@ -78,12 +83,12 @@ If EasyChair offers an optional note to the program chairs, use:
 ## Artifact and PDF record
 
 - Repository: <https://github.com/Sasha-Cui/HighDimSpatialStatistics>
-- Candidate tag: `supportshift-geosim-v1.2.1`
+- Candidate tag: `supportshift-geosim-v1.3.0`
 - Submission PDF: `output/pdf/supportshift_geosim2026.pdf`
 - PDF structure: 10 main pages, one reference page, two appendix pages
 - Current PDF SHA-256:
-  `26cb4dcf80d981254ce646d7f0fc1ad09ea03935bb4de7c8bbc5da0d1a6ccf7c`
-- Current PDF size: 702,402 bytes
+  `e22ffbfb4a682b92932c8ca4acfd51097715453fec00f18f91371811f5558cc8`
+- Current PDF size: 694,863 bytes
 
 Recompute the hash from the exact uploaded file and replace these values if the
 portal copy differs from the tagged artifact.

@@ -1521,3 +1521,39 @@ toward a top-tier venue by adding breadth. Its strongest form is a focused
 Matérn pseudo-parameter theorem with a rigorous synthetic benchmark and a
 carefully delimited high-dimensional-probability section. On those terms, it is
 worth finishing now.
+
+## 15. Referee-directed strengthening (2026-08-09)
+
+The referee's central criticism was correct: an exactly fitted, variance-refitted
+two-point covariance is saturated and cannot by itself establish genuine
+likelihood misspecification. The revision now separates three levels:
+
+1. the sharp pairwise phase law, retained as the local analytic building block;
+2. a weighted multi-lag pair-composite theorem, whose pseudo-range shift is an
+   information-weighted average and whose minimum KL divergence has a strictly
+   positive first nonzero term when lag coefficients differ; and
+3. a finite-design full-Gaussian proposition, which projects the support
+   perturbation onto the variance--decay covariance tangent space and identifies
+   the irreducible residual KL component.
+
+The known-smoothness limitation is now tested rather than hidden. A 2,400-fit
+joint smoothness--decay experiment shows that ignored support moves the
+population smoothness target in all eight cells and can reverse the
+fixed-smoothness decay direction. A model using the correct support shape at
+75% of the true bandwidth improves population KL in all eight cells, supplying
+an intermediate comparison instead of only exact versus deliberately naive.
+
+The finite-design validation now includes matched (p=16) interior and
+boundary blocks, continuous-to-grid parameter distances, lag-sensitive
+multi-lag coefficients, and fixed-(N) dimension slopes. These audits resolve
+the referee's boundary/dimension confounding and objective-only grid-resolution
+concerns without making a universal boundary theorem or a universal (p^{-1/2})
+claim.
+
+The primary claim remains deliberately narrower than a top-tier asymptotic
+theory paper: the full-likelihood projection is local and design specific, and
+there is no continuous joint-nuisance theorem. The strongest defensible product
+is therefore a theory-plus-synthetic-benchmark paper. It is materially stronger
+than the reviewed version and suitable for a specialist workshop or modest
+methodological journal after independent proof review; it should not be sold as
+a general solution to change of support.

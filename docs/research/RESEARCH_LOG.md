@@ -517,6 +517,43 @@ component is complete; no new simulation is required for a current manuscript
 claim. Remaining gates are external proof/priority review, attendance,
 submission-portal validation, and archival DOI creation.
 
+## 2026-08-09 -- referee-directed likelihood and nuisance audit
+
+**Question.** Does SupportShift create genuine misspecification beyond the
+saturated two-point construction, and do the conclusions survive joint
+smoothness fitting, an intermediate support model, and a dimension-matched
+boundary comparison?
+
+**Theory repair.** Commit `dbd1013` added an information-weighted multi-lag
+pair-composite projection with a nonzero residual-KL coefficient and a general
+finite-design Fisher-tangent projection for full Gaussian likelihood. The
+pairwise phase law is now explicitly a building block, not the full
+misspecification claim.
+
+**Predeclared synthetic audits.** Commits `4f05f14` and `8505a37` added four
+clean-run drivers. The promoted outputs contain 48 multi-lag cells, 12
+full-likelihood projection cells, 2,400 joint smoothness--decay fits, and 48
+matched-boundary cells. At the smallest bandwidth, the maximum multi-lag shift
+relative error is 0.0141 and the maximum residual-KL relative error is 0.0985.
+All 12 evaluated full-likelihood designs have positive residual KL; the maximum
+smallest-bandwidth errors are 0.0542 for decay shift, 0.1268 for variance shift,
+and 0.0177 for residual KL.
+
+**Nuisance and intermediate-model result.** Exact support selects the physical
+joint target in all eight design cells. Point support increases the smoothness
+target in all eight and selects inverse range above one in all eight, reversing
+the fixed-smoothness decay direction. The 75%-bandwidth support model has no
+larger population KL than point support in all eight cells. For matched
+interior/boundary blocks with (p=16), point-target differences are
+0.030--0.062 and the partial-to-point KL ratio is 0.167--0.323.
+
+**Decision.** Promote all four audits into artifact-manifest schema 1.4. The
+manifest now binds 23 source inputs and 33 generated outputs; the claim ledger
+contains 168 passing checks. Retain the universal sign only for fixed
+smoothness and translation-invariant interior pair targets. Treat joint
+smoothness and boundary behavior as finite-design evidence, and treat the
+full-likelihood result as a local projection with a design-specific sign.
+
 ## Entry template
 
 ```text

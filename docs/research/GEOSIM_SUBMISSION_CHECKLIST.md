@@ -6,7 +6,7 @@
 **Notification:** 2026-09-15<br>
 **Official call:** <https://geosim.org/2026/cfp/><br>
 **Submission site:** <https://easychair.org/conferences/?conf=geosim2026><br>
-**Artifact candidate:** `supportshift-geosim-v1.2.1`
+**Artifact candidate:** `supportshift-geosim-v1.3.0`
 
 The official call lists parameterizable and scalable spatial-simulation data
 sets made available to the community as an in-scope topic. Full papers may use
@@ -17,6 +17,12 @@ references. Review is single-blind and uses the ACM `sigconf` format.
 
 - [x] Formal model and estimand are explicit.
 - [x] Pairwise theorem is separated from numerical full-grid claims.
+- [x] A genuine multi-lag composite theorem gives both the pseudo-range shift
+  and the first nonzero residual KL term.
+- [x] A finite-design full-Gaussian proposition gives the Fisher-tangent
+  projection and irreducible KL component.
+- [x] Joint smoothness--decay and partial-support experiments test the two main
+  known-smoothness and exact-versus-naive limitations.
 - [x] Fixed-domain and increasing-domain statements are not conflated.
 - [x] Within-field spatial dependence is retained in the probability result.
 - [x] Concentration machinery is described as standard supporting machinery.
@@ -40,8 +46,8 @@ references. Review is single-blind and uses the ACM `sigconf` format.
 - [x] Seeds, factors, environment, generation commit, and validation gates are
   recorded in machine-readable metadata.
 - [x] One command verifies 12,800 replicated fits, 8,400 finite-grid fits, 64
-  coverage cells, 15 source-input hashes, and 23 generated-artifact hashes.
-- [x] The same command recomputes all 113 reported numerical claims from the
+  coverage cells, 23 source-input hashes, and 33 generated-artifact hashes.
+- [x] The same command recomputes all 168 reported numerical claims from the
   promoted tables and fails on any mismatch.
 - [x] Clean-clone reproduction has passed.
 - [x] Local and Bouchet checks have passed.
