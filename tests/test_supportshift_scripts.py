@@ -56,6 +56,52 @@ def test_release_identity_requires_one_public_tag(tmp_path: Path) -> None:
     assert "release tag mismatch" in failures[0]
 
 
+def test_finite_grid_fit_records_reconstruct_paper_summary(tmp_path: Path) -> None:
+    scripts_directory = REPO_ROOT / "scripts/research"
+    sys.path.insert(0, str(scripts_directory))
+    try:
+        verifier = runpy.run_path(str(scripts_directory / "verify_supportshift_release.py"))
+    finally:
+        sys.path.remove(str(scripts_directory))
+    verify_finite_grid_artifact = verifier["verify_finite_grid_artifact"]
+
+    manifest = json.loads(
+        (REPO_ROOT / "paper/data/supportshift_artifact_manifest.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    metrics, failures = verify_finite_grid_artifact(
+        manifest,
+        REPO_ROOT / "paper",
+        REPO_ROOT,
+    )
+    assert failures == []
+    assert metrics["fit_rows"] == 8_400
+    assert metrics["configurations"] == 21
+    assert metrics["cells"] == 42
+
+    corrupt_results = tmp_path / "results.csv"
+    lines = (
+        REPO_ROOT
+        / "outputs/smoothing_bias/support_only_final_20260802_v2/results.csv"
+    ).read_text(encoding="utf-8").splitlines()
+    header = lines[0].split(",")
+    first = lines[1].split(",")
+    estimate_index = header.index("decay_estimate")
+    first[estimate_index] = str(float(first[estimate_index]) + 0.25)
+    lines[1] = ",".join(first)
+    corrupt_results.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    corrupt_manifest = json.loads(json.dumps(manifest))
+    corrupt_manifest["inputs"]["finite_results"]["path"] = str(corrupt_results)
+    _, failures = verify_finite_grid_artifact(
+        corrupt_manifest,
+        REPO_ROOT / "paper",
+        REPO_ROOT,
+    )
+    assert any("signed-error identity" in failure for failure in failures)
+    assert any("finite summary mismatch" in failure for failure in failures)
+
+
 def test_highdimensional_driver_shakedown_is_self_auditing(tmp_path: Path) -> None:
     result = tmp_path / "supportshift_shakedown.csv"
     subprocess.run(
@@ -119,7 +165,17 @@ def test_paper_artifact_builder_records_input_and_output_hashes(tmp_path: Path) 
     data_directory = paper_directory / "data"
     data_directory.mkdir(parents=True)
     phase = data_directory / "phase_oracle_d2.csv"
+    phase_metadata = REPO_ROOT / "outputs/smoothing_bias/phase_oracle_d2_v2.metadata.json"
     finite_summary = data_directory / "finite_summary.csv"
+    finite_results = (
+        REPO_ROOT
+        / "outputs/smoothing_bias/support_only_final_20260802_v2/results.csv"
+    )
+    finite_audit = (
+        REPO_ROOT
+        / "outputs/smoothing_bias/support_only_final_20260802_v2/audit.json"
+    )
+    finite_manifest = REPO_ROOT / "configs/smoothing_bias/support_only_20260802.json"
     transition = data_directory / "transition_stress.csv"
     dimension_kernel = (
         REPO_ROOT
@@ -152,14 +208,28 @@ def test_paper_artifact_builder_records_input_and_output_hashes(tmp_path: Path) 
             "scripts/research/make_support_paper_artifacts.py",
             "--phase",
             str(phase),
+            "--phase-metadata",
+            str(phase_metadata),
             "--finite-summary",
             str(finite_summary),
+            "--finite-results",
+            str(finite_results),
+            "--finite-audit",
+            str(finite_audit),
+            "--finite-manifest",
+            str(finite_manifest),
             "--transition-stress",
             str(transition),
+            "--transition-stress-metadata",
+            str(transition.with_suffix(".metadata.json")),
             "--dimension-kernel-robustness",
             str(dimension_kernel),
+            "--dimension-kernel-robustness-metadata",
+            str(dimension_kernel.with_suffix(".metadata.json")),
             "--highdim",
             str(result),
+            "--highdim-metadata",
+            str(result.with_suffix(".metadata.json")),
             "--paper-directory",
             str(paper_directory),
         ],
@@ -171,11 +241,17 @@ def test_paper_artifact_builder_records_input_and_output_hashes(tmp_path: Path) 
 
     manifest_path = paper_directory / "data" / "supportshift_artifact_manifest.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    assert manifest["schema_version"] == "1.2"
+    assert manifest["schema_version"] == "1.3"
     assert manifest["inputs"]["highdim"]["sha256"] == _sha256(result)
+    assert manifest["inputs"]["highdim_metadata"]["sha256"] == _sha256(
+        result.with_suffix(".metadata.json")
+    )
     assert manifest["inputs"]["dimension_kernel_robustness"]["sha256"] == _sha256(
         dimension_kernel
     )
+    assert manifest["inputs"]["finite_results"]["sha256"] == _sha256(finite_results)
+    assert manifest["inputs"]["finite_audit"]["sha256"] == _sha256(finite_audit)
+    assert manifest["inputs"]["finite_manifest"]["sha256"] == _sha256(finite_manifest)
     assert manifest["input_output_aliases"] == {
         "finite_summary": "data/finite_summary.csv",
         "phase": "data/phase_oracle_d2.csv",

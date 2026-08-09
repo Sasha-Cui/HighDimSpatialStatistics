@@ -696,27 +696,54 @@ def write_source_extract(
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--phase", type=Path, required=True)
+    parser.add_argument("--phase-metadata", type=Path, required=True)
     parser.add_argument("--transition-stress", type=Path)
+    parser.add_argument("--transition-stress-metadata", type=Path)
     parser.add_argument("--dimension-kernel-robustness", type=Path)
+    parser.add_argument("--dimension-kernel-robustness-metadata", type=Path)
     parser.add_argument("--finite-summary", type=Path, required=True)
+    parser.add_argument("--finite-results", type=Path, required=True)
+    parser.add_argument("--finite-audit", type=Path, required=True)
+    parser.add_argument("--finite-manifest", type=Path, required=True)
     parser.add_argument("--anisotropy", type=Path)
+    parser.add_argument("--anisotropy-metadata", type=Path)
     parser.add_argument("--raw-example", type=Path)
     parser.add_argument("--highdim", type=Path)
+    parser.add_argument("--highdim-metadata", type=Path)
     parser.add_argument("--paper-directory", type=Path, required=True)
     args = parser.parse_args()
     input_paths = {
         name: path
         for name, path in {
             "phase": args.phase,
+            "phase_metadata": args.phase_metadata,
             "transition_stress": args.transition_stress,
+            "transition_stress_metadata": args.transition_stress_metadata,
             "dimension_kernel_robustness": args.dimension_kernel_robustness,
+            "dimension_kernel_robustness_metadata": args.dimension_kernel_robustness_metadata,
             "finite_summary": args.finite_summary,
+            "finite_results": args.finite_results,
+            "finite_audit": args.finite_audit,
+            "finite_manifest": args.finite_manifest,
             "anisotropy": args.anisotropy,
+            "anisotropy_metadata": args.anisotropy_metadata,
             "raw_example": args.raw_example,
             "highdim": args.highdim,
+            "highdim_metadata": args.highdim_metadata,
         }.items()
         if path is not None
     }
+    paired_inputs = (
+        ("transition_stress", "transition_stress_metadata"),
+        ("dimension_kernel_robustness", "dimension_kernel_robustness_metadata"),
+        ("anisotropy", "anisotropy_metadata"),
+        ("highdim", "highdim_metadata"),
+    )
+    for data_name, metadata_name in paired_inputs:
+        if (data_name in input_paths) != (metadata_name in input_paths):
+            raise ValueError(
+                f"{data_name} and {metadata_name} must be supplied together"
+            )
     input_manifest = {
         name: {"path": str(path), "sha256": sha256_file(path)}
         for name, path in input_paths.items()
@@ -848,7 +875,7 @@ def main() -> None:
         and input_paths[name].resolve() == destination.resolve()
     }
     manifest = {
-        "schema_version": "1.2",
+        "schema_version": "1.3",
         "inputs": input_manifest,
         "input_output_aliases": output_aliases,
         "outputs": {

@@ -37,8 +37,18 @@ fi
 
 "$HDS_PYTHON" scripts/research/make_support_paper_artifacts.py \
   --phase paper/data/phase_oracle_d2.csv \
+  --phase-metadata outputs/smoothing_bias/phase_oracle_d2_v2.metadata.json \
+  --transition-stress outputs/smoothing_bias/supportshift_transition_stress_20260804.csv \
+  --transition-stress-metadata outputs/smoothing_bias/supportshift_transition_stress_20260804.metadata.json \
+  --dimension-kernel-robustness outputs/smoothing_bias/supportshift_dimension_kernel_robustness_20260804.csv \
+  --dimension-kernel-robustness-metadata outputs/smoothing_bias/supportshift_dimension_kernel_robustness_20260804.metadata.json \
   --finite-summary paper/data/finite_summary.csv \
+  --finite-results outputs/smoothing_bias/support_only_final_20260802_v2/results.csv \
+  --finite-audit outputs/smoothing_bias/support_only_final_20260802_v2/audit.json \
+  --finite-manifest configs/smoothing_bias/support_only_20260802.json \
   --anisotropy outputs/smoothing_bias/supportshift_anisotropic_final_20260803.csv \
+  --anisotropy-metadata outputs/smoothing_bias/supportshift_anisotropic_final_20260803.metadata.json \
   --highdim outputs/smoothing_bias/supportshift_highdim_final_v2_20260803.csv \
+  --highdim-metadata outputs/smoothing_bias/supportshift_highdim_final_v2_20260803.metadata.json \
   --raw-example outputs/smoothing_bias/supportshift_raw_final_v2_20260803.csv \
   --paper-directory paper

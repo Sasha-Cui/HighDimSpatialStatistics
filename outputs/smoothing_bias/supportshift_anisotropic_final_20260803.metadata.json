@@ -23,7 +23,7 @@
       2.5
     ]
   },
-  "created_utc": "2026-08-03T01:45:12.731178+00:00",
+  "created_utc": "2026-08-09T00:38:23.365340+00:00",
   "directional_contrast_checks": [
     {
       "aspect_ratio": 1.0,
@@ -74,15 +74,15 @@
       "smoothness": 2.5
     }
   ],
-  "git_commit": "d5207fb43cf63f5dfd68a443853a209e303f9aa2",
+  "git_commit": "b6c8ee294db9319746eb3a3869f4b1315f694ef9",
   "git_dirty": false,
   "numpy": "2.3.5",
   "python": "3.12.8",
   "quadrature_refinement": {
     "128": {
-      "max_abs_pseudo_decay_difference": 1.0747691625567768e-10,
-      "max_relative_decay_shift_difference": 3.3029590596809e-09,
-      "max_relative_directional_contrast_difference": 4.1941931674929326e-10
+      "max_abs_pseudo_decay_difference": 1.0747647216646783e-10,
+      "max_relative_decay_shift_difference": 2.5805066848593944e-09,
+      "max_relative_directional_contrast_difference": 4.893225839922067e-10
     },
     "64": {
       "max_abs_pseudo_decay_difference": 1.3203654836146939e-09,

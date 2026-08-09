@@ -8,9 +8,29 @@
       "path": "outputs/smoothing_bias/supportshift_anisotropic_final_20260803.csv",
       "sha256": "cdd7b0fdb760c8e3178c4b573b6f6d776ce2a13569cb0249cab8d06cf4e9f1e9"
     },
+    "anisotropy_metadata": {
+      "path": "outputs/smoothing_bias/supportshift_anisotropic_final_20260803.metadata.json",
+      "sha256": "0641835672d983241138cc302932ffdeb1cab367161306acfd23f55f31a45ae2"
+    },
     "dimension_kernel_robustness": {
       "path": "outputs/smoothing_bias/supportshift_dimension_kernel_robustness_20260804.csv",
       "sha256": "175ac2ca3417002f69dde1746165d4fd576ae80ae1e727f1da58913d89867516"
+    },
+    "dimension_kernel_robustness_metadata": {
+      "path": "outputs/smoothing_bias/supportshift_dimension_kernel_robustness_20260804.metadata.json",
+      "sha256": "3fecf27877ffeefc12947f6fbc0269b20a7b9cd1c6b656c65da7696b9caea87a"
+    },
+    "finite_audit": {
+      "path": "outputs/smoothing_bias/support_only_final_20260802_v2/audit.json",
+      "sha256": "7b488e3c5d54a54e7fbbbab1b6abb86529686dfadaf8e0aed43419f4f11afdce"
+    },
+    "finite_manifest": {
+      "path": "configs/smoothing_bias/support_only_20260802.json",
+      "sha256": "995b53156fcc7060c665829dcbfc87f0cbe74181b81df86a14c43b44137eb4e6"
+    },
+    "finite_results": {
+      "path": "outputs/smoothing_bias/support_only_final_20260802_v2/results.csv",
+      "sha256": "ef9e97fdaddae7a44f98c9eca78317dd2d3aff02b1bd58ecb88f7389cb800bcb"
     },
     "finite_summary": {
       "path": "paper/data/finite_summary.csv",
@@ -20,9 +40,17 @@
       "path": "outputs/smoothing_bias/supportshift_highdim_final_v2_20260803.csv",
       "sha256": "247db5e6f09f95f303195d813dbdc60cbf164c1abc4e1da09634d5630e8a6856"
     },
+    "highdim_metadata": {
+      "path": "outputs/smoothing_bias/supportshift_highdim_final_v2_20260803.metadata.json",
+      "sha256": "e8b924ea036a0511e5b4a3daea22f39069ed7ed3db4aeb90cfb9a08f8a46f560"
+    },
     "phase": {
       "path": "paper/data/phase_oracle_d2.csv",
       "sha256": "900d028eadaf67d5d9daced382f2c3cd63d382724d88adae4594e8a9f1ba3329"
+    },
+    "phase_metadata": {
+      "path": "outputs/smoothing_bias/phase_oracle_d2_v2.metadata.json",
+      "sha256": "9beef8435ef087d2b5659fb720ed8d842696839f3db08db188f81f4e871aeb5a"
     },
     "raw_example": {
       "path": "outputs/smoothing_bias/supportshift_raw_final_v2_20260803.csv",
@@ -31,6 +59,10 @@
     "transition_stress": {
       "path": "outputs/smoothing_bias/supportshift_transition_stress_20260804.csv",
       "sha256": "61537589aa30ee8a67f7970125a2aec2ddc23742661e0d75abebfba0a00873a9"
+    },
+    "transition_stress_metadata": {
+      "path": "outputs/smoothing_bias/supportshift_transition_stress_20260804.metadata.json",
+      "sha256": "2917709d59b2acbdd4b0ccb7bd9e182bf676bf72bc3e2f0e970ff527a07dad1a"
     }
   },
   "outputs": {
@@ -64,5 +96,5 @@
     "pandas": "2.2.3",
     "python": "3.12.8"
   },
-  "schema_version": "1.2"
+  "schema_version": "1.3"
 }
