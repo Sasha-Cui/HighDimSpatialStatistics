@@ -321,6 +321,238 @@ def audit_claims(repository_root: Path, paper_directory: Path) -> dict[str, Any]
         _sha256(promoted_dimension_kernel_path),
     )
 
+    multilag = pd.read_csv(data_directory / "multilag_composite.csv")
+    promoted_multilag_path = output_directory / "supportshift_multilag_composite.csv"
+    promoted_multilag = pd.read_csv(promoted_multilag_path)
+    multilag_metadata = _load_json(
+        output_directory / "supportshift_multilag_composite.metadata.json"
+    )
+    audit.truth(
+        "paper multi-lag table matches promoted source",
+        _tables_match(multilag, promoted_multilag),
+        "schemas and values match promoted source",
+    )
+    audit.exact("multi-lag rows", len(multilag), 48)
+    audit.exact(
+        "multi-lag factor cells",
+        len(multilag.drop_duplicates(["smoothness", "bandwidth"])),
+        12,
+    )
+    audit.truth(
+        "all multi-lag shifts positive",
+        bool((multilag["composite_decay_shift"] > 0.0).all()),
+        "all positive",
+    )
+    audit.truth(
+        "all multi-lag minimum KL values positive",
+        bool((multilag["minimum_composite_kl"] > 0.0).all()),
+        "all positive",
+    )
+    smallest = multilag[np.isclose(multilag["bandwidth"], multilag["bandwidth"].min())]
+    smallest_cells = smallest.drop_duplicates(["smoothness", "bandwidth"])
+    audit.upper(
+        "multi-lag smallest-bandwidth shift error",
+        np.abs(smallest_cells["composite_shift_ratio"] - 1.0).max(),
+        0.0141,
+    )
+    audit.upper(
+        "multi-lag smallest-bandwidth KL error",
+        np.abs(smallest_cells["minimum_kl_ratio"] - 1.0).max(),
+        0.09851,
+    )
+    audit.close(
+        "rough pair coefficient at lag 0.5",
+        _selected_row(multilag, smoothness=0.5, bandwidth=0.005, lag=0.5)[
+            "pair_shift_coefficient"
+        ],
+        1.61,
+        2,
+    )
+    audit.close(
+        "rough pair coefficient at lag 2",
+        _selected_row(multilag, smoothness=0.5, bandwidth=0.005, lag=2.0)[
+            "pair_shift_coefficient"
+        ],
+        0.40,
+        2,
+    )
+    audit.exact(
+        "multi-lag gates pass",
+        multilag_metadata["validation_gates"]["all_passed"],
+        True,
+    )
+    audit.exact(
+        "multi-lag provenance is clean",
+        multilag_metadata["provenance"]["git_dirty"],
+        False,
+    )
+    audit.exact(
+        "multi-lag promoted hash",
+        multilag_metadata["result_csv"]["sha256"],
+        _sha256(promoted_multilag_path),
+    )
+
+    full_likelihood = pd.read_csv(data_directory / "full_likelihood_phase.csv")
+    promoted_full_path = output_directory / "supportshift_full_likelihood_phase.csv"
+    promoted_full = pd.read_csv(promoted_full_path)
+    full_metadata = _load_json(
+        output_directory / "supportshift_full_likelihood_phase.metadata.json"
+    )
+    audit.truth(
+        "paper full-likelihood table matches promoted source",
+        _tables_match(full_likelihood, promoted_full),
+        "schemas and values match promoted source",
+    )
+    audit.exact("full-likelihood phase rows", len(full_likelihood), 12)
+    audit.truth(
+        "all full-likelihood minimum KL values positive",
+        bool((full_likelihood["minimum_kl"] > 0.0).all()),
+        "all positive",
+    )
+    audit.truth(
+        "selected full-likelihood design inflates range",
+        bool((full_likelihood["decay_shift"] > 0.0).all()),
+        "all positive",
+    )
+    full_smallest = full_likelihood[
+        np.isclose(full_likelihood["bandwidth"], full_likelihood["bandwidth"].min())
+    ]
+    audit.upper(
+        "full-likelihood smallest-bandwidth decay error",
+        np.abs(full_smallest["decay_shift_ratio"] - 1.0).max(),
+        0.0542,
+    )
+    audit.upper(
+        "full-likelihood smallest-bandwidth variance error",
+        np.abs(full_smallest["log_variance_shift_ratio"] - 1.0).max(),
+        0.1268,
+    )
+    audit.upper(
+        "full-likelihood smallest-bandwidth KL error",
+        np.abs(full_smallest["minimum_kl_ratio"] - 1.0).max(),
+        0.0177,
+    )
+    audit.exact("full-likelihood gates pass", full_metadata["validation_gates"]["all_passed"], True)
+    audit.exact("full-likelihood provenance is clean", full_metadata["provenance"]["git_dirty"], False)
+    audit.exact(
+        "full-likelihood promoted hash",
+        full_metadata["result_csv"]["sha256"],
+        _sha256(promoted_full_path),
+    )
+
+    joint = pd.read_csv(data_directory / "joint_smoothness.csv")
+    joint_summary = pd.read_csv(data_directory / "joint_smoothness_summary.csv")
+    promoted_joint_path = output_directory / "supportshift_joint_smoothness.csv"
+    promoted_joint_summary_path = output_directory / "supportshift_joint_smoothness.summary.csv"
+    joint_metadata = _load_json(
+        output_directory / "supportshift_joint_smoothness.metadata.json"
+    )
+    audit.truth(
+        "paper joint fit table matches promoted source",
+        _tables_match(joint, pd.read_csv(promoted_joint_path)),
+        "schemas and values match promoted source",
+    )
+    audit.truth(
+        "paper joint summary matches promoted source",
+        _tables_match(joint_summary, pd.read_csv(promoted_joint_summary_path)),
+        "schemas and values match promoted source",
+    )
+    audit.exact("joint fit rows", len(joint), 2_400)
+    audit.exact("joint summary rows", len(joint_summary), 24)
+    point_joint = joint_summary[joint_summary["model"] == "point_support"]
+    corrected_joint = joint_summary[joint_summary["model"] == "support_aware"]
+    audit.exact(
+        "point support raises joint smoothness in every cell",
+        int((point_joint["population_smoothness_target"] > point_joint["smoothness_true"]).sum()),
+        8,
+    )
+    audit.exact(
+        "point support reverses fixed-smoothness decay direction in every cell",
+        int((point_joint["population_decay_target"] > 1.0).sum()),
+        8,
+    )
+    audit.truth(
+        "support-aware joint population target is truth",
+        bool(
+            np.allclose(corrected_joint["population_smoothness_target"], corrected_joint["smoothness_true"])
+            and np.allclose(corrected_joint["population_decay_target"], 1.0)
+        ),
+        "all target coordinates equal truth",
+    )
+    audit.close(
+        "joint rough h0.5 smoothness target",
+        _selected_row(point_joint, bandwidth=0.5, smoothness_true=0.5)["population_smoothness_target"],
+        2.0,
+        1,
+    )
+    audit.close(
+        "joint rough h0.5 decay target",
+        _selected_row(point_joint, bandwidth=0.5, smoothness_true=0.5)["population_decay_target"],
+        2.176,
+        3,
+    )
+    audit.close(
+        "joint smooth h0.5 smoothness target",
+        _selected_row(point_joint, bandwidth=0.5, smoothness_true=2.5)["population_smoothness_target"],
+        3.5,
+        1,
+    )
+    audit.close(
+        "joint smooth h0.5 decay target",
+        _selected_row(point_joint, bandwidth=0.5, smoothness_true=2.5)["population_decay_target"],
+        1.338,
+        3,
+    )
+    audit.exact("joint gates pass", joint_metadata["validation_gates"]["all_passed"], True)
+    audit.exact("joint provenance is clean", joint_metadata["provenance"]["git_dirty"], False)
+    audit.exact("joint promoted hash", joint_metadata["result_csv"]["sha256"], _sha256(promoted_joint_path))
+    audit.exact(
+        "joint summary promoted hash",
+        joint_metadata["summary_csv"]["sha256"],
+        _sha256(promoted_joint_summary_path),
+    )
+
+    matched = pd.read_csv(data_directory / "matched_boundary.csv")
+    promoted_matched_path = output_directory / "supportshift_matched_boundary.csv"
+    matched_metadata = _load_json(
+        output_directory / "supportshift_matched_boundary.metadata.json"
+    )
+    audit.truth(
+        "paper matched-boundary table matches promoted source",
+        _tables_match(matched, pd.read_csv(promoted_matched_path)),
+        "schemas and values match promoted source",
+    )
+    audit.exact("matched-boundary rows", len(matched), 48)
+    audit.exact("matched-boundary output dimensions", sorted(matched["output_dimension"].unique().tolist()), [16])
+    matched_selected = matched[np.isclose(matched["bandwidth"], 0.7)]
+    point_pivot = matched_selected[matched_selected["model"] == "point_support"].pivot(
+        index="smoothness", columns="region", values="decay_target"
+    )
+    boundary_differences = np.abs(point_pivot["boundary"] - point_pivot["interior"])
+    audit.close("minimum matched boundary target difference", boundary_differences.min(), 0.030, 3)
+    audit.close("maximum matched boundary target difference", boundary_differences.max(), 0.062, 3)
+    kl_ratios: list[float] = []
+    for region in ("interior", "boundary"):
+        region_rows = matched_selected[matched_selected["region"] == region]
+        point_kl = region_rows[region_rows["model"] == "point_support"].set_index("smoothness")["minimum_kl"]
+        partial_kl = region_rows[region_rows["model"] == "partial_support"].set_index("smoothness")["minimum_kl"]
+        kl_ratios.extend((partial_kl / point_kl).tolist())
+    audit.close("minimum partial-to-point KL ratio", min(kl_ratios), 0.167, 3)
+    audit.close("maximum partial-to-point KL ratio", max(kl_ratios), 0.323, 3)
+    corrected_matched = matched[matched["model"] == "support_aware"]
+    audit.upper(
+        "matched support-aware decay error",
+        np.abs(corrected_matched["decay_target"] - 1.0).max(),
+        4.1e-7,
+    )
+    audit.exact("matched-boundary gates pass", matched_metadata["validation_gates"]["all_passed"], True)
+    audit.exact("matched-boundary provenance is clean", matched_metadata["provenance"]["git_dirty"], False)
+    audit.exact(
+        "matched-boundary promoted hash",
+        matched_metadata["result_csv"]["sha256"],
+        _sha256(promoted_matched_path),
+    )
+
     anisotropy = pd.read_csv(data_directory / "anisotropic_phase.csv")
     anisotropy_metadata = _load_json(
         output_directory / "supportshift_anisotropic_final_20260803.metadata.json"
@@ -524,6 +756,27 @@ def audit_claims(repository_root: Path, paper_directory: Path) -> dict[str, Any]
         ],
         2.63e-5,
     )
+    for model, decay_bound, variance_bound in (
+        ("corrected", 1.68e-7, 4.06e-7),
+        ("naive", 0.00499, 0.0297),
+    ):
+        selected_model = highdim[highdim["model"] == model]
+        audit.upper(
+            f"{model} continuous-to-grid decay distance",
+            np.abs(
+                selected_model["population_grid_decay_target"]
+                - selected_model["population_continuous_decay_target"]
+            ).max(),
+            decay_bound,
+        )
+        audit.upper(
+            f"{model} continuous-to-grid variance distance",
+            np.abs(
+                selected_model["population_grid_variance_target"]
+                - selected_model["population_continuous_variance_target"]
+            ).max(),
+            variance_bound,
+        )
     audit.truth(
         "all candidatewise certificate events hold",
         bool(highdim["simultaneous_candidatewise_bound_holds"].all()),
@@ -559,6 +812,20 @@ def audit_claims(repository_root: Path, paper_directory: Path) -> dict[str, Any]
     audit.close("minimum criterion-noise slope", min(slopes), -0.528, 3)
     audit.close("maximum criterion-noise slope", max(slopes), -0.454, 3)
     audit.close("median criterion-noise slope", float(np.median(slopes)), -0.505, 3)
+    dimension_slopes: list[float] = []
+    for _, group in highdim_summary.groupby(["model", "sample_size", "smoothness"]):
+        dimension_slopes.append(
+            float(
+                np.polyfit(
+                    np.log(group["dimension_p"]),
+                    np.log(group["criterion_deviation_q95"]),
+                    1,
+                )[0]
+            )
+        )
+    audit.close("minimum fixed-N dimension slope", min(dimension_slopes), -0.509, 3)
+    audit.close("maximum fixed-N dimension slope", max(dimension_slopes), -0.297, 3)
+    audit.close("median fixed-N dimension slope", float(np.median(dimension_slopes)), -0.413, 3)
 
     selected = highdim[
         (highdim["dimension_p"] == 100)

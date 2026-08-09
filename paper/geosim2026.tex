@@ -3,6 +3,7 @@
 \usepackage{mathtools}
 \usepackage{booktabs}
 \usepackage{placeins}
+\setlength{\emergencystretch}{1em}
 
 \setcopyright{none}
 \settopmatter{printacmref=true}
@@ -46,19 +47,26 @@ replicate count, and covariance-library resolution.
 Its analytic anchor is a
 stationary Matérn Gaussian field in \(\R^d\) observed through a compact
 symmetric averaging kernel of bandwidth \(h\). For a fixed nonzero-lag
-two-point likelihood with known smoothness \(\nu\), the naive inverse-range
+correlation match with known smoothness \(\nu\), the naive inverse-range
 shift has order \(h^{2\nu}\) for \(0<\nu<1\),
 \(h^2\log(1/h)\) at \(\nu=1\), and \(h^2\) for \(\nu>1\). Explicit
 coefficients prove range inflation for every fixed \(\nu>0\) at sufficiently
-small support. A transition-aware two-term approximation resolves the slow
+small support. We then prove that a weighted multi-lag pair composite has the
+information-weighted average coefficient and a strictly positive
+order-\(s_\nu(h)^2\) minimum KL divergence whenever its lag coefficients differ.
+For an arbitrary fixed site design, a second result projects the support
+perturbation onto the variance--decay covariance tangent space and identifies
+the irreducible full-likelihood KL term. A transition-aware two-term
+approximation resolves the slow
 finite-bandwidth crossover at \(\nu=1\), while a directional \(h^2\) contrast
 handles elongated support.
 For \(N\) independent \(p\)-dimensional Gaussian fields and a deterministic
 finite covariance library, a simultaneous likelihood certificate scales as
 \(\sqrt{\log(M)/(Np)}+\log(M)/(Np)\) under relative spectral control; spatial
-dependence within each field is unrestricted. Four reproducible tracks pair
-these statements with deterministic quadrature, finite-grid likelihoods,
-directional support, and growing-\(p\) replicated fields. Released generators,
+dependence within each field is unrestricted. Reproducible tracks pair these
+statements with deterministic quadrature, genuine multi-lag and full-likelihood
+targets, joint smoothness--range fitting, matched-size boundary comparisons,
+and growing-\(p\) replicated fields. Released generators,
 source tables, seeds, metadata, and pass/fail gates make every reported number
 auditable. The benchmark exposes a sharp failure mode: likelihood noise can
 vanish while a point-support fit concentrates around the wrong range target.
@@ -136,6 +144,10 @@ theory supplies the KL framework \cite{bachoc2018misspecified}, while Gaussian
 quadratic-form concentration is standard
 \cite{laurent2000quadratic,hsu2012quadratic}. Table~\ref{tab:literature}
 separates these known ingredients from our claims.
+Pairwise and weighted composite likelihoods for Gaussian random fields are also
+established computational devices \cite{varin2011composite,bevilacqua2012weighted};
+our question is the local KL target created by an omitted observation operator,
+not composite-likelihood consistency or Godambe efficiency.
 
 We contribute a theorem-linked benchmark rather than a new generic
 change-of-support method:
@@ -143,21 +155,27 @@ change-of-support method:
 \begin{itemize}
   \item We derive an all-smoothness, \(d\)-dimensional fixed-lag phase law
   with explicit coefficients, a universal small-support range direction, and a
-  two-term approximation continuous through the smoothness-one threshold.
+  two-term approximation continuous through the smoothness-one threshold. We
+  extend it to a genuinely misspecified multi-lag composite, including the
+  first nonzero minimum-KL term, and to a finite-design full-Gaussian tangent
+  projection.
   \item We derive a directional \(h^2\) apparent-range contrast for elongated
   support. The qualitative link between convolution and anisotropy is known.
   \item We certify finite-library likelihood concentration and ERM excess risk
   for \(N\) independent \(p\)-dimensional Gaussian fields without assuming
   independent spatial coordinates.
-  \item SupportShift turns the theorem into four reusable synthetic tracks:
-  a continuous phase oracle, finite-grid likelihoods, directional support, and
-  growing-\(p\) replicated fields. Each exposes declared scale controls,
+  \item SupportShift turns the theory into reusable synthetic tracks spanning
+  continuous and finite-design likelihoods, directional and boundary support,
+  joint smoothness--range selection, and growing-\(p\) replicated fields. Each
+  exposes declared scale controls,
   deterministic seeds, source tables, numerical gates, and a machine-checkable
   claim audit.
 \end{itemize}
 
-The phase theorem is pairwise; full-grid targets are computed, not asserted to
-share its coefficient. The high-dimensional experiment grows domain at fixed
+The universal sign theorem is conditional on fixed smoothness. The general
+full-grid projection has a design-specific coefficient and no universal sign;
+joint smoothness can also reverse the fixed-smoothness decay direction. The
+high-dimensional experiment grows domain at fixed
 lattice spacing and uses independent replicated fields. We do not claim
 separate fixed-domain consistency of Matérn variance and range, which would
 conflict with microergodicity results
@@ -182,7 +200,11 @@ Regularized-semivariogram range rules
 & Infinite-range Matérn KL target, smoothness phase, and coefficient \\
 Misspecified GP likelihood \cite{bachoc2018misspecified}
 & Population KL pseudo-target under covariance misspecification
-& Closed direction, rate, and coefficient for ignored support \\
+& Local tangent projection and irreducible KL for ignored support \\
+Spatial composite likelihood
+\cite{varin2011composite,bevilacqua2012weighted}
+& Pairwise objectives, weighting, consistency, and efficiency
+& Support-induced multi-lag target coefficient and residual KL \\
 Convolution and anisotropy \cite{clifford2006yield,paciorek2006nonstationary}
 & Support/convolution can create anisotropic covariance
 & Leading directional apparent-range contrast \\
@@ -327,6 +349,52 @@ v_h^\dagger<v,\qquad \rho_h(r)>\Matern_\nu(\alpha R),\qquad
 \]
 \end{theorem}
 
+The two-point family in \eqref{eq:target} is saturated: after refitting variance,
+one correlation determines one decay exactly. To obtain a genuine
+misspecification result, let \(0<R_1<\cdots<R_J\), \(w_j>0\), and
+\(B(\rho)=\left(\begin{smallmatrix}1&\rho\\\rho&1\end{smallmatrix}\right)\).
+Write \(\rho_{h,j}=C_h(R_je)/C_h(0)\) and define the Gaussian pair composite
+\begin{equation}
+ Q_h^{\rm C}(a)=\sum_{j=1}^Jw_j
+ D_{\rm KL}\!\left\{N(0,B(\rho_{h,j}))\,\|\,
+ N(0,B(\Matern_\nu(aR_j)))\right\}.
+ \label{eq:composite}
+\end{equation}
+Let \(s_\nu(h)=h^{2\nu}\), \(h^2\log(1/h)\), or \(h^2\) in the rough,
+threshold, or smooth regime. Theorem~\ref{thm:phase-law} defines positive
+coefficients \(C_j\) by
+\(\alpha-\alpha_{h,j}^\dagger=C_js_\nu(h)+o\{s_\nu(h)\}\).
+
+\begin{theorem}[Genuinely misspecified multi-lag target]
+\label{thm:multilag}
+Let \(\alpha\) be interior to a compact positive parameter interval and let
+\(a_h^{\rm C}\) minimize \eqref{eq:composite} on that interval. Put
+\begin{align}
+ \rho_j&=\Matern_\nu(\alpha R_j),&
+ I_j&=\frac{1+\rho_j^2}{(1-\rho_j^2)^2},\\
+ \lambda_j&=w_jI_j\{R_j\Matern_\nu'(\alpha R_j)\}^2,&
+ \bar C&=\frac{\sum_j\lambda_jC_j}{\sum_j\lambda_j}.
+\end{align}
+Then
+\begin{align}
+ \alpha-a_h^{\rm C}&=\bar C s_\nu(h)+o\{s_\nu(h)\},
+ \label{eq:multilag-shift}\\
+ \min_aQ_h^{\rm C}(a)
+ &=\frac{s_\nu(h)^2}{2}
+ \sum_{j=1}^J\lambda_j(C_j-\bar C)^2+o\{s_\nu(h)^2\}.
+ \label{eq:multilag-kl}
+\end{align}
+Thus the composite still has apparent range inflation, and its minimum KL is
+strictly positive to leading order whenever the lag-specific coefficients are
+not all equal.
+\end{theorem}
+
+The coefficient is explicitly lag-sensitive through both \(C_j\) and the
+Gaussian correlation information \(I_j\). It is neither the coefficient at a
+representative lag nor an unweighted average. This answers the pairwise versus
+multi-location objection without treating overlapping pairs as independent for
+uncertainty quantification.
+
 The leading law is pointwise in fixed \(\nu\). To resolve its slow crossover,
 let \(b_\nu=\Gamma(-\nu)/\{2^{2\nu}\Gamma(\nu)\}\) and define, for
 \(0<\nu<2\),
@@ -451,6 +519,18 @@ the common zero-lag normalization and all direction-free terms cancel. Using
 \]
 and dividing by \(-R\Matern_\nu'(z)\) gives the displayed coefficient.
 
+For Theorem~\ref{thm:multilag}, the KL divergence between unit-variance
+Gaussian pairs with correlations \(\rho\) and \(q\) has second derivative
+\(I(\rho)=(1+\rho^2)/(1-\rho^2)^2\) at \(q=\rho\). Also,
+\[
+ \rho_{h,j}=\rho_j-C_js_\nu(h)R_j\Matern_\nu'(\alpha R_j)
+ +o\{s_\nu(h)\}.
+\]
+A second-order expansion of \eqref{eq:composite}, followed by completing the
+weighted square, gives \eqref{eq:multilag-shift} and
+\eqref{eq:multilag-kl}. The positive Hessian \(\sum_j\lambda_j\) and target
+uniqueness at \(h=0\) justify the local minimizer expansion.
+
 At the remaining integer transition,
 \[
 \Matern_2(x)=1-\frac{x^2}{4}
@@ -496,6 +576,59 @@ Q_n(\alpha)=\frac12\left[
 \tr\{\Sigma(\alpha)^{-1}\Sigma_0\}\right].
 \label{eq:kl}
 \end{equation}
+
+The multi-lag result has an exact full-Gaussian analogue on any fixed interior
+site design. Let \(x_1,\ldots,x_p\) be distinct, let
+\(\theta=(\log v,\log\alpha)\), and write \(\Sigma(\theta)\) for the
+point-support Matérn covariance at those sites with fixed \(\nu\). Entrywise
+application of the zero- and nonzero-lag expansions gives
+\begin{equation}
+ \Sigma_h=\Sigma_0+s_\nu(h)\Gamma_\nu+o\{s_\nu(h)\}.
+ \label{eq:matrix-perturbation}
+\end{equation}
+Put \(P=\Sigma_0^{-1}\),
+\(D_j=\partial\Sigma(\theta_0)/\partial\theta_j\), and
+\begin{equation}
+ J_{jk}=\tfrac12\tr(PD_jPD_k),\qquad
+ b_j=\tfrac12\tr(PD_jP\Gamma_\nu).
+\end{equation}
+
+\begin{proposition}[Finite-design full-likelihood projection]
+\label{prop:full-projection}
+Suppose \(\theta_0\) is interior to a compact parameter set, \(J\) is
+nonsingular, and the KL target \(\theta_h^\dagger\) is the local minimizer
+converging to \(\theta_0\). Let \(K_h^\star\) denote the minimum full Gaussian
+KL criterion. With \(\beta=J^{-1}b\),
+\begin{align}
+ \theta_h^\dagger-\theta_0&=\beta s_\nu(h)+o\{s_\nu(h)\},
+ \label{eq:full-shift}\\
+ K_h^\star&=\tfrac14\tr(PE_\nu PE_\nu)s_\nu(h)^2
+ +o\{s_\nu(h)^2\},
+ \label{eq:full-kl}
+\end{align}
+where \(E_\nu=\Gamma_\nu-\sum_{j=1}^2\beta_jD_j\). Hence the full
+likelihood is genuinely misspecified to leading order exactly when the support
+perturbation has a nonzero component outside the variance--decay covariance
+tangent space.
+\end{proposition}
+
+To prove Proposition~\ref{prop:full-projection}, differentiate the Gaussian KL
+criterion at \(\theta_0\). Equations \eqref{eq:matrix-perturbation} and the
+matrix inverse derivative give score \(-b\,s_\nu(h)+o\{s_\nu(h)\}\) and
+Hessian \(J+o(1)\). The implicit function theorem yields
+\eqref{eq:full-shift}. The local Gaussian KL expansion is
+\(\tfrac14\tr\{P(\Gamma_\nu-\sum_j\beta_jD_j)
+P(\Gamma_\nu-\sum_j\beta_jD_j)\}s_\nu(h)^2\), which proves
+\eqref{eq:full-kl}. Nonsingularity of \(J\), rather than increasing- or
+fixed-domain asymptotics, is the required finite-design identifiability
+condition.
+
+Unlike Theorem~\ref{thm:multilag}, this general projection does not imply a
+universal sign for the decay coordinate: \(J^{-1}b\) depends on the complete
+site design. The selected \(3\times3\) regular-grid audit below has range
+inflation for all four tested smoothnesses, but that fact is numerical, not an
+extra theorem.
+
 The corrected family contains \(\Sigma_0\) when the operator and fixed nuisance
 parameters are correctly specified and decay is identifiable; the naive family
 generally does not. Our primary experiment sets \(\tau=0\), isolating field
@@ -618,14 +751,18 @@ Continuous phase and transition
 & Exact pairwise KL pseudo-decay
 & \(h,\nu,d\), kernel family, quadrature order
 & Sign, local rate and coefficient; kernel--dimension and quadrature stability \\
+Multi-lag and full likelihood
+& Composite and finite-design Gaussian KL projections
+& \(h,\nu,\alpha R\), lag weights, site design
+& Shift coefficient and first nonzero minimum-KL term \\
 Directional support
 & Exact pairwise KL pseudo-decay by lag angle
 & \(h,\nu\), angle, support aspect
 & \(h^2\) contrast coefficient and quadrature stability \\
 Finite-grid likelihood
 & Full Gaussian KL minimizer
-& \(h,\nu\), boundary, irregularity, domain size
-& Model containment, Monte Carlo error to target, retained boundary fits \\
+& \(h,\nu\), fitted support, boundary, domain size
+& Model containment, joint nuisance movement, matched-size boundary contrast \\
 Replicated high dimension
 & Finite-library Gaussian KL minimizer
 & \(p,N,\nu\), fitted support model
@@ -647,8 +784,8 @@ and 0.3, are stress points outside the sufficient Taylor neighborhood
 bandwidths, which are inside that neighborhood.
 Repeating at orders 64 and 128 changed pseudo-decay by at most
 \(4.4\times10^{-8}\) and \(5.2\times10^{-9}\), respectively, relative to
-order 96. Appendix~\ref{app:dimension-kernel-audit} audits the same phase
-coefficient in dimensions one through three and for a second compact kernel.
+order 96. The released robustness audit repeats the coefficient check in
+dimensions one through three and for a second compact kernel.
 
 All 108 shifts \(\alpha-\alpha_h^\dagger\) were positive. For smoothness 0.25,
 0.5, and 0.75, log--log slopes over the six smallest bandwidths were 0.515,
@@ -696,6 +833,40 @@ fixed-\(\nu\) one-term law is accurate away from the crossover but nonuniform
 near it. Right: retaining the canceling quadratic and fractional terms gives a
 continuous, sub-0.1\% approximation on the audited grid.}
 \label{fig:transition}
+\end{figure*}
+
+\subsection{Genuine likelihood projection audits}
+
+We evaluated Theorem~\ref{thm:multilag} at
+\(\alpha R\in\{0.5,1,1.5,2\}\), equal weights,
+\(\nu\in\{0.5,1,1.5,2.5\}\), and
+\(h\in\{0.005,0.01,0.02\}\). All 12 composite targets had
+\(\alpha-a_h^{\rm C}>0\) and strictly positive minimum KL. At the smallest
+bandwidth, the maximum relative errors of the leading shift and minimum-KL
+terms were 1.41\% and 9.85\%, respectively. The lag coefficients vary
+substantially---for \(\nu=0.5\), from 1.61 at \(\alpha R=0.5\) to 0.40 at
+\(\alpha R=2\)---so the residual in \eqref{eq:multilag-kl} is not a numerical
+roundoff effect.
+
+For Proposition~\ref{prop:full-projection}, we used a \(3\times3\) regular
+grid with unit spacing and jointly profiled variance and decay. Every one of the
+12 exact continuously smoothed targets had positive minimum KL and range
+inflation. At \(h=0.005\), the maximum relative errors of the predicted decay
+shift, log-variance shift, and minimum KL were 5.42\%, 12.68\%, and 1.77\%.
+These signs describe this selected design; only the matrix projection and
+residual-KL formulas are general.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/likelihood_projection.pdf}
+\Description{Three panels show lag-specific pair coefficients, multi-lag
+composite exact-to-leading ratios, and full Gaussian likelihood
+exact-to-leading ratios for decay shifts and minimum KL divergence.}
+\caption{From a saturated pair match to genuine misspecification. Dotted
+segments in the left panel are the information-weighted composite
+coefficients. The middle and right panels validate both the pseudo-parameter
+shift and the first nonzero minimum-KL term.}
+\label{fig:likelihood-projection}
 \end{figure*}
 
 \subsection{Directional support oracle}
@@ -769,10 +940,18 @@ Error bars show two Monte Carlo standard errors of the mean.}
 \label{fig:finite}
 \end{figure*}
 
-Including boundary outputs changed both output dimension and the rough-field
-naive target, from 0.152 to 0.135 at \(h=0.7\); for the fixed jittered design
-the target moved from 0.289 to 0.284 at \(h=0.5\). Corrected targets remained
-one. In the domain-growth check, increasing raw sites from
+The earlier boundary stress changed output dimension. We therefore added two
+translated \(4\times4\) blocks on the same \(19\times19\) latent grid: one
+touches the lower-left boundary and one is interior, while both have
+\(p=16\) outputs and identical relative geometry. At \(h=0.7\), their
+point-support targets differ by 0.030--0.062 across smoothnesses, isolating a
+boundary effect without a dimension change. A less-oracular model that uses the
+correct radial support shape but bandwidth \(0.75h\) reduced population KL to
+16.7--32.3\% of the point-support KL. The exact-support target recovered the
+truth to \(4.1\times10^{-7}\) in decay. Table~\ref{tab:matched-boundary}
+reports the matched comparison. For the fixed jittered design the original
+target moved from 0.289 to 0.284 at \(h=0.5\). In the domain-growth check,
+increasing raw sites from
 100 to 400 reduced corrected-estimator standard deviation from 0.529 to 0.177
 and naive-estimator standard deviation from 0.151 to 0.068, while at
 \(n=400\) their means were within 0.026 and 0.009 of their respective targets.
@@ -784,29 +963,37 @@ and naive-estimator standard deviation from 0.151 to 0.068, while at
 \input{tables/finite_summary.tex}
 \end{table}
 
-\begin{figure*}[t]
+\begin{table*}[t]
 \centering
-\includegraphics[width=0.64\textwidth]{figures/supportshift_raw_example.pdf}
-\Description{A twenty-three by twenty-three latent Matérn field and its ten by
-ten locally averaged observations, displayed with a common color scale.}
-\caption{One synthetic field before and after the benchmark's known
-rectangular support operator.}
-\label{fig:raw}
-\end{figure*}
+\small
+\caption{Matched-size boundary comparison at \(h=0.7\). I and B denote
+interior and boundary blocks. The KL columns report the intermediate
+\(0.75h\)-support model relative to the point-support model; smaller is better.}
+\label{tab:matched-boundary}
+\input{tables/matched_boundary.tex}
+\end{table*}
 
-\begin{figure*}[t]
-\centering
-\includegraphics[width=\textwidth]{figures/supportshift_highdim.pdf}
-\Description{Three panels compare empirical criterion deviations to a theorem
-envelope, decay RMSE to each model's KL target, and concentration around the
-correct versus misspecified target as independent fields increase.}
-\caption{High-dimensional SupportShift likelihood benchmark. Left: the weaker
-worst-radius envelope; exact candidatewise coverage is reported in text.
-Center: decay RMSE to each model's finite-grid KL target versus \(Np\).
-Right: increasing \(N\) makes both estimators more precise, but the
-point-support fit concentrates near its displaced target.}
-\label{fig:highdim}
-\end{figure*}
+\subsection{Joint smoothness--decay and partial-support fits}
+
+To test the known-smoothness restriction, we jointly selected
+\((\nu,\alpha,v)\) from a fixed library with 18 smoothness values,
+52 log-spaced decay values, and analytically profiled variance. The data use an
+\(11\times11\) latent grid, 16 interior outputs, true
+\(\nu\in\{0.5,1,1.5,2.5\}\), \(h\in\{0.35,0.5\}\), \(N=16\) independent
+fields, and 100 trials per cell. We compared exact support, \(0.75h\) support,
+and point support, producing 2,400 fits.
+
+The exact-support population target equaled the physical parameter in all
+eight design cells. Point support changed the population smoothness target in
+all eight, always upward: for example, at \(h=0.5\) the target moved from
+\((\nu,\alpha)=(0.5,1)\) to \((2,2.176)\), and from \((2.5,1)\) to
+\((3.5,1.338)\). Thus the fixed-\(\nu\) range-inflation theorem does not
+describe the joint fit: smoothness absorbs enough aggregation that the fitted
+inverse range exceeds one in all eight point-support cells. The partial-support
+population criterion improved on point support in all eight cells, providing a
+nontrivial method ordering rather than only exact-versus-naive containment.
+Monte Carlo medians generally tracked their discrete targets; the released
+aggregate table contains every population target and median.
 
 \subsection{Replicated-field high-dimensional track}
 
@@ -826,9 +1013,13 @@ Each \((p,\nu)\) cell used 200 nested replicate-field sequences, giving 64
 model--design--sample-size cells and 12,800 exact finite-library fits. The
 discrete population objective was within \(2.63\times10^{-5}\) per coordinate
 of the continuously profiled objective in all 16 design--model cases, below
-the \(5\times10^{-5}\) tolerance fixed before simulation. No adaptive jitter
-or coordinate-independence approximation was used. Figure~\ref{fig:raw}
-shows the exact observation map for the largest design.
+the \(5\times10^{-5}\) tolerance fixed before simulation. The corresponding
+maximum continuous-to-library parameter distances were 0.00499 in decay and
+0.0297 in variance for point support, and below \(4.1\times10^{-7}\) for both
+coordinates under exact support. Thus the reported parameter floor is explicit,
+not hidden behind an objective-only audit. No adaptive jitter or
+coordinate-independence approximation was used; the declared support operator
+is applied directly to every latent field.
 
 With \(\delta=0.05\), every trial in every cell satisfied the actual
 candidatewise simultaneous event \eqref{eq:certificate}. Across all fits,
@@ -843,6 +1034,11 @@ Across cells, the 95th percentile of the worst criterion deviation was at most
 For each fixed model, \(p\), and \(\nu\), its log--log slope against \(N\)
 ranged from \(-0.528\) to \(-0.454\), with median \(-0.505\), matching the
 leading \(N^{-1/2}\) dependence.
+At fixed \(N\), regressing the same 95th-percentile deviation on \(p\) gave
+slopes from \(-0.509\) to \(-0.297\), with median \(-0.413\). The departure
+from a universal \(-1/2\) is expected: Proposition~\ref{prop:certificate}
+depends on relative operator norms and effective rank, not coordinate count
+alone.
 
 At \(p=100,\nu=1.5\), the naive finite-grid decay target was 0.594
 (continuous target 0.589), versus the physical value one. From \(N=1\) to 64,
@@ -854,76 +1050,40 @@ without repairing support misspecification. These parameter summaries are
 empirical; the proposition controls criterion error and excess risk unless a
 curvature condition is added.
 
-\FloatBarrier
-\balance
-
 \section{Discussion}
 
-The theorem separates a standard operation from a less-studied inferential
-consequence. Propagating a covariance through a known support is classical; the
-object studied here is the parameter selected when that propagation is ignored.
-This differs from classical range-of-influence rules: compactly supported
-variograms can gain a geometric support-width extension
-\cite{clark1977regularization}, but Matérn has no finite range and our
-variance-refitted KL target moves at a smoothness-dependent power.
-Rough
-Matérn fields move at a fractional bandwidth power because the origin cusp
-changes the variance more rapidly than fixed-lag covariance. Smooth fields move
-quadratically, but a Bessel identity still fixes the sign.
+Propagating covariance through known support is classical; our object is the
+parameter selected when that propagation is omitted. Unlike finite
+range-of-influence rules \cite{clark1977regularization}, the Matérn KL target
+moves at a smoothness-dependent power: an origin cusp drives the rough-field
+fractional rate, while a Bessel identity fixes the smooth-field sign.
 
-The simulation has a deliberate role: it validates a theorem-linked generator,
-computes nonrandom finite-design KL targets, and distinguishes misspecification
-from finite-sample error. It is not a substitute for the proof. The zero-support
-case verifies exact agreement, the corrected target verifies model containment,
-and the boundary and irregular panels expose where the interior theorem stops.
-The replicated-field track checks the candidatewise probability event and
-shows that stochastic concentration does not erase KL approximation error.
+The simulations compute finite-design targets and separate misspecification
+from sampling error; they do not replace the proofs. The scope is deliberately
+narrow: the universal sign fixes smoothness, the multi-lag theorem concerns a
+declared pair composite, and the full-likelihood coefficient is design
+specific. Boundary normalization may create first-order terms, joint nuisance
+parameters may be weakly identified, and the probability radius is an oracle
+benchmark certificate. Fixed-resolution smoothing also does not converge to
+continuous convolution merely through domain growth.
 
-The scope is narrow. Smoothness and support are known. The original finite-grid
-track fixes nuisance parameters; the replicated track jointly selects variance
-and decay only over a declared finite library. The closed target is for a
-two-point criterion, while full-grid targets are numerical. Fixed-resolution
-discrete smoothing does not converge to continuous convolution merely because
-the domain grows. Boundary normalization can introduce first-order terms.
-Joint support, smoothness, variance, and range estimation may be weakly
-identified. The exact probability radius uses the generating \(\Sigma_0\), so
-it is an oracle benchmark certificate rather than a plug-in interval for an
-unknown real-data covariance. These are future problems, not implicit claims.
-
-Recent finite-grid Matérn work studies discretization and edge effects without
-deriving this preprocessing-support pseudo-target phase law
-\cite{simons2026finite}. Our narrower contribution is the explicit
-all-\(\nu\) expansion, its directional coefficient, and their synthesis with a
-parameterized theorem-linked benchmark.
-
-The closest analytic setup located in our search is Fuentes's block-average
-spectral representation and small-pixel approximation
-\cite{fuentes2007approximate}. The distinction is that our estimand is the
-next-order point-support KL parameter after the support transform is omitted.
-This comparison is a scoped literature conclusion, not a claim of exhaustive
-priority.
+Fuentes's block-average spectral likelihood and small-pixel approximation is
+the closest analytic setup we located \cite{fuentes2007approximate}; recent
+finite-grid Matérn work instead studies discretization and edge effects
+\cite{simons2026finite}. Neither derives this omitted-support KL phase law.
+This is a scoped comparison, not a claim of exhaustive priority.
 
 \section{Conclusion}
 
-For a fixed nonzero-lag pair fit under translation-invariant interior
-averaging, ignored support makes a Matérn field look more persistent than it is.
-The inverse-range displacement is \(h^{2\nu}\), \(h^2\log(1/h)\), or \(h^2\),
-and its leading sign is negative across fixed smoothness values, dimensions,
-and compact symmetric kernels. A support-aware covariance removes the
-finite-design population shift when the known operator and fixed nuisance
-parameters are correctly specified and decay is identifiable. The result
-supplies a theorem-level diagnostic and a reproducible simulation protocol.
-For replicated fields, high-dimensional probability explains how likelihood
-noise can contract around either the physical covariance or a misspecified KL
-target. The paper does not assert a universal sign for boundary supports,
-arbitrary full-likelihood fits, or continuous-parameter estimation.
+Ignored interior support shifts the fixed-smoothness inverse range by
+\(h^{2\nu}\), \(h^2\log(1/h)\), or \(h^2\). Multi-lag and finite-design
+projections expose genuine residual KL, while the replicated-field certificate
+separates likelihood noise from population displacement. Joint smoothness can
+reverse the fixed-smoothness decay direction; no universal sign is asserted for
+boundary support or arbitrary full-likelihood fits.
 
-Code, manifests, and audited aggregate results are available at
-\url{https://github.com/Sasha-Cui/HighDimSpatialStatistics} under the immutable
-tag \texttt{supportshift-geosim-v1.2.1}. The release includes a synthetic-data
-card, scoped reuse terms, a citation file, and a one-command verifier for the
-15 promoted data/provenance inputs, 23 generated paper artifacts, 8,400
-finite-grid fits, 12,800 replicated fits, and 113 reported numerical claims.
+Code, manifests, aggregate data, and a one-command numerical-claim verifier are
+available in release \href{https://github.com/Sasha-Cui/HighDimSpatialStatistics/tree/supportshift-geosim-v1.3.0}{v1.3.0}.
 
 \clearpage
 \bibliographystyle{ACM-Reference-Format}
@@ -999,6 +1159,63 @@ K_\nu(z)=K_{\nu-2}(z)+2(\nu-1)K_{\nu-1}(z)/z
 reduces it to the displayed identity \(A_{\nu,k}(r)>0\).  Division by the
 negative
 \(R\Matern_\nu'(z)\) proves that \(\alpha_h^\dagger-\alpha<0\).
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:multilag}]
+For \(|\rho|,|q|<1\), put \(P_\rho=N\{0,B(\rho)\}\). Direct evaluation gives
+\begin{equation}
+ d(\rho,q):=D_{\rm KL}(P_\rho\|P_q)
+ =\frac12\left[
+ \log\frac{1-q^2}{1-\rho^2}-2+
+ \frac{2(1-q\rho)}{1-q^2}\right].
+ \label{eq:pair-kl-exact}
+\end{equation}
+At \(q=\rho\), \(d=\partial_qd=0\) and
+\(\partial_q^2d=I(\rho)=(1+\rho^2)/(1-\rho^2)^2\).
+Theorem~\ref{thm:phase-law} and differentiability of the Matérn correlation
+at positive lags give, uniformly over the finite lag set,
+\begin{align*}
+ \rho_{h,j}
+ &=\Matern_\nu\{(\alpha-C_js_\nu(h)+o(s_\nu))R_j\}\\
+ &=\rho_j-C_j\dot\rho_js_\nu(h)+o\{s_\nu(h)\},
+ \qquad \dot\rho_j=R_j\Matern_\nu'(\alpha R_j).
+\end{align*}
+For \(a=\alpha-\gamma s_\nu(h)\), the candidate correlation is
+\(\rho_j-\gamma\dot\rho_js_\nu(h)+o(s_\nu)\). Taylor expansion of
+\eqref{eq:pair-kl-exact} therefore yields
+\[
+ Q_h^{\rm C}(a)=\frac{s_\nu(h)^2}{2}
+ \sum_j\lambda_j(C_j-\gamma)^2+o\{s_\nu(h)^2\}.
+\]
+The criterion at \(h=0\) is uniquely minimized by \(a=\alpha\), and its
+second derivative there is \(\sum_j\lambda_j>0\). Compactness and uniform
+convergence place every global minimizer near \(\alpha\); the implicit function
+theorem then gives the displayed local expansion. Minimizing the quadratic in
+\(\gamma\) gives \(\gamma=\bar C\) and proves both claims.
+\end{proof}
+
+\begin{proof}[Proof of Proposition~\ref{prop:full-projection}]
+Let
+\[
+ K_h(\theta)=\frac12\left[
+ \tr\{\Sigma(\theta)^{-1}\Sigma_h\}-p+
+ \log\det\Sigma(\theta)-\log\det\Sigma_h\right].
+\]
+Using \(\partial\Sigma^{-1}=-\Sigma^{-1}(\partial\Sigma)\Sigma^{-1}\),
+the score at \(\theta_0\) is
+\[
+ \partial_jK_h(\theta_0)
+ =-\tfrac12s_\nu(h)\tr(PD_jP\Gamma_\nu)+o\{s_\nu(h)\}
+ =-b_js_\nu(h)+o\{s_\nu(h)\}.
+\]
+At \(h=0\), the Hessian is the Fisher information \(J\). Nonsingularity and
+the implicit function theorem give
+\(\theta_h^\dagger-\theta_0=J^{-1}b\,s_\nu(h)+o(s_\nu)\).
+Finally, for a covariance perturbation \(H\), Gaussian KL has quadratic term
+\(\tfrac14\tr(PHPH)\). Substitution of
+\(H=s_\nu(h)(\Gamma_\nu-\sum_j\beta_jD_j)+o(s_\nu)\) proves
+\eqref{eq:full-kl}. The coefficient vanishes exactly when \(E_\nu=0\), because
+\(\tr(PE_\nu PE_\nu)=\|P^{1/2}E_\nu P^{1/2}\|_F^2\).
 \end{proof}
 
 \begin{proof}[Proof of Propositions~\ref{prop:transition}--\ref{prop:direction}]
@@ -1078,46 +1295,26 @@ independent of \(\theta\).  If
 \eqref{eq:np-rate}.
 \end{proof}
 
-\clearpage
 \section{Dimension--kernel robustness audit}
 \label{app:dimension-kernel-audit}
 
-The primary phase figure fixes \(d=2\) and the product Epanechnikov kernel.
-As a separate, predeclared implementation audit, we used
-\(d\in\{1,2,3\}\), product Epanechnikov and product uniform kernels,
-\(\nu\in\{0.5,1,1.5,2.5\}\), and
-\(h\in\{0.002,0.004,0.008\}\), with \(\alpha=R=1\). Tensor quadrature used
-order 48 per coordinate and was repeated at orders 32 and 64. These factors
-give 72 deterministic cells.
-
-Put
-\[
- s_\nu(h)=
- \begin{cases}
- h^{2\nu},&0<\nu<1,\\
- h^2\log(1/h),&\nu=1,\\
- h^2,&\nu>1,
- \end{cases}
-\]
-and let \(C_{\nu,k}\) be the positive coefficient of
-\(\alpha-\alpha_h^\dagger\) in Theorem~\ref{thm:phase-law}. Table~\ref{tab:dimension-kernel}
-reports the range, over the four smoothness values, of
-\((\alpha-\alpha_h^\dagger)/\{C_{\nu,k}s_\nu(h)\}\) at \(h=0.002\).
+As a predeclared implementation audit, we repeated the coefficient check for
+dimensions \(d\in\{1,2,3\}\), product Epanechnikov and uniform kernels,
+four smoothness values, and \(h\in\{0.002,0.004,0.008\}\). Tensor quadrature
+used order 48 and was repeated at orders 32 and 64. Table~\ref{tab:dimension-kernel}
+reports the smallest-bandwidth ratio of the exact shift to its leading term.
 
 \begin{table}[h]
 \centering
 \small
-\caption{Smallest-bandwidth coefficient ratios in the robustness audit.}
+\caption{Coefficient-ratio ranges in the 72-cell robustness audit.}
 \label{tab:dimension-kernel}
 \input{tables/dimension_kernel_robustness.tex}
 \end{table}
 
-All 72 exact shifts were positive. The largest absolute coefficient-ratio
-error was 0.169, below the predeclared 0.20 gate; it occurred at \(\nu=1\),
-where logarithmic convergence is slow. The maximum relative shift change under
-quadrature refinement was \(3.92\times10^{-7}\), below the predeclared
-\(2\times10^{-4}\) gate. This finite audit checks two kernel families and
-three dimensions only; it is neither the proof of the kernel-general theorem
-nor a uniform guarantee over kernels or dimensions.
+All 72 shifts were positive. The largest coefficient-ratio error was 0.169,
+below its 0.20 gate, and the largest quadrature-refinement change was
+\(3.92\times10^{-7}\), below its \(2\times10^{-4}\) gate. This finite audit is
+not a uniform guarantee over kernels or dimensions.
 
 \end{document}
