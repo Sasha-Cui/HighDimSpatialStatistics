@@ -4,19 +4,19 @@
 > SupportShift paper release, the controlling status and remaining items are in
 > `FINAL_RESEARCH_ASSESSMENT.md`.
 
-## SupportShift release status (2026-08-03)
+## SupportShift release status (2026-08-08)
 
-- Original `main` remains preserved; paper development is isolated on
-  `research/paper-audit`.
+- The pre-audit `main` state remains identifiable at `2a6ef52`; all maintained
+  paper work is now consolidated on the sole local and remote branch, `main`.
 - The maintained theorem/benchmark code is script-first and covered by unit,
   regression, and end-to-end integration tests.
 - `environment-research.yml`, `environment.toml`, and the promoted Bouchet pip
   snapshot declare the executable environment.
 - Seeds, commands, Git cleanliness, Slurm job identity, configuration hashes,
   row counts, validation gates, and input/output SHA-256 hashes are recorded.
-- Final synthetic artifacts are compact source-data extracts and deterministic
-  figures under `paper/`; large fit-level outputs remain ignored but exactly
-  regenerable from the clean run metadata.
+- Final synthetic artifacts include compact paper extracts, deterministic
+  figures, the 12,800-fit replicated table, and the complete 8,400-fit finite
+  table with its reducer audit and immutable run manifest.
 - Legacy notebooks, converted scripts, and invalid outputs remain in place for
   forensic provenance and are explicitly excluded from paper evidence.
 - Bulk movement or deletion of the 1.5 GB legacy tree is intentionally deferred;
@@ -37,8 +37,9 @@ cannot execute as ordinary Python.
 
 ## Preservation policy
 
-- Keep `main` and all original artifacts unchanged.
-- Develop on `research/paper-audit`; do not rewrite old outputs in place.
+- Keep the pre-audit base addressable by commit and preserve legacy artifacts.
+- Develop, commit, tag, and push only on `main`; do not create auxiliary branches
+  or worktrees for the paper workflow.
 - Label old notebooks/results `forensic provenance -- scientifically invalid`.
 - Store regenerated outputs under a versioned `outputs/` tree outside Git or in a
   declared artifact store.
@@ -87,7 +88,7 @@ Do not physically move thousands of legacy files until all references are mapped
 that cleanup is logically separate from scientific corrections and should be a
 separate commit if authorized.
 
-## Completed audit-branch scaffold
+## Completed maintained scaffold
 
 - canonical AGS decay-scale kernel and signed cross-covariance helper;
 - location-major covariance/simulation/likelihood convention;

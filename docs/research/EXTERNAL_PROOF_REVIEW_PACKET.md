@@ -1,7 +1,7 @@
 # External proof-review packet: SupportShift
 
 - **Prepared:** 2026-08-04
-- **Frozen scientific artifact:** `supportshift-geosim-v1.2.0`
+- **Frozen scientific artifact:** `supportshift-geosim-v1.2.1`
 - **Commit reviewed:** `b6c8ee294db9319746eb3a3869f4b1315f694ef9`
 - **Requested reviewer expertise:** spatial statistics, Gaussian-process
   misspecification, special functions, or applied probability

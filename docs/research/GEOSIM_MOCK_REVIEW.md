@@ -1,7 +1,7 @@
 # GeoSim 2026 internal mock review
 
 - **Review date:** 2026-08-04
-- **Artifact reviewed:** frozen tag `supportshift-geosim-v1.2.0`
+- **Artifact reviewed:** release candidate `supportshift-geosim-v1.2.1`
 - **Status:** internal red-team assessment, not an official review or an
   acceptance prediction
 
@@ -48,7 +48,7 @@ benchmark varies dimension: the paper makes no large-system throughput claim.
 | Technical correctness | 4/5 | The derivations, integer transitions, signs, and concentration constants survived an internal hostile-referee audit and numerical checks. Independent expert review is still required. |
 | Originality | 3.5/5 | The exact Matérn KL estimand, smoothness-dependent order, coefficient, and directional contrast were not located in the screened literature. The qualitative range-inflation direction is classical and is now cited explicitly. |
 | Experimental support | 4/5 | Deterministic oracles now cover two compact kernels in dimensions one through three; full Gaussian KL targets, Monte Carlo fits, anisotropy, boundary/irregular stress cases, and growing-p,N trials correspond to declared claims. No external-validity claim is possible without real data. |
-| Reproducibility | 5/5 | Clean-clone verification covers 12,800 fits, 64 coverage cells, 23 hashes, and 113 manuscript claims, with immutable inputs and metadata. |
+| Reproducibility | 5/5 | Clean-clone verification covers 12,800 replicated fits, 8,400 finite-grid fits, 64 coverage cells, 15 source-input hashes, 23 generated-artifact hashes, and 113 manuscript claims. |
 | Clarity and presentation | 4/5 | The model, asymptotic scope, and limitations are explicit. The new benchmark-contract table removes the main navigation burden; the paper remains mathematically dense. |
 
 ## Likely reviewer objections and current answers

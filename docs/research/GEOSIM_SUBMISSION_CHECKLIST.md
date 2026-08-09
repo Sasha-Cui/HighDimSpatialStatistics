@@ -6,7 +6,7 @@
 **Notification:** 2026-09-15<br>
 **Official call:** <https://geosim.org/2026/cfp/><br>
 **Submission site:** <https://easychair.org/conferences/?conf=geosim2026><br>
-**Artifact candidate:** `supportshift-geosim-v1.2.0`
+**Artifact candidate:** `supportshift-geosim-v1.2.1`
 
 The official call lists parameterizable and scalable spatial-simulation data
 sets made available to the community as an in-scope topic. Full papers may use
@@ -39,7 +39,8 @@ references. Review is single-blind and uses the ACM `sigconf` format.
 - [x] Full synthetic inputs required by the paper are tracked.
 - [x] Seeds, factors, environment, generation commit, and validation gates are
   recorded in machine-readable metadata.
-- [x] One command verifies 12,800 fits, 64 coverage cells, and 23 hashes.
+- [x] One command verifies 12,800 replicated fits, 8,400 finite-grid fits, 64
+  coverage cells, 15 source-input hashes, and 23 generated-artifact hashes.
 - [x] The same command recomputes all 113 reported numerical claims from the
   promoted tables and fails on any mismatch.
 - [x] Clean-clone reproduction has passed.

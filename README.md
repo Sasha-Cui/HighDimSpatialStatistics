@@ -10,7 +10,7 @@ archived numerical claims are not paper evidence.
 ## SupportShift reviewer quick start
 
 The audited artifact is frozen at
-[`supportshift-geosim-v1.2.0`](https://github.com/Sasha-Cui/HighDimSpatialStatistics/tree/supportshift-geosim-v1.2.0).
+[`supportshift-geosim-v1.2.1`](https://github.com/Sasha-Cui/HighDimSpatialStatistics/tree/supportshift-geosim-v1.2.1).
 Start with:
 
 - the [GeoSim submission PDF](output/pdf/supportshift_geosim2026.pdf);
@@ -32,9 +32,10 @@ python scripts/research/verify_supportshift_release.py \
   --require-full
 ```
 
-A valid release reports 12,800 rows, 64 coverage cells, 23 hashed paper
-artifacts, and 113 passed paper claims. Verification uses tracked source tables;
-it does not require rerunning the full Monte Carlo experiment.
+A valid release reports 12,800 replicated-field fits, 8,400 finite-grid fits,
+64 coverage cells, 15 hashed source inputs, 23 hashed paper artifacts, and 113
+passed paper claims. Verification reconstructs the finite-grid summary from its
+fit-level records; it does not require rerunning either Monte Carlo experiment.
 
 ## Preserved legacy pipeline
 
@@ -89,8 +90,10 @@ Bouchet snapshot and central-environment pointer are recorded in
 The original numerical results are not scientifically valid after an August 2026
 audit found kernel-convention, cross-covariance-sign, vector-ordering, gradient,
 likelihood, and smoothing-covariance defects. The paper artifact was developed
-on `research/paper-audit`; consult `docs/research/FINAL_RESEARCH_ASSESSMENT.md`
-and `docs/research/SUPPORTSHIFT_BENCHMARK.md` before using any result.
+on `research/paper-audit` and subsequently consolidated onto `main`. Current
+development, commits, tags, and pushes are main-only; consult
+`docs/research/FINAL_RESEARCH_ASSESSMENT.md` and
+`docs/research/SUPPORTSHIFT_BENCHMARK.md` before using any result.
 
 The canonical smoother now saves its linear operators, but the ordinary marginal
 fitter is **not** a valid downstream fit for smoothed groups. Use the dedicated
@@ -144,16 +147,24 @@ manifest from validated inputs:
 ```bash
 python scripts/research/make_support_paper_artifacts.py \
   --phase paper/data/phase_oracle_d2.csv \
+  --phase-metadata outputs/smoothing_bias/phase_oracle_d2_v2.metadata.json \
   --transition-stress outputs/smoothing_bias/supportshift_transition_stress_20260804.csv \
+  --transition-stress-metadata outputs/smoothing_bias/supportshift_transition_stress_20260804.metadata.json \
   --dimension-kernel-robustness outputs/smoothing_bias/supportshift_dimension_kernel_robustness_20260804.csv \
+  --dimension-kernel-robustness-metadata outputs/smoothing_bias/supportshift_dimension_kernel_robustness_20260804.metadata.json \
   --finite-summary paper/data/finite_summary.csv \
+  --finite-results outputs/smoothing_bias/support_only_final_20260802_v2/results.csv \
+  --finite-audit outputs/smoothing_bias/support_only_final_20260802_v2/audit.json \
+  --finite-manifest configs/smoothing_bias/support_only_20260802.json \
   --anisotropy outputs/smoothing_bias/supportshift_anisotropic_final_20260803.csv \
+  --anisotropy-metadata outputs/smoothing_bias/supportshift_anisotropic_final_20260803.metadata.json \
   --highdim outputs/smoothing_bias/supportshift_highdim_final_v2_20260803.csv \
+  --highdim-metadata outputs/smoothing_bias/supportshift_highdim_final_v2_20260803.metadata.json \
   --raw-example outputs/smoothing_bias/supportshift_raw_final_v2_20260803.csv \
   --paper-directory paper
 ```
 
-The promoted artifact schema is 1.2. Its replicated-field component remains
+The promoted artifact-manifest schema is 1.3. Its replicated-field component remains
 benchmark schema 1.1 with $p\in\{16,36,64,100\}$,
 $N\in\{1,4,16,64\}$, 200 trials per design, and a fixed
 $161\times101=16{,}261$-candidate variance--decay library. The clean final
@@ -162,7 +173,7 @@ gates passing. The threshold audit was generated from clean commit `34a2603`
 and passed all sign, approximation-error, and quadrature-refinement gates. The
 dimension--kernel audit was generated from clean commit `2fc7040` and passed its
 predeclared sign, coefficient, and quadrature gates. The audited paper package
-is frozen at tag `supportshift-geosim-v1.2.0`.
+is frozen at tag `supportshift-geosim-v1.2.1`.
 
 Verify the promoted run, every paper-artifact hash, and all 113 numerical claims
 reported in the manuscripts in one command:

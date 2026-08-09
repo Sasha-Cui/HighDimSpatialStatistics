@@ -484,6 +484,39 @@ source tables byte-for-byte, records 23 output hashes, and expands the claim
 ledger from 100 to 113 checks. The configured Bouchet environment passes 138
 tests and the maintained Ruff scope.
 
+## 2026-08-08 -- final empirical completion audit
+
+**Recovered finite evidence.** The complete support-only finite run remained on
+Bouchet even though only its 42-row summary had been tracked. The recovered
+artifact contains all 8,400 fits, its 21-task reducer audit, clean generation
+commit, exact configuration hashes, and deterministic seeds. There are no
+missing tasks, invalid rows, duplicates, or non-finite objectives. Recomputing
+the summary from fit-level estimates changes no value beyond
+(2.22\times10^{-16}), attributable to CSV serialization.
+
+**Independent reruns.** Clean commit `b6c8ee2` reproduced the transition,
+dimension--kernel, and anisotropy CSVs byte-for-byte. The phase fitted inverse
+ranges agree within (4.9\times10^{-15}); only a derived coefficient ratio
+differs by as much as (1.3\times10^{-9}) under the newer SciPy build. Full CPU
+Slurm job `21749885` reran all 12,800 replicated fits under `pi_jss233` with
+exit code zero. Every numerical field equals the promoted table exactly; the
+only row-level differences are the recorded source commit. Its 2,516-row raw
+illustration is byte-identical, all gates pass, and all 64 coverage cells equal
+one.
+
+**Metadata repair.** The anisotropy CSV did not change. Its metadata was
+regenerated because an old key named a 0.10 endpoint-error gate even though the
+driver and predeclared rule used 0.15; the observed 0.1175 passes the actual
+rule. The corrected metadata now names the 0.15 tolerance.
+
+**Release decision.** Artifact-manifest schema 1.3 binds 15 data/provenance
+inputs and 23 generated paper artifacts. The release verifier reconstructs all
+finite summary cells from raw fits and checks 12,800 replicated fits, 8,400
+finite fits, 64 coverage cells, and 113 paper claims. The scoped empirical
+component is complete; no new simulation is required for a current manuscript
+claim. Remaining gates are external proof/priority review, attendance,
+submission-portal validation, and archival DOI creation.
+
 ## Entry template
 
 ```text

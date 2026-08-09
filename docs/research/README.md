@@ -2,7 +2,8 @@
 
 Audit date: 2026-08-02  
 Preserved base: `main` at `2a6ef52`  
-Development branch: `research/paper-audit`
+Current development branch: `main` (the former audit branch was consolidated
+and removed)
 
 This directory separates established claims, invalidated legacy claims, and
 remaining research obligations.
@@ -32,6 +33,9 @@ remaining research obligations.
   packaging, and artifact-release plan.
 - [RESEARCH_LOG.md](RESEARCH_LOG.md): dated findings, repairs, negative results,
   open questions, and a template for future entries.
+- [EMPIRICAL_COMPLETION_AUDIT.md](EMPIRICAL_COMPLETION_AUDIT.md): final
+  experiment inventory, independent rerun comparisons, raw-to-summary checks,
+  and empirical go/no-go decision.
 - [GEOSIM_MOCK_REVIEW.md](GEOSIM_MOCK_REVIEW.md): reviewer-rubric red team,
   likely objections, current answers, and remaining external acceptance gates.
 - [GEOSIM_SUBMISSION_PACKET.md](GEOSIM_SUBMISSION_PACKET.md): copy-ready title,

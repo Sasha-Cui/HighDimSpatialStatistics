@@ -3,7 +3,7 @@
 - **Prepared:** 2026-08-04
 - **Official call:** <https://geosim.org/2026/cfp/>
 - **Paper type:** Full paper
-- **Artifact candidate:** `supportshift-geosim-v1.2.0`
+- **Artifact candidate:** `supportshift-geosim-v1.2.1`
 
 This file stages copy-ready submission metadata and records the fields that
 still require the author or the live EasyChair portal. It is not evidence that
@@ -78,11 +78,11 @@ If EasyChair offers an optional note to the program chairs, use:
 ## Artifact and PDF record
 
 - Repository: <https://github.com/Sasha-Cui/HighDimSpatialStatistics>
-- Candidate tag: `supportshift-geosim-v1.2.0`
+- Candidate tag: `supportshift-geosim-v1.2.1`
 - Submission PDF: `output/pdf/supportshift_geosim2026.pdf`
 - PDF structure: 10 main pages, one reference page, two appendix pages
 - Current PDF SHA-256:
-  `9621c15e72c6e08cdd91b4a8b7e00daff415cf948d2b5dd6161adec43f86b304`
+  `26cb4dcf80d981254ce646d7f0fc1ad09ea03935bb4de7c8bbc5da0d1a6ccf7c`
 - Current PDF size: 702,402 bytes
 
 Recompute the hash from the exact uploaded file and replace these values if the

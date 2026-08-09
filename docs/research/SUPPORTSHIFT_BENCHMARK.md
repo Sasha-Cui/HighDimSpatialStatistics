@@ -1,7 +1,9 @@
 # SupportShift synthetic benchmark
 
-Promoted artifact schema: **1.2**. Version 1.2 adds the 72-cell
-dimension--kernel robustness audit and byte-preserving paper source extracts.
+Promoted artifact-manifest schema: **1.3**. Version 1.3 binds every promoted
+metadata record and the complete 8,400-fit finite-grid table to the release,
+and mechanically reconstructs its 42-row paper summary. Version 1.2 added the
+72-cell dimension--kernel robustness audit and byte-preserving source extracts.
 The replicated-field component remains schema 1.1 with its
 resolution-certified \(161\times101\) library and exact candidatewise
 simultaneous-coverage fields; earlier 1.0 files are pre-release artifacts.
@@ -146,6 +148,8 @@ The final benchmark run is accepted only if all of the following hold:
   the true candidate;
 - every theorem-facing covariance is positive definite without adaptive jitter;
 - all expected rows and unique configuration--replicate--model keys are present;
+- the 8,400 finite-grid records reproduce every value in the 42-row summary;
+- each finite-grid task matches its immutable configuration hash and derived seed;
 - the zero-support control has no pseudo-target displacement;
 - continuous phase coefficients agree with the smallest-bandwidth oracle to the
   predeclared tolerance;

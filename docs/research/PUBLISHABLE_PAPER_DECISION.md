@@ -232,8 +232,8 @@ were \(0.152,0.414,0.573,0.740\) for
 
 Completed:
 
-- original main preserved at the pre-audit commit and work developed on
-  research/paper-audit;
+- pre-audit main preserved by commit identity and maintained work consolidated
+  onto the sole branch, `main`;
 - corrected Matérn convention, cross signs, stacking, gradients, and likelihood;
 - theory, design, KL, estimator, and experiment modules;
 - closed-form OU/Epanechnikov software oracle;

@@ -15,11 +15,13 @@ be used to make scientific claims about one.
 ## Versioned release
 
 - Repository: <https://github.com/Sasha-Cui/HighDimSpatialStatistics>
-- Artifact release: `supportshift-geosim-v1.2.0`
-- Benchmark schema: `1.2`
+- Artifact release: `supportshift-geosim-v1.2.1`
+- Artifact-manifest schema: `1.3`
+- Replicated-field benchmark schema: `1.1`
 - Promoted high-dimensional run: Slurm job `21081491`
 - Authorized allocation: `pi_jss233`
 - Promoted generation commit recorded in metadata: `d5207fb`
+- Independent empirical re-audit: Slurm job `21749885`, clean commit `b6c8ee2`
 - Release verifier: `scripts/research/verify_supportshift_release.py`
 
 The promoted numerical inputs are immutable even though later release commits
@@ -79,6 +81,14 @@ variance--decay library contains 16,261 candidates.
 - `outputs/smoothing_bias/supportshift_dimension_kernel_robustness_20260804.metadata.json`:
   clean-commit provenance, SHA-256, factor grid, quadrature refinement, and
   predeclared sign and coefficient-accuracy gates.
+- `outputs/smoothing_bias/support_only_final_20260802_v2/results.csv`: all
+  8,400 finite-grid fit records, including task/configuration hashes, model and
+  replicate keys, deterministic seeds, estimates, targets, errors, objectives,
+  boundary-fit flags, and clean generation commit.
+- `outputs/smoothing_bias/support_only_final_20260802_v2/audit.json`: reducer
+  certificate for all 21 tasks, with no missing or invalid shard.
+- `configs/smoothing_bias/support_only_20260802.json`: immutable 21-design
+  manifest and root seed used to validate the preceding records.
 
 ### Compact paper data
 
@@ -92,8 +102,8 @@ variance--decay library contains 16,261 candidates.
 - `paper/data/transition_stress.csv`: threshold-audit plot data.
 - `paper/data/dimension_kernel_robustness.csv`: exact robustness-audit source
   data for the appendix table.
-- `paper/data/supportshift_artifact_manifest.json`: SHA-256 contract for seven
-  promoted inputs and 23 generated tables, data extracts, and figures.
+- `paper/data/supportshift_artifact_manifest.json`: SHA-256 contract for 15
+  promoted data/provenance inputs and 23 generated tables, extracts, and figures.
 
 CSV files use header rows, period decimal separators, and no implicit row index.
 Boolean fields are textual `True`/`False`. Coordinates and parameter values use
@@ -125,9 +135,13 @@ python scripts/research/verify_supportshift_release.py \
   --require-full
 ```
 
-A valid full release has 12,800 rows, 64 candidatewise-coverage cells, all
-predeclared statistical gates passing, 23 matching paper-artifact hashes, and
-113 machine-checked manuscript claims.
+A valid full release has 12,800 replicated-field fits, 8,400 finite-grid fits,
+64 candidatewise-coverage cells, all predeclared statistical gates passing, 15
+matching source-input hashes, 23 matching paper-artifact hashes, and 113
+machine-checked manuscript claims. The verifier independently reconstructs all
+42 finite-grid summary rows from the fit-level table and checks exact task keys,
+configuration hashes, deterministic seeds, numerical identities, and clean
+generation provenance.
 The verifier fails on missing files, hash changes, incomplete grids, failed
 gates, dirty generation provenance, or a mismatch between any reported number
 and its released source table. The public artifact also supplies the exact

@@ -1,13 +1,13 @@
 # Final research assessment: SupportShift
 
-**Assessment date:** 2026-08-04
+**Assessment date:** 2026-08-04; empirical completion audit updated 2026-08-08
 
 **Repository:** HighDimSpatialStatistics
 
 **Preserved base:** main at 2a6ef52
 
-**Development branch audited:** research/paper-audit; final benchmark generated
-at d5207fb and release hardening continued on the same branch
+**Development history audited:** research/paper-audit; maintained work was later
+consolidated onto the sole local and remote branch, `main`
 
 **Recommended paper type:** narrow theory-plus-synthetic-benchmark paper
 
@@ -80,8 +80,9 @@ synthetic artifacts, reference library, tests, Git history, and the successive
 research-branch commits. It also reconstructed several archived simulations
 directly enough to falsify their original interpretation.
 
-The original main branch is preserved at 2a6ef52. All scientific salvage work
-was developed on research/paper-audit. The paper-grade SupportShift benchmark
+The original pre-audit state is preserved at 2a6ef52. Scientific salvage work
+was developed on research/paper-audit and later consolidated onto `main`; the
+former branch was removed. The paper-grade SupportShift benchmark
 was executed from clean commit
 d5207fb43cf63f5dfd68a443853a209e303f9aa2. The final schema-1.1 run records:
 
@@ -124,34 +125,45 @@ kernels. It also makes paper-facing source extracts byte-identical to their
 promoted CSV inputs, expands the artifact manifest to schema 1.2, and adds a
 second permitted appendix page. The audit changes no theorem statement and is
 explicitly labeled finite evidence rather than a proof or uniform guarantee.
+Patch release `supportshift-geosim-v1.2.1` completes the empirical provenance:
+it promotes all 8,400 finite-grid fit records and their reducer audit, binds all
+promoted metadata in artifact-manifest schema 1.3, reconstructs every finite
+summary value during release verification, and corrects the anisotropy metadata
+label from 0.10 to its actual predeclared 0.15 tolerance. Independent clean
+reruns reproduce the transition, dimension--kernel, anisotropy, and raw-example
+CSVs byte-for-byte; the phase and replicated tables agree numerically, with the
+replicated table differing only in its recorded generation commit.
 
 The pre-audit history consisted of four bulk commits made on one day and did not
-record a theorem or experiment-development trail. The research branch now has
+record a theorem or experiment-development trail. The maintained history now has
 separate commits for the mathematical salvage, simulation workflow,
 anisotropic oracle, high-dimensional benchmark, candidatewise audit, and
 reproducibility hardening. That later history is scientifically useful; the
 original history is provenance rather than evidence.
 
-The final benchmark files are:
+The final benchmark files include:
 
+- outputs/smoothing_bias/phase_oracle_d2_v2.metadata.json;
 - outputs/smoothing_bias/supportshift_highdim_final_v2_20260803.csv;
 - outputs/smoothing_bias/supportshift_highdim_final_v2_20260803.metadata.json;
 - outputs/smoothing_bias/supportshift_raw_final_v2_20260803.csv;
-- outputs/smoothing_bias/supportshift_anisotropic_final_20260803.csv; and
+- outputs/smoothing_bias/supportshift_anisotropic_final_20260803.csv;
 - outputs/smoothing_bias/supportshift_anisotropic_final_20260803.metadata.json;
-- outputs/smoothing_bias/supportshift_transition_stress_20260804.csv; and
+- outputs/smoothing_bias/supportshift_transition_stress_20260804.csv;
 - outputs/smoothing_bias/supportshift_transition_stress_20260804.metadata.json;
 - outputs/smoothing_bias/supportshift_dimension_kernel_robustness_20260804.csv;
-  and
-- outputs/smoothing_bias/supportshift_dimension_kernel_robustness_20260804.metadata.json.
+- outputs/smoothing_bias/supportshift_dimension_kernel_robustness_20260804.metadata.json;
+- outputs/smoothing_bias/support_only_final_20260802_v2/results.csv;
+- outputs/smoothing_bias/support_only_final_20260802_v2/audit.json; and
+- configs/smoothing_bias/support_only_20260802.json.
 
 The artifact manifest at paper/data/supportshift_artifact_manifest.json links
 the final inputs to generated source data, figures, and tables. Manifest schema
-1.2 records seven inputs and 23 paper outputs, preserves source extracts
+1.3 records 15 data/provenance inputs and 23 paper outputs, preserves source extracts
 byte-for-byte, and explicitly records any source file that is also a paper
 output. Every current input/output hash verifies.
 
-The maintained suite was verified with 138 passing tests in the configured
+The maintained suite was verified with 139 passing tests in the configured
 research environment, and the maintained SupportShift Ruff scope is clean.
 Reproduction instructions point to the declared Python 3.12 environment and
 promoted package snapshot rather than an arbitrary system Python.
@@ -220,7 +232,7 @@ found all of the following:
     biological replication, and independent validation.
 
 The original \(q=3\) simulations and approximately \(q=22\) gene analysis were
-not high-dimensional statistics. Repairs made on the research branch are useful
+not high-dimensional statistics. Repairs made during the audit are useful
 software regression guards, but they invalidate rather than rescue the old
 numerical conclusions.
 
@@ -1161,7 +1173,7 @@ required for the minimum paper.
 
 ### 9.1 Completed datasets
 
-The paper already contains six useful synthetic products.
+The paper contains seven useful synthetic products.
 
 1. **Continuous phase table.** Exact quadrature targets across \(h\) and
    \(\nu\), with leading coefficients and refinement diagnostics.
@@ -1179,6 +1191,9 @@ The paper already contains six useful synthetic products.
 6. **Threshold stress table.** Exact, one-term, and transition-aware targets on
    111 cells around \(\nu=1\), with quadrature refinements and predeclared sign
    and relative-error gates.
+7. **Dimension--kernel robustness table.** Seventy-two deterministic cells in
+   dimensions one through three across product Epanechnikov and uniform kernels,
+   with sign, coefficient-ratio, and quadrature-refinement diagnostics.
 
 These are empirical experiments on synthetic data, not empirical application
 data.
@@ -1247,8 +1262,8 @@ should be reserved for a future workload that demonstrably uses them.
 
 ### 10.1 Completed
 
-- main is preserved and the research work is isolated on
-  research/paper-audit;
+- the pre-audit state is preserved by commit identity and maintained work is
+  consolidated on the sole branch, `main`;
 - the Matérn convention, signed covariance, stacking, Bessel derivatives, and
   likelihood dimension have regression tests;
 - explicit smoothing matrices and transformed covariance utilities exist;
@@ -1271,8 +1286,8 @@ pages, one reference page, and two appendix pages and is within both limits;
 the technical manuscript is 22 pages, every page has
 been rendered and inspected,
 the maintained test suite passes, scoped Ruff is clean, and the release verifier
-checks 12,800 rows, 64 coverage cells, 23 hashed paper artifacts, and 113
-manuscript claims. The remaining
+checks 12,800 replicated fits, 8,400 finite-grid fits, 64 coverage cells, 15
+hashed source inputs, 23 hashed paper artifacts, and 113 manuscript claims. The remaining
 tasks are proof, priority, publication, and release chores rather than further
 statistical computation:
 
