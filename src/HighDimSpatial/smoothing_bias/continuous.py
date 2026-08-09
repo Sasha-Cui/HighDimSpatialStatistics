@@ -758,10 +758,11 @@ def finite_design_full_likelihood_asymptotics(
 ) -> FiniteDesignProjectionAsymptotics:
     r"""Project the leading support perturbation onto variance--decay scores.
 
-    Parameters are ``(log variance, log decay)``. The returned vector ``b``
-    satisfies ``theta_h - theta_0 = b s_nu(h) + o(s_nu(h))``. The minimum KL
-    coefficient is the squared Fisher-metric norm of the component of the
-    support perturbation orthogonal to the two-parameter Matérn tangent space.
+    Parameters are ``(log variance, log decay)``. The returned shift
+    coefficients satisfy ``theta_h - theta_0 = beta s_nu(h) + o(s_nu(h))``.
+    The minimum KL coefficient is the squared Fisher-metric norm of the
+    component of the support perturbation orthogonal to the two-parameter
+    Matérn tangent space.
     """
     points = _finite_locations(locations)
     truth = continuous_matern_covariance_matrix(

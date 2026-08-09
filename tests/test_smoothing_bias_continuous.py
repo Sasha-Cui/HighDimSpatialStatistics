@@ -348,6 +348,59 @@ def test_finite_design_full_likelihood_projection_predicts_target_and_kl(
     assert kl_ratio == pytest.approx(1.0, rel=tolerance)
 
 
+def test_full_likelihood_projection_is_invariant_to_site_order() -> None:
+    locations = np.asarray([(i, j) for i in range(3) for j in range(3)], dtype=float)
+    permutation = np.array([7, 2, 5, 0, 8, 3, 1, 6, 4])
+    original = finite_design_full_likelihood_asymptotics(
+        locations,
+        variance=1.3,
+        decay=0.8,
+        smoothness=1.5,
+        quadrature_order=64,
+    )
+    reordered = finite_design_full_likelihood_asymptotics(
+        locations[permutation],
+        variance=1.3,
+        decay=0.8,
+        smoothness=1.5,
+        quadrature_order=64,
+    )
+    original_target = continuous_matern_full_likelihood_target(
+        locations,
+        variance=1.3,
+        decay=0.8,
+        smoothness=1.5,
+        bandwidth=0.01,
+        quadrature_order=64,
+    )
+    reordered_target = continuous_matern_full_likelihood_target(
+        locations[permutation],
+        variance=1.3,
+        decay=0.8,
+        smoothness=1.5,
+        bandwidth=0.01,
+        quadrature_order=64,
+    )
+    assert reordered.log_variance_shift_coefficient == pytest.approx(
+        original.log_variance_shift_coefficient, rel=2e-12
+    )
+    assert reordered.log_decay_shift_coefficient == pytest.approx(
+        original.log_decay_shift_coefficient, rel=2e-12
+    )
+    assert reordered.minimum_kl_coefficient == pytest.approx(
+        original.minimum_kl_coefficient, rel=2e-12
+    )
+    assert reordered_target.pseudo_variance == pytest.approx(
+        original_target.pseudo_variance, rel=1e-8
+    )
+    assert reordered_target.pseudo_decay == pytest.approx(
+        original_target.pseudo_decay, rel=1e-8
+    )
+    assert reordered_target.minimum_kl == pytest.approx(
+        original_target.minimum_kl, rel=1e-6
+    )
+
+
 def test_anisotropic_transform_second_moment_matches_covariance_trace() -> None:
     transform = np.array([[1.7, 0.2], [-0.1, 0.6]])
     moment = transformed_epanechnikov_difference_radial_moment(
