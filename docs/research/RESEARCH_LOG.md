@@ -554,6 +554,38 @@ smoothness and translation-invariant interior pair targets. Treat joint
 smoothness and boundary behavior as finite-design evidence, and treat the
 full-likelihood result as a local projection with a design-specific sign.
 
+## 2026-08-09 -- GeoSim acceptance-hardening preflight
+
+**Reviewer-facing repair.** The GeoSim abstract was reduced to a direct
+theory-to-benchmark narrative. The finite-design proposition now states the
+Fisher-orthogonality equations defining its residual, and the fixed-smoothness
+scope is positioned against published evidence that Mat\'ern smoothness
+information can be appreciable and design-dependent. A new regression test
+confirms that both the analytic projection and exact numerical KL target are
+invariant to site ordering.
+
+**Artifact usability.** The isolated reviewer README now includes a custom
+synthetic-generation example with explicit controls and row semantics. The
+exact command was executed with two lattice sizes, two replicate counts, two
+smoothness values, 10 trials, and a 21-by-15 variance--decay library. It wrote
+160 fit rows and 1,044 raw-field rows in under one second and passed every
+declared validation gate. The GeoSim appendix now explains how the release
+verifier, claim ledger, source hashes, and generators divide responsibility.
+
+**Preflight.** All 156 tests pass in the portable research environment. Both
+papers compile without unresolved citations, unresolved references, or
+overfull boxes. The submission PDF remains 13 letter-size pages: 10 main-text
+pages, one references page, and two appendix pages. Ghostscript parses both
+PDFs and every listed font is embedded. A page-by-page visual audit found no
+clipping, overlap, invisible text, or illegible figure labels; bibliography
+spacing in the technical manuscript was tightened to avoid a nearly empty
+27th page.
+
+**Decision.** Cut patch release `supportshift-geosim-v1.3.1`. No new Monte
+Carlo experiment is required for a manuscript claim. The remaining scientific
+gate is independent expert proof and priority review; the remaining submission
+gates require author metadata and the live EasyChair form.
+
 ## Entry template
 
 ```text

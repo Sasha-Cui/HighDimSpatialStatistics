@@ -6,7 +6,7 @@
 **Notification:** 2026-09-15<br>
 **Official call:** <https://geosim.org/2026/cfp/><br>
 **Submission site:** <https://easychair.org/conferences/?conf=geosim2026><br>
-**Artifact candidate:** `supportshift-geosim-v1.3.0`
+**Artifact candidate:** `supportshift-geosim-v1.3.1`
 
 The official call lists parameterizable and scalable spatial-simulation data
 sets made available to the community as an in-scope topic. Full papers may use
@@ -21,6 +21,8 @@ references. Review is single-blind and uses the ACM `sigconf` format.
   and the first nonzero residual KL term.
 - [x] A finite-design full-Gaussian proposition gives the Fisher-tangent
   projection and irreducible KL component.
+- [x] The projection residual is stated as Fisher-orthogonal to the fitted
+  covariance tangent space and its implementation is invariant to site order.
 - [x] Joint smoothness--decay and partial-support experiments test the two main
   known-smoothness and exact-versus-naive limitations.
 - [x] Fixed-domain and increasing-domain statements are not conflated.
@@ -35,6 +37,8 @@ references. Review is single-blind and uses the ACM `sigconf` format.
 - [x] Priority search is documented without treating a negative search as proof.
 - [x] A claim-by-claim external proof-review packet records source identities,
   numerical adversarial probes, and mandatory fallback actions.
+- [x] The fixed-smoothness restriction is positioned against the nearest
+  design-dependent Mat\'ern smoothness-information result.
 - [ ] An independent spatial-statistics/probability expert has checked every
   theorem and proof.
 - [ ] A human expert has manually checked older regularized-variogram monographs
@@ -43,6 +47,8 @@ references. Review is single-blind and uses the ACM `sigconf` format.
 ## Artifact gates
 
 - [x] Full synthetic inputs required by the paper are tracked.
+- [x] A documented custom synthetic-generation command passes every declared
+  gate and writes both fit-level and raw-field examples with metadata.
 - [x] Seeds, factors, environment, generation commit, and validation gates are
   recorded in machine-readable metadata.
 - [x] One command verifies 12,800 replicated fits, 8,400 finite-grid fits, 64
