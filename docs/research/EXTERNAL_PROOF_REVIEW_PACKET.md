@@ -1,37 +1,39 @@
 # External proof-review packet: SupportShift
 
 - **Prepared:** 2026-08-04
-- **Frozen scientific artifact:** `supportshift-geosim-v1.2.1`
-- **Commit reviewed:** `b6c8ee294db9319746eb3a3869f4b1315f694ef9`
+- **Baseline scientific artifact:** `supportshift-geosim-v1.3.2`
+- **Baseline commit:** `d3539c126f258228a823ccab71585b71d969ead1`
 - **Requested reviewer expertise:** spatial statistics, Gaussian-process
   misspecification, special functions, or applied probability
 
 ## Purpose and decision rule
 
 This packet is for an independent human audit of the mathematical claims in
-*SupportShift: Matérn Range Distortion under Ignored Observation Support, with
-a Theory-Linked Synthetic Benchmark*. It deliberately separates analytic
+*SupportShift: A Theory-Linked Spatial Simulation Benchmark for Ignored
+Matérn Observation Support*. It deliberately separates analytic
 claims from numerical evidence. The code, simulations, and checks below may
 help locate an error, but they are not substitutes for verifying the displayed
 identities and remainders.
 
 Please classify each item as **verified**, **correct after a stated minor
 repair**, or **not verified**. GeoSim submission should proceed only if items
-P1--P8 are verified or repaired without changing the paper's central phase-law
-claim. Item P9 is standard supporting machinery but its constants and
-normalization must still be correct.
+P1--P9 are verified or repaired without changing the paper's phase-law and
+global-projection claims. Item P10 is standard supporting machinery but its
+constants and normalization must still be correct.
 
 The primary source is `paper/geosim2026.tex`; the longer derivation is in
-`paper/manuscript.tex`. The theorem intentionally concerns the exact
-two-location Gaussian KL pseudo-parameter at a fixed nonzero lag. It is not a
-claim about unrestricted full-grid maximum likelihood.
+`paper/manuscript.tex`. The phase theorem concerns the exact two-location Gaussian
+KL pseudo-parameter at a fixed nonzero lag. Separate results cover a declared
+multi-lag composite and the unique global variance--decay KL projection on any
+fixed design with at least two distinct sites. No universal sign is claimed for
+the full-design decay coordinate.
 
 ## Model and notation to hold fixed
 
 Let
 
 \[
-C(r)=v\mathcal M_\nu(\alpha\lVert r\rVert),\qquad
+C(r)=\sigma^2\mathcal M_\nu(\alpha\lVert r\rVert),\qquad
 \mathcal M_\nu(x)=\frac{2^{1-\nu}}{\Gamma(\nu)}x^\nu K_\nu(x),
 \]
 
@@ -48,14 +50,14 @@ m_q=\mathbb E\lVert D\rVert^q.
 For \(Z_h(t)=\int h^{-d}k(u/h)Y(t-u)\,du\),
 
 \[
-C_h(r)=v\mathbb E\mathcal M_\nu
+C_h(r)=\sigma^2\mathbb E\mathcal M_\nu
    \{\alpha\lVert r+hD\rVert\}.
 \]
 
 At \(r=Re\), \(R>0\), the claimed point-support pair target is
 
 \[
-v_h^\dagger=C_h(0),\qquad
+(\sigma_h^2)^\dagger=C_h(0),\qquad
 \mathcal M_\nu(\alpha_h^\dagger R)=
 \rho_h(r)=\frac{C_h(r)}{C_h(0)}.
 \]
@@ -236,7 +238,7 @@ W_{\nu,k}(h)=
 check, with \(\nu=1+\varepsilon\),
 
 \[
-b_{1+\varepsilon}=rac1{4\varepsilon}
+b_{1+\varepsilon}=\frac1{4\varepsilon}
 +\frac{2\gamma_{\mathrm E}-1-2\log2}{4}+O(\varepsilon)
 \]
 
@@ -285,7 +287,52 @@ Check the sign convention \(\Delta_e(h)=\alpha-\alpha_h^\dagger(e)\).
 **If this fails:** remove the anisotropy proposition and corresponding panel;
 the isotropic phase theorem can remain if P1--P7 pass.
 
-### P9. Finite-library Gaussian certificate
+### P9. Global finite-design projection and residual criterion
+
+Fix \(p\ge2\) distinct sites and a compact log-variance--log-decay set
+\(\Theta\) with physical parameter \(\theta_0\) in its interior. Check that
+at \(h=0\), equality in forward Gaussian KL requires equality of covariance
+matrices. Diagonal equality must identify variance, and any nonzero-lag entry,
+together with \(\mathcal M_\nu'<0\), must identify decay. Then verify that
+continuity on compact \(\Theta\) supplies uniform positive spectral bounds and
+that \(K_h\to K_0\) uniformly, so every global minimizer localizes at
+\(\theta_0\).
+
+For tangent matrices \(\dot\Sigma_1,\dot\Sigma_2\), check
+
+\[
+ c^\top\mathcal Jc
+ =\frac12\left\|P^{1/2}
+   \left(\sum_jc_j\dot\Sigma_j\right)P^{1/2}\right\|_{\mathrm F}^2.
+\]
+
+The diagonal must force \(c_1=0\); a nonzero-lag derivative must then force
+\(c_2=0\). This establishes \(\mathcal J\succ0\) rather than assuming it.
+Check that Hessian continuity and global localization yield a unique global
+minimizer for small \(h\), followed by
+
+\[
+ \theta_h^\dagger-\theta_0
+ =\mathcal J^{-1}g_\nu s_\nu(h)+o\{s_\nu(h)\}.
+\]
+
+Finally, verify the lag-heterogeneity corollary. If the Fisher residual
+\(E_\nu\) vanished, restricting the tangent identity to every two-site
+principal submatrix would force
+\(\kappa_{ab}=-\alpha\beta_{\nu,2}\) for every pair. Thus two unequal pair
+coefficients imply
+
+\[
+ \lim_{h\downarrow0}\frac{K_h^\star}{s_\nu(h)^2}
+ =\frac14\operatorname{tr}(PE_\nu PE_\nu)>0.
+\]
+
+**If global localization fails:** retain only a correctly stated local result.
+**If Fisher positivity fails:** add the missing design condition. **If the
+pair-restriction argument fails:** remove the heterogeneity corollary without
+using numerical minimum KL as a replacement proof.
+
+### P10. Finite-library Gaussian certificate
 
 For \(N\) independent \(N_p(0,\Sigma_0)\) vectors and deterministic positive
 definite candidate matrices, set
@@ -296,7 +343,7 @@ two-sided quadratic-form bound, division by \(2Np\), and union bound with
 \[
 |\widehat L_N(\theta)-L(\theta)|\le
 \frac{\lVert A_\theta\rVert_{\mathrm F}}p\sqrt{\frac tN}
-+\frac{\lVert A_\theta\rVert_{\mathrm{op}}p\frac tN
++\frac{\lVert A_\theta\rVert_{\mathrm{op}}}p\frac tN
 \]
 
 simultaneously. Verify the factor two in the ERM excess-risk bound and that a
@@ -365,7 +412,8 @@ item.
 | P6 Smooth-regime sign |  |  |
 | P7 Transition cancellation |  |  |
 | P8 Directional contrast |  |  |
-| P9 Gaussian certificate |  |  |
+| P9 Global projection and residual criterion |  |  |
+| P10 Gaussian certificate |  |  |
 
 Also answer:
 

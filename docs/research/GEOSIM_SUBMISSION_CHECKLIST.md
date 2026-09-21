@@ -19,10 +19,14 @@ references. Review is single-blind and uses the ACM `sigconf` format.
 - [x] Pairwise theorem is separated from numerical full-grid claims.
 - [x] A genuine multi-lag composite theorem gives both the pseudo-range shift
   and the first nonzero residual KL term.
-- [x] A finite-design full-Gaussian proposition gives the Fisher-tangent
-  projection and irreducible KL component.
-- [x] The projection residual is stated as Fisher-orthogonal to the fitted
-  covariance tangent space and its implementation is invariant to site order.
+- [x] A finite-design full-Gaussian proposition proves existence and
+  uniqueness of the global KL target on a compact parameter set; distinct
+  sites imply covariance identification and a positive-definite Fisher matrix.
+- [x] The projection residual is Fisher-orthogonal to the fitted covariance
+  tangent space, and unequal pair coefficients give a simple sufficient
+  condition for a strictly positive full-likelihood residual.
+- [x] The projection implementation is invariant to site order, and the
+  selected design's lag-heterogeneity premise is tested directly.
 - [x] Mathematical notation distinguishes physical variance, smoothness,
   generic candidates, composite targets, lag coefficients, and Fisher
   projection objects without symbol collisions.

@@ -348,6 +348,53 @@ def test_finite_design_full_likelihood_projection_predicts_target_and_kl(
     assert kl_ratio == pytest.approx(1.0, rel=tolerance)
 
 
+@pytest.mark.parametrize("smoothness", [0.5, 1.0, 1.5, 2.5])
+def test_lag_heterogeneity_certifies_selected_full_design_residual(
+    smoothness: float,
+) -> None:
+    lags = (1.0, np.sqrt(2.0), 2.0)
+    pair_coefficients = np.asarray(
+        [
+            product_kernel_decay_shift_coefficient(
+                dimension=2,
+                smoothness=smoothness,
+                decay=1.0,
+                lag=lag,
+                kernel_family="epanechnikov",
+                quadrature_order=64,
+            )
+            for lag in lags
+        ]
+    )
+    locations = np.asarray(
+        [(i, j) for i in range(3) for j in range(3)], dtype=float
+    )
+    projection = finite_design_full_likelihood_asymptotics(
+        locations,
+        variance=1.0,
+        decay=1.0,
+        smoothness=smoothness,
+        quadrature_order=64,
+    )
+    assert np.ptp(pair_coefficients) > 0.01
+    assert projection.minimum_kl_coefficient > 0.0
+
+
+@pytest.mark.parametrize("smoothness", [0.5, 1.0, 1.5, 2.5])
+def test_two_site_fisher_information_is_nonsingular_despite_saturation(
+    smoothness: float,
+) -> None:
+    projection = finite_design_full_likelihood_asymptotics(
+        np.asarray([[0.0, 0.0], [1.0, 0.0]]),
+        variance=1.0,
+        decay=1.0,
+        smoothness=smoothness,
+        quadrature_order=64,
+    )
+    assert projection.information_condition_number < 10.0
+    assert projection.minimum_kl_coefficient == pytest.approx(0.0, abs=2e-30)
+
+
 def test_full_likelihood_projection_is_invariant_to_site_order() -> None:
     locations = np.asarray([(i, j) for i in range(3) for j in range(3)], dtype=float)
     permutation = np.array([7, 2, 5, 0, 8, 3, 1, 6, 4])

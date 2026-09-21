@@ -615,6 +615,56 @@ symbols.
 `supportshift-geosim-v1.3.2`. The theorem assumptions, coefficients, rates,
 simulation outputs, and acceptance claims are unchanged.
 
+## 2026-08-09 -- global finite-design KL theorem strengthening
+
+**Problem.** The finite-design result was previously conditional on a chosen
+local KL branch and an assumed nonsingular Fisher matrix. Those assumptions
+were stronger than necessary and did not themselves certify irreducible
+full-likelihood misspecification on the selected simulation design.
+
+**Theorem repair.** On a compact log-variance--log-decay parameter set
+containing the physical parameter in its interior, any fixed design with at
+least two distinct sites has a unique global point-support KL target for all
+sufficiently small support widths. At zero width, diagonal covariance equality
+identifies variance and strict Mat\'ern monotonicity at any nonzero lag
+identifies decay. Uniform KL convergence localizes all global minimizers.
+Diagonal/off-diagonal separation of the two covariance tangents proves
+\(\mathcal J\succ0\) automatically, so local strict convexity completes the
+global uniqueness argument. The existing Fisher projection and squared
+residual-KL expansion then follow without an identifiability assumption.
+
+**Strict residual criterion.** A new corollary proves that unequal pairwise
+phase coefficients on two design lags force the support perturbation outside
+the variance--decay tangent space, and hence
+\[
+  K_h^\star/s_\nu(h)^2
+  \longrightarrow \tfrac14\operatorname{tr}(PE_\nu PE_\nu)>0.
+\]
+The selected \(3\times3\) design has lags \(1,\sqrt2,2\); their computed
+coefficients are unequal for \(\nu\in\{0.5,1,1.5,2.5\}\). A complementary
+two-site test verifies that Fisher information remains nonsingular even when
+the residual coefficient is zero, separating identifiability from saturation.
+
+**Numerical repair.** The exact finite-design target now canonicalizes site
+labels before quadrature. This removes label-dependent floating-point paths in
+the scalar optimizer while leaving the mathematical target unchanged.
+
+**Verification.** The focused continuous-support suite passes 92 tests and the
+full suite passes 164 tests. Ruff and Git whitespace checks pass. The full
+release verifier confirms 12,800 replicated fits, 8,400 finite-grid fits, 64
+coverage cells, 23 hashed inputs, 33 paper artifacts, and all 168 numerical
+claims. Both PDFs compile without unresolved references or overfull boxes.
+Page-by-page image inspection found no clipping, overlap, broken glyphs, or
+illegible labels. The GeoSim paper remains 13 pages; tightening only
+bibliography inter-entry spacing keeps the expanded technical manuscript at 26
+pages.
+
+**Decision.** Replace the assumption-dependent local statement with the global
+finite-design theorem and lag-heterogeneity corollary. No new Monte Carlo run is
+needed: the promoted full-likelihood audit already uses a design satisfying the
+new analytic sufficient condition. Independent proof and priority review
+remain the final scientific gate.
+
 ## Entry template
 
 ```text

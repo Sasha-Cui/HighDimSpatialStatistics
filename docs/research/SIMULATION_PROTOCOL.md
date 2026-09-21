@@ -25,9 +25,9 @@ exclusion rules must be frozen before large runs.
 Use
 
 \[
-Y(s)=m(s)+Z(s)+\epsilon(s),\qquad
+Y(s)=m(s)+Z(s)+\varepsilon(s),\qquad
 Z\sim GP(0,C_{\theta_0}),\quad
-\epsilon\stackrel{iid}{\sim}N(0,\tau_0^2),
+\varepsilon\stackrel{iid}{\sim}N(0,\tau_0^2),
 \]
 
 where \(C_{\theta_0}\) uses the AGS decay-scale convention. The theorem-matching

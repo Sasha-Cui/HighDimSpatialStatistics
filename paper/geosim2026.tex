@@ -11,6 +11,7 @@
 
 \newtheorem{theorem}{Theorem}
 \newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
 \theoremstyle{remark}
 \newtheorem{remark}{Remark}
 
@@ -51,9 +52,10 @@ at order \(h^{2\nu}\) for \(0<\nu<1\), \(h^2\log(1/h)\) at \(\nu=1\), and
 inflation. Because a variance-refitted two-point model is saturated, we extend
 the law to a weighted multi-lag composite and obtain both its
 information-weighted displacement and a strictly positive first nonzero
-residual-KL term. Under finite-design identifiability, a second result gives the
-Fisher-metric projection of the support perturbation onto the variance--decay
-tangent space and its irreducible full-likelihood KL component.
+residual-KL term. On any fixed design with at least two distinct sites, a
+second result gives the unique global variance--decay KL projection, its
+Fisher-metric expansion, and a lag-heterogeneity criterion for irreducible
+full-likelihood misspecification.
 
 The released tracks test these claims by deterministic quadrature, exact
 finite-design targets, joint smoothness--range fitting, a partially corrected
@@ -150,8 +152,9 @@ change-of-support method:
   with explicit coefficients, a universal small-support range direction, and a
   two-term approximation continuous through the smoothness-one threshold. We
   extend it to a genuinely misspecified multi-lag composite, including the
-  first nonzero minimum-KL term, and to a finite-design full-Gaussian tangent
-  projection.
+  first nonzero minimum-KL term, and to a unique global finite-design
+  full-Gaussian projection with an explicit sufficient condition for strictly
+  positive residual KL.
   \item We derive a directional \(h^2\) apparent-range contrast for elongated
   support. The qualitative link between convolution and anisotropy is known.
   \item We certify finite-library likelihood concentration and ERM excess risk
@@ -195,7 +198,7 @@ Regularized-semivariogram range rules
 & Infinite-range Matérn KL target, smoothness phase, and coefficient \\
 Misspecified GP likelihood \cite{bachoc2018misspecified}
 & Population KL pseudo-target under covariance misspecification
-& Local tangent projection and irreducible KL for ignored support \\
+& Global finite-design projection and irreducible KL for ignored support \\
 Spatial composite likelihood
 \cite{varin2011composite,bevilacqua2012weighted}
 & Pairwise objectives, weighting, consistency, and efficiency
@@ -588,9 +591,12 @@ Q_n(\alpha)=\frac12\left[
 \end{equation}
 
 The multi-lag result has an exact full-Gaussian analogue on any fixed interior
-site design. Let \(x_1,\ldots,x_p\) be distinct, let
-\(\theta=(\log\sigma^2,\log\alpha)^\top\), and write \(\Sigma(\theta)\) for the
-point-support Matérn covariance at those sites with fixed \(\nu\). Entrywise
+site design. Let \(p\geq2\), let \(x_1,\ldots,x_p\) be distinct, and let
+\(\Theta\subset\R^2\) be compact. A candidate
+\(\theta=(\log\varsigma^2,\log\eta)^\top\in\Theta\) indexes the point-support
+Matérn covariance \(\Sigma(\theta)\) at fixed \(\nu\). Write
+\(\Sigma_0=\Sigma(\theta_0)\), where the physical parameter is
+\(\theta_0=(\log\sigma^2,\log\alpha)^\top\in\operatorname{int}(\Theta)\). Entrywise
 application of the zero- and nonzero-lag expansions gives
 \begin{equation}
  \Sigma_h=\Sigma_0+s_\nu(h)\Gamma_\nu+o\{s_\nu(h)\}.
@@ -607,12 +613,12 @@ and let \(\dot\Sigma_j=\partial_j\Sigma(\theta_0)\). Define
  \qquad g_{\nu,j}=\langle\dot\Sigma_j,\Gamma_\nu\rangle_P.
 \end{equation}
 
-\begin{proposition}[Finite-design full-likelihood projection]
+\begin{proposition}[Global finite-design full-likelihood projection]
 \label{prop:full-projection}
-Suppose \(\theta_0\) is interior to a compact parameter set, \(\mathcal J\) is
-nonsingular, and the KL target \(\theta_h^\dagger\) is the local minimizer
-converging to \(\theta_0\). Let \(K_h^\star\) denote the minimum full Gaussian
-KL criterion. With \(\beta_\nu=\mathcal J^{-1}g_\nu\),
+For all sufficiently small \(h>0\), the full Gaussian KL criterion has a
+unique global minimizer \(\theta_h^\dagger\in\Theta\), and
+\(\mathcal J\succ0\). Let \(K_h^\star\) denote its minimum value. With
+\(\beta_\nu=\mathcal J^{-1}g_\nu\),
 \begin{align}
  \theta_h^\dagger-\theta_0&=\beta_\nu s_\nu(h)+o\{s_\nu(h)\},
  \label{eq:full-shift}\\
@@ -627,16 +633,34 @@ perturbation has a nonzero component outside the variance--decay covariance
 tangent space.
 \end{proposition}
 
-To prove Proposition~\ref{prop:full-projection}, differentiate the Gaussian KL
-criterion at \(\theta_0\). Equations \eqref{eq:matrix-perturbation} and the
-matrix inverse derivative give score \(-g_\nu s_\nu(h)+o\{s_\nu(h)\}\) and
-Hessian \(\mathcal J+o(1)\). The implicit function theorem yields
-\eqref{eq:full-shift}. The local Gaussian KL expansion is
-\(\tfrac14\tr\{P(\Gamma_\nu-\sum_j\beta_{\nu,j}\dot\Sigma_j)
-P(\Gamma_\nu-\sum_j\beta_{\nu,j}\dot\Sigma_j)\}s_\nu(h)^2\), which proves
-\eqref{eq:full-kl}. Nonsingularity of \(\mathcal J\), rather than increasing- or
-fixed-domain asymptotics, is the required finite-design identifiability
-condition.
+For each pair \(a<b\), apply Theorem~\ref{thm:phase-law} at
+\(r_{ab}=x_a-x_b\) and define \(\kappa_{ab}>0\) by
+\begin{equation}
+ \alpha-\alpha_{h,ab}^\dagger
+ =\kappa_{ab}s_\nu(h)+o\{s_\nu(h)\}.
+ \label{eq:pair-design-coefficient}
+\end{equation}
+\begin{corollary}[Lag heterogeneity forces residual KL]
+\label{cor:lag-heterogeneity}
+If \(\kappa_{ab}\ne\kappa_{cd}\) for two site pairs, then \(E_\nu\ne0\) and
+\begin{equation}
+ \lim_{h\downarrow0}\frac{K_h^\star}{s_\nu(h)^2}
+ =\tfrac14\tr(PE_\nu PE_\nu)>0.
+ \label{eq:positive-full-kl}
+\end{equation}
+\end{corollary}
+
+At \(h=0\), Gaussian KL is zero only when candidate and physical covariances
+coincide. Their diagonals identify variance, and any off-diagonal entry plus
+strict Matérn monotonicity identifies decay. Compactness therefore localizes
+every global minimizer near \(\theta_0\). Moreover, the variance tangent has
+nonzero diagonal while the decay tangent has zero diagonal and a nonzero
+off-diagonal, so \(\mathcal J\succ0\) automatically. Local strict convexity
+then gives uniqueness and the expansion; Appendix~\ref{app:analytic-proof}
+gives details. If \(E_\nu=0\), restriction to every two-site submatrix yields
+the same log-decay tangent \(\beta_{\nu,2}\), forcing
+\(\kappa_{ab}=-\alpha\beta_{\nu,2}\) for all pairs. The corollary follows by
+contraposition.
 
 Unlike Theorem~\ref{thm:multilag}, this general projection does not imply a
 universal sign for the decay coordinate: \(\mathcal J^{-1}g_\nu\) depends on
@@ -863,11 +887,15 @@ substantially---for \(\nu=0.5\), from 1.61 at \(\alpha R=0.5\) to 0.40 at
 \(\alpha R=2\)---so the residual in \eqref{eq:multilag-kl} is not a numerical
 roundoff effect.
 
-For Proposition~\ref{prop:full-projection}, we used a \(3\times3\) regular
-grid with unit spacing and jointly profiled variance and decay. Every one of the
-12 exact continuously smoothed targets had positive minimum KL and range
-inflation. At \(h=0.005\), the maximum relative errors of the predicted decay
-shift, log-variance shift, and minimum KL were 5.42\%, 12.68\%, and 1.77\%.
+For Proposition~\ref{prop:full-projection} and
+Corollary~\ref{cor:lag-heterogeneity}, we used a \(3\times3\) unit-spaced
+regular grid and jointly profiled variance and decay. Its lags
+\(1,\sqrt2,2\) have unequal pair coefficients at each of the four tested
+smoothnesses, so the corollary certifies a positive leading residual before
+numerical optimization. Every one of the 12 exact continuously smoothed targets
+had positive minimum KL and range inflation. At \(h=0.005\), the maximum
+relative errors of the predicted decay shift, log-variance shift, and minimum
+KL were 5.42\%, 12.68\%, and 1.77\%.
 These signs describe this selected design; only the matrix projection and
 residual-KL formulas are general.
 
@@ -1097,9 +1125,6 @@ separates likelihood noise from population displacement. Joint smoothness can
 reverse the fixed-smoothness decay direction; no universal sign is asserted for
 boundary support or arbitrary full-likelihood fits.
 
-Code, manifests, aggregate data, and a one-command numerical-claim verifier are
-available in release \href{https://github.com/Sasha-Cui/HighDimSpatialStatistics/tree/supportshift-geosim-v1.3.2}{v1.3.2}.
-
 \clearpage
 \bibliographystyle{ACM-Reference-Format}
 \bibliography{references}
@@ -1217,23 +1242,60 @@ Let
  \tr\{\Sigma(\theta)^{-1}\Sigma_h\}-p+
  \log\det\Sigma(\theta)-\log\det\Sigma_h\right].
 \]
-Using \(\partial\Sigma^{-1}=-\Sigma^{-1}(\partial\Sigma)\Sigma^{-1}\),
-the score at \(\theta_0\) is
+At \(h=0\), \(K_0(\theta)\geq0\), with equality exactly when
+\(\Sigma(\theta)=\Sigma_0\). Equality of the diagonals gives
+\(\varsigma^2=\sigma^2\); equality of any off-diagonal entry then gives
+\(\eta=\alpha\) because \(\Matern_\nu\) is strictly decreasing. Thus
+\(\theta_0\) is the unique global minimizer of \(K_0\).
+
+Continuity and compactness give a minimizer for every \(h\). The Matérn
+covariance is strictly positive definite on the fixed distinct sites, so
+compactness of \(\Theta\) bounds the candidate
+eigenvalues uniformly away from zero. Since \(\Sigma_h\to\Sigma_0\), we have
+\(K_h\to K_0\) uniformly on \(\Theta\); hence every global minimizer of
+\(K_h\) converges to \(\theta_0\).
+
+For \(c\in\R^2\), put \(H_c=\sum_jc_j\dot\Sigma_j\). Then
 \[
- \partial_j K_h(\theta_0)
- =-s_\nu(h)\langle\dot\Sigma_j,\Gamma_\nu\rangle_P+o\{s_\nu(h)\}
- =-g_{\nu,j}s_\nu(h)+o\{s_\nu(h)\}.
+ c^\top\mathcal Jc
+ =\tfrac12\|P^{1/2}H_cP^{1/2}\|_{\mathrm F}^2.
 \]
-At \(h=0\), the Hessian is the Fisher information \(\mathcal J\). Nonsingularity and
-the implicit function theorem give
-\(\theta_h^\dagger-\theta_0=\mathcal J^{-1}g_\nu\,s_\nu(h)
-+o\{s_\nu(h)\}\).
-Finally, for a covariance perturbation \(H\), Gaussian KL has quadratic term
-\(\tfrac14\tr(PHPH)\). Substitution of
-\(H=s_\nu(h)(\Gamma_\nu-\sum_j\beta_{\nu,j}\dot\Sigma_j)
-+o\{s_\nu(h)\}\) proves
-\eqref{eq:full-kl}. The coefficient vanishes exactly when \(E_\nu=0\), because
-\(\tr(PE_\nu PE_\nu)=\|P^{1/2}E_\nu P^{1/2}\|_{\mathrm F}^2\).
+If this vanishes, the diagonal of \(H_c\) first gives \(c_1=0\), because
+\(\dot\Sigma_1=\Sigma_0\) while \(\operatorname{diag}(\dot\Sigma_2)=0\).
+Any off-diagonal entry then gives \(c_2=0\), since
+\(\Matern_\nu'(\alpha\|x_a-x_b\|)<0\). Thus \(\mathcal J\succ0\).
+Continuity of the Hessian makes \(K_h\) strictly convex on a neighborhood of
+\(\theta_0\) for small \(h\); global localization then proves uniqueness.
+
+Using \(\partial\Sigma^{-1}=-\Sigma^{-1}(\partial\Sigma)\Sigma^{-1}\),
+\[
+ \nabla K_h(\theta_0)=-g_\nu s_\nu(h)+o\{s_\nu(h)\},\qquad
+ \nabla^2K_h(\theta_0)=\mathcal J+o(1).
+\]
+The score equation and Taylor expansion give \eqref{eq:full-shift}.
+For a covariance perturbation \(H\), Gaussian KL has
+quadratic term \(\tfrac14\tr(PHPH)\). Substitution of
+\(H=s_\nu(h)E_\nu+o\{s_\nu(h)\}\) proves \eqref{eq:full-kl}; the normal
+equations give the stated Fisher orthogonality. Finally,
+\(\tr(PE_\nu PE_\nu)=\|P^{1/2}E_\nu P^{1/2}\|_{\mathrm F}^2\), so the
+coefficient vanishes exactly when \(E_\nu=0\).
+\end{proof}
+
+\begin{proof}[Proof of Corollary~\ref{cor:lag-heterogeneity}]
+If \(E_\nu=0\), then
+\(\Gamma_\nu=\sum_j\beta_{\nu,j}\dot\Sigma_j\). Restricting this identity to
+any two-site principal submatrix shows that its smoothed covariance agrees to
+first order with the point-support covariance at
+\(\theta_0+\beta_\nu s_\nu(h)\). Uniqueness of the exact pair target and the
+local inverse map therefore give
+\[
+ \log(\alpha_{h,ab}^\dagger/\alpha)
+ =\beta_{\nu,2}s_\nu(h)+o\{s_\nu(h)\},
+ \qquad \kappa_{ab}=-\alpha\beta_{\nu,2}
+\]
+for every pair. Unequal pair coefficients imply \(E_\nu\ne0\) by
+contraposition, and \eqref{eq:positive-full-kl} follows from
+\eqref{eq:full-kl} and the squared-norm identity.
 \end{proof}
 
 \begin{proof}[Proof of Propositions~\ref{prop:transition}--\ref{prop:direction}]
@@ -1338,8 +1400,9 @@ not a uniform guarantee over kernels or dimensions.
 \section{Artifact-level reproduction}
 \label{app:artifact-reproduction}
 
-The isolated artifact entry point is \path{supportshift/README.md}. From a
-clean checkout, its release-verification command checks the environment and
+Release \texttt{supportshift-geosim-v1.3.2} uses the isolated artifact entry
+point \path{supportshift/README.md}. From a clean checkout, its
+release-verification command checks the environment and
 provenance records, hashes every promoted input and paper artifact, validates
 all declared factor grids and schemas, reconstructs the finite-grid summary
 from fit-level records, and evaluates the machine-readable claim ledger. A

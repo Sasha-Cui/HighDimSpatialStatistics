@@ -35,7 +35,7 @@ locally averaged field
 has covariance
 
 \[
-  C_h(r)=v\mathbb E\mathcal M_\nu
+  C_h(r)=\sigma^2\mathbb E\mathcal M_\nu
   \{\alpha\lVert r+hD\rVert\}.
 \]
 
@@ -68,6 +68,25 @@ transition values one or two.
 **P5 (pair target).** Smoothness is known; pair variance and inverse range are
 free. Strict monotonicity of (\mathcal M_\nu) identifies the decay target once
 (0<\rho_h(r)<1).
+
+## Assumptions used by the global finite-design projection
+
+**G1 (design).** There are at least two distinct sites. This supplies one
+nonzero lag, so the covariance diagonal identifies variance and strict Matérn
+monotonicity identifies inverse range.
+
+**G2 (parameter set).** The candidate log-variance--log-decay set
+\(\Theta\subset\mathbb R^2\) is compact and contains the physical parameter
+\(\theta_0\) in its interior. Continuity and strict positive definiteness on
+the fixed design then provide uniform spectral bounds.
+
+**G3 (small-support perturbation).** Smoothness is fixed and
+\(\Sigma_h=\Sigma_0+s_\nu(h)\Gamma_\nu+o\{s_\nu(h)\}\) entrywise. No domain
+asymptotic is used.
+
+Under G1--G3, global identification and Fisher nonsingularity are conclusions,
+not additional assumptions. Lag heterogeneity is needed only for the simple
+sufficient condition that the residual KL coefficient is strictly positive.
 
 ## Assumptions used by the high-dimensional proposition
 
@@ -110,6 +129,10 @@ flowchart TD
   T1b["T1b: transition-aware pair approximation"]
   C1["C1: directional h^2 contrast"]
   F1["F1: exact finite-design support covariance"]
+  G["G1--G3: distinct sites, compact parameters, support perturbation"]
+  L8["L8: global covariance identification and Fisher positivity"]
+  T3["T3: unique global finite-design KL projection"]
+  C4["C4: lag heterogeneity implies positive residual KL"]
   H["H1--H5: iid vectors, finite library, normalization"]
   Q1["Q1: Gaussian quadratic-form tail"]
   T2["T2: simultaneous likelihood concentration"]
@@ -130,6 +153,13 @@ flowchart TD
   L3 --> C1
   L6 --> C1
   L0 --> F1
+  G --> L8
+  L1 --> L8
+  L2 --> T3
+  L3 --> T3
+  L8 --> T3
+  T1 --> C4
+  T3 --> C4
   H --> Q1 --> T2 --> C2
   T2 --> C3
   F1 --> T2
@@ -142,7 +172,7 @@ flowchart TD
 Fubini's theorem and stationarity give
 
 \[
-  C_h(r)=v\mathbb E\mathcal M_\nu
+  C_h(r)=\sigma^2\mathbb E\mathcal M_\nu
   \{\alpha\lVert r+hD\rVert\}.
 \]
 
@@ -170,7 +200,7 @@ expansion is uniform on the declared annulus. Kernel symmetry removes odd
 expectations and yields
 
 \[
-  C_h(r)/v
+  C_h(r)/\sigma^2
   =\mathcal M_\nu(\alpha R)+h^2B_{\nu,k}(r)+O(h^4).
 \]
 
@@ -182,7 +212,7 @@ be incorrect for rough Matérn fields.
 The Bessel series at zero, integrated against bounded (D), yields
 
 \[
-  1-C_h(0)/v
+  1-C_h(0)/\sigma^2
   \asymp
   \begin{cases}
   h^{2\nu}, & 0<\nu<1,\\
@@ -295,6 +325,53 @@ For the transformed product smoother
 For (\nu\le1), this contrast is lower order than the common leading shift.
 The qualitative fact that convolution can look anisotropic is known; the paper
 claims only the explicit apparent-range coefficient.
+
+### L8--T3. Global finite-design full-likelihood projection -- complete
+
+At zero support, forward Gaussian KL is nonnegative and is zero exactly when
+the candidate covariance equals the physical covariance. For at least two
+distinct sites, diagonal equality identifies \(\sigma^2\), and any
+nonzero-lag entry identifies \(\alpha\) because \(\mathcal M_\nu\) is strictly
+decreasing. Thus \(\theta_0\) is the unique global minimizer.
+
+Continuity on compact \(\Theta\) bounds all candidate eigenvalues away from
+zero. The true smoothed covariance converges to \(\Sigma_0\), so the KL
+criteria converge uniformly and every global minimizer localizes at
+\(\theta_0\). The Fisher matrix is automatically positive definite: the
+log-variance tangent has a nonzero diagonal, while the log-decay tangent has
+zero diagonal and a nonzero off-diagonal. Local Hessian positivity then makes
+the global minimizer unique for sufficiently small \(h\), with
+
+\[
+  \theta_h^\dagger-\theta_0
+  =\mathcal J^{-1}g_\nu\,s_\nu(h)+o\{s_\nu(h)\}.
+\]
+
+The leading minimum KL is the squared Fisher distance from
+\(\Gamma_\nu\) to the variance--decay tangent space.
+
+### C4. Lag heterogeneity forces positive residual KL -- complete
+
+Let \(\kappa_{ab}\) be the pairwise coefficient at lag
+\(x_a-x_b\). If the full perturbation were tangent, restriction to every
+principal two-site submatrix would give the same log-decay displacement and
+therefore
+
+\[
+  \kappa_{ab}=-\alpha\beta_{\nu,2}
+\]
+
+for every pair. Hence two unequal pair coefficients imply a nonzero Fisher
+residual and
+
+\[
+  \lim_{h\downarrow0}\frac{K_h^\star}{s_\nu(h)^2}
+  =\frac14\operatorname{tr}(PE_\nu PE_\nu)>0.
+\]
+
+This is a sufficient condition for genuine full-likelihood misspecification;
+it does not impose or imply a universal sign for the design-specific decay
+coordinate.
 
 ### F1. Finite-design support-aware containment -- complete
 

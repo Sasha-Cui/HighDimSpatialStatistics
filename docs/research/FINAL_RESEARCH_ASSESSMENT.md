@@ -1532,9 +1532,10 @@ likelihood misspecification. The revision now separates three levels:
 2. a weighted multi-lag pair-composite theorem, whose pseudo-range shift is an
    information-weighted average and whose minimum KL divergence has a strictly
    positive first nonzero term when lag coefficients differ; and
-3. a finite-design full-Gaussian proposition, which projects the support
-   perturbation onto the variance--decay covariance tangent space and identifies
-   the irreducible residual KL component.
+3. a global finite-design full-Gaussian proposition, which proves covariance
+   identification and Fisher positivity from distinct sites, gives the unique
+   global small-support KL target, and shows that unequal pair coefficients
+   force a strictly positive irreducible residual KL component.
 
 The known-smoothness limitation is now tested rather than hidden. A 2,400-fit
 joint smoothness--decay experiment shows that ignored support moves the
@@ -1551,8 +1552,9 @@ concerns without making a universal boundary theorem or a universal (p^{-1/2})
 claim.
 
 The primary claim remains deliberately narrower than a top-tier asymptotic
-theory paper: the full-likelihood projection is local and design specific, and
-there is no continuous joint-nuisance theorem. The strongest defensible product
+theory paper: the full-likelihood target is global on a fixed compact parameter
+set, but its small-support coefficient is design specific, and there is no
+continuous joint-nuisance theorem. The strongest defensible product
 is therefore a theory-plus-synthetic-benchmark paper. It is materially stronger
 than the reviewed version and suitable for a specialist workshop or modest
 methodological journal after independent proof review; it should not be sold as

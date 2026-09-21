@@ -13,26 +13,27 @@ target as an analytic building block rather than evidence of genuine
 misspecification. It adds:
 
 - a weighted multi-lag pair-composite theorem. If the lag-specific phase
-  coefficients are $C_j$ and the information weights are $\lambda_j$, the
+  coefficients are $\kappa_j$ and the information weights are $\lambda_j$, the
   pseudo-range shift has coefficient
   
   \[
-  \bar C=\frac{\sum_j\lambda_j C_j}{\sum_j\lambda_j},
+  \bar\kappa=\frac{\sum_j\lambda_j\kappa_j}{\sum_j\lambda_j},
   \]
   
   and the first nonzero minimum-KL term is
   
   \[
-  \frac{s_\nu(h)^2}{2}\sum_j\lambda_j(C_j-\bar C)^2.
+  \frac{s_\nu(h)^2}{2}\sum_j\lambda_j(\kappa_j-\bar\kappa)^2.
   \]
   
   Thus the composite is genuinely misspecified whenever the lag coefficients
   are not all equal.
-- a finite-design full-Gaussian local projection. For
-  $\theta=(\log v,\log\alpha)$, the covariance perturbation is projected onto
-  the variance--decay tangent space with Fisher matrix $J$. The local target
-  shift is $J^{-1}b\,s_\nu(h)$, and the irreducible KL coefficient is the
-  squared Fisher norm of the residual perturbation.
+- a global finite-design full-Gaussian projection. On any compact
+  log-variance--log-decay set containing the physical parameter in its
+  interior, at least two distinct sites identify the covariance and make the
+  Fisher matrix $\mathcal J$ positive definite. The unique global target has
+  shift $\mathcal J^{-1}g_\nu\,s_\nu(h)$, and unequal pair coefficients
+  force a strictly positive squared Fisher norm for the residual perturbation.
 
 The 48-cell multi-lag audit and 12-cell full-likelihood audit evaluate both
 results against exact numerical KL minimizers. At the smallest bandwidth, the
@@ -76,7 +77,7 @@ smoothness values, isolating boundary normalization without a dimension change.
 ### Lag sensitivity was not quantified
 
 **Addressed.** The new multi-lag theorem makes lag dependence explicit through
-$C_j$ and $\lambda_j$. For $\nu=0.5$, the reported coefficient changes
+$\kappa_j$ and $\lambda_j$. For $\nu=0.5$, the reported coefficient changes
 from 1.61 at $\alpha R=0.5$ to 0.40 at $\alpha R=2$; unequal coefficients are
 exactly what produces the positive residual-KL term.
 

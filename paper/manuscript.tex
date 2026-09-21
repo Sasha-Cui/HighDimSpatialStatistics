@@ -57,8 +57,10 @@ inverse range---and therefore overestimates spatial range---for every fixed
 \(\nu>0\) and all sufficiently small \(h\). We extend the saturated pair result
 to a weighted multi-lag composite, deriving both its information-weighted
 parameter displacement and its first nonzero minimum-KL term. For any fixed
-site design, a covariance-tangent projection gives the analogous joint
-variance--decay displacement and irreducible full-Gaussian KL divergence. For anisotropic support, an
+design with at least two distinct sites, we prove existence and uniqueness of
+the global variance--decay KL target, derive its Fisher-tangent displacement,
+and show that heterogeneous pair coefficients force irreducible full-Gaussian
+KL divergence. For anisotropic support, an
 all-smoothness directional contrast isolates the order-\(h^2\) difference
 between lag directions.  We also give an explicit finite-library Gaussian
 likelihood certificate based on standard quadratic-form concentration.  It
@@ -137,9 +139,9 @@ principal mathematical contribution is the explicit all-smoothness,
   the slow finite-bandwidth crossover around \(\nu=1\).
   \item We extend the pair coefficient to a genuinely misspecified multi-lag
   Gaussian composite and derive its positive residual-KL coefficient. A
-  finite-design proposition projects the support perturbation onto the
-  variance--decay Fisher tangent space and identifies exactly when the
-  full-Gaussian model remains misspecified to first order.
+  global finite-design proposition proves that the variance--decay KL target
+  is unique, projects its displacement onto the Fisher tangent space, and gives
+  a pair-coefficient criterion for strictly positive residual KL.
   \item We give explicit coefficients.  Origin expansions, together with a
   Bessel-function identity in the smooth regime, prove that normalized
   correlation increases, hence inverse range decreases, for every \(\nu>0\)
@@ -598,10 +600,15 @@ the naive family generally does not. Our primary support-only experiment sets
 separate combined-misspecification run with \(\tau^2=0.05\) is retained as a
 reproducibility stress artifact but is not used for the principal claims.
 
-For a local full-likelihood result, let \(x_1,\ldots,x_p\) be distinct
-interior sites, let \(\theta=(\log\sigma^2,\log\alpha)^\top\), and write
-\(\Sigma(\theta)\) for their point-support Matérn covariance at fixed
-smoothness. The entrywise origin and fixed-lag expansions imply
+For the full-likelihood result, let \(p\geq2\), let
+\(x_1,\ldots,x_p\) be distinct interior sites, and let
+\(\Theta\subset\R^2\) be compact. A candidate
+\(\theta=(\log\varsigma^2,\log\eta)^\top\in\Theta\) indexes their point-support
+Matérn covariance \(\Sigma(\theta)\) at fixed smoothness. Write
+\(\Sigma_0=\Sigma(\theta_0)\), where the physical parameter is
+\(\theta_0=(\log\sigma^2,\log\alpha)^\top
+\in\operatorname{int}(\Theta)\). The entrywise origin and fixed-lag
+expansions imply
 \begin{equation}
  \Sigma_h=\Sigma_0+s_\nu(h)\Gamma_\nu+o\{s_\nu(h)\}.
  \label{eq:finite-matrix-perturbation}
@@ -618,16 +625,16 @@ and let \(\dot\Sigma_j=\partial_j\Sigma(\theta_0)\). Define
  \label{eq:projection-information}
 \end{equation}
 
-\begin{proposition}[Finite-design full-likelihood projection]
+\begin{proposition}[Global finite-design full-likelihood projection]
 \label{prop:full-likelihood-projection}
-Suppose \(\theta_0\) is interior to a compact parameter set, \(\mathcal J\) is
-nonsingular, and \(\theta_h^\dagger\) is the local Gaussian KL minimizer
-converging to \(\theta_0\). With \(\beta_\nu=\mathcal J^{-1}g_\nu\),
+For all sufficiently small \(h>0\), the Gaussian KL criterion on \(\Theta\)
+has a unique global minimizer \(\theta_h^\dagger\), and
+\(\mathcal J\succ0\). With \(\beta_\nu=\mathcal J^{-1}g_\nu\),
 \begin{align}
  \theta_h^\dagger-\theta_0
  &=\beta_\nu s_\nu(h)+o\{s_\nu(h)\},
  \label{eq:finite-full-shift}\\
- \min_\theta\KL\!\left\{\Normal_p(0,\Sigma_h)\,\middle\|\,
+ \min_{\theta\in\Theta}\KL\!\left\{\Normal_p(0,\Sigma_h)\,\middle\|\,
  \Normal_p(0,\Sigma(\theta))\right\}
  &=\tfrac14\tr(PE_\nu PE_\nu)s_\nu(h)^2+o\{s_\nu(h)^2\},
  \label{eq:finite-full-kl}
@@ -638,10 +645,32 @@ likelihood is genuinely misspecified to leading order exactly when the support
 perturbation is not contained in the variance--decay covariance tangent space.
 \end{proposition}
 
-The decay coordinate of \(\mathcal J^{-1}g_\nu\) is design specific, so the
-proposition does not assert a universal full-likelihood sign. It is a finite-design local
-result, not a fixed- or increasing-domain consistency theorem. Its assumptions
-make identifiability explicit through nonsingularity of \(\mathcal J\).
+For each pair \(a<b\), define \(\kappa_{ab}>0\) by applying the pair phase law
+at \(x_a-x_b\):
+\begin{equation}
+ \alpha-\alpha_{h,ab}^\dagger
+ =\kappa_{ab}s_\nu(h)+o\{s_\nu(h)\}.
+ \label{eq:finite-pair-coefficient}
+\end{equation}
+\begin{corollary}[Lag heterogeneity forces residual KL]
+\label{cor:full-likelihood-lag-heterogeneity}
+If \(\kappa_{ab}\ne\kappa_{cd}\) for two site pairs, then \(E_\nu\ne0\) and
+\begin{equation}
+ \lim_{h\downarrow0}\frac{1}{s_\nu(h)^2}
+ \min_{\theta\in\Theta}\KL\!\left\{\Normal_p(0,\Sigma_h)\,\middle\|\,
+ \Normal_p(0,\Sigma(\theta))\right\}
+ =\tfrac14\tr(PE_\nu PE_\nu)>0.
+ \label{eq:finite-positive-full-kl}
+\end{equation}
+\end{corollary}
+
+The result is global over \(\Theta\), rather than conditional on a selected
+local branch. Distinct sites identify variance from the diagonal and decay
+from any off-diagonal entry; the same diagonal/off-diagonal separation makes
+\(\mathcal J\) positive definite. The decay coordinate of
+\(\mathcal J^{-1}g_\nu\) remains design specific, so no universal
+full-likelihood sign is asserted. This is a fixed-design small-support result,
+not a fixed- or increasing-domain consistency theorem.
 
 A rectangular \(S_h\) is intentional.  If a square parameter-independent
 smoother is invertible, the exact transformed likelihood is merely a change of
@@ -882,10 +911,13 @@ the largest relative errors in the leading shift and minimum-KL formulas were
 \(\alpha R=2\). Thus the residual in \eqref{eq:multi-lag-kl} is genuine and
 the composite coefficient is visibly lag-sensitive.
 
-For Proposition~\ref{prop:full-likelihood-projection}, we used a
+For Proposition~\ref{prop:full-likelihood-projection} and
+Corollary~\ref{cor:full-likelihood-lag-heterogeneity}, we used a
 \(3\times3\) unit-spaced regular grid and jointly profiled variance and decay.
-All 12 exact continuously smoothed targets had positive minimum KL and, for
-this design, range inflation. At the smallest bandwidth, the largest relative
+Its lags \(1,\sqrt2,2\) have unequal pair coefficients at all four tested
+smoothnesses, analytically certifying a positive leading residual. All 12 exact
+continuously smoothed targets had positive minimum KL and, for this design,
+range inflation. At the smallest bandwidth, the largest relative
 errors in the projected decay shift, log-variance shift, and minimum KL were
 5.42\%, 12.68\%, and 1.77\%, respectively. This validates the general tangent
 formula on one declared design without promoting its observed decay sign into
@@ -1418,29 +1450,70 @@ gives \(\gamma=\bar\kappa\), \eqref{eq:multi-lag-shift}, and
 \end{proof}
 
 \begin{proof}[Proof of Proposition~\ref{prop:full-likelihood-projection}]
-The Gaussian criterion is
+Write
 \[
  K_h(\theta)=\frac12\left[
  \tr\{\Sigma(\theta)^{-1}\Sigma_h\}-p+
  \log\det\Sigma(\theta)-\log\det\Sigma_h\right].
 \]
+At \(h=0\), Gaussian KL is nonnegative and vanishes precisely when
+\(\Sigma(\theta)=\Sigma_0\). Diagonal equality identifies
+\(\varsigma^2=\sigma^2\); any off-diagonal entry then identifies
+\(\eta=\alpha\) by strict monotonicity of \(\Matern_\nu\). Hence
+\(\theta_0\) is the unique global minimizer of \(K_0\).
+
+Continuity and compactness give a minimizer for every \(h\). On \(\Theta\),
+strict positive definiteness of the Matérn matrices and continuity bound their
+smallest eigenvalues away from zero. Since
+\(\Sigma_h\to\Sigma_0\), the inverse and log-determinant formulas imply
+\(K_h\to K_0\) uniformly. The strict global minimum of \(K_0\) therefore
+forces every global minimizer of \(K_h\) to converge to \(\theta_0\).
+
+For \(c\in\R^2\), let \(H_c=\sum_jc_j\dot\Sigma_j\). Then
+\[
+ c^\top\mathcal Jc
+ =\tfrac12\|P^{1/2}H_cP^{1/2}\|_{\mathrm F}^2.
+\]
+If \(H_c=0\), its diagonal gives \(c_1=0\), since
+\(\dot\Sigma_1=\Sigma_0\) and
+\(\operatorname{diag}(\dot\Sigma_2)=0\). Any off-diagonal entry then gives
+\(c_2=0\), because \(\Matern_\nu'(\alpha\|x_a-x_b\|)<0\). Thus
+\(\mathcal J\succ0\). Hessian continuity makes \(K_h\) strictly convex in a
+neighborhood of \(\theta_0\) for small \(h\); combined with global
+localization, this proves uniqueness.
+
 The identities \(\partial\Sigma^{-1}=-\Sigma^{-1}(\partial\Sigma)
 \Sigma^{-1}\) and \eqref{eq:finite-matrix-perturbation} give
 \[
- \partial_j K_h(\theta_0)
- =-s_\nu(h)\langle\dot\Sigma_j,\Gamma_\nu\rangle_P+o\{s_\nu(h)\}
- =-g_{\nu,j}s_\nu(h)+o\{s_\nu(h)\}.
+ \nabla K_h(\theta_0)=-g_\nu s_\nu(h)+o\{s_\nu(h)\},\qquad
+ \nabla^2K_h(\theta_0)=\mathcal J+o(1).
 \]
-At \(h=0\), the Hessian equals \(\mathcal J\). The implicit function theorem thus
-gives \(\theta_h^\dagger-\theta_0=\mathcal J^{-1}g_\nu\,s_\nu(h)
-+o\{s_\nu(h)\}\).
-For a covariance perturbation \(H\), Gaussian KL has quadratic term
-\(\tfrac14\tr(PHPH)\). Taking
-\(H=s_\nu(h)(\Gamma_\nu-\sum_j\beta_{\nu,j}\dot\Sigma_j)
-+o\{s_\nu(h)\}\) proves
-\eqref{eq:finite-full-kl}. Moreover,
-\(\tr(PE_\nu PE_\nu)=\|P^{1/2}E_\nu P^{1/2}\|_{\mathrm F}^2\), so the coefficient is
-zero exactly when the support perturbation belongs to the tangent space.
+Taylor expansion of the score equation yields
+\(\theta_h^\dagger-\theta_0=\mathcal J^{-1}g_\nu s_\nu(h)
++o\{s_\nu(h)\}\). For a covariance perturbation \(H\), Gaussian KL has
+quadratic term \(\tfrac14\tr(PHPH)\). Taking
+\(H=s_\nu(h)E_\nu+o\{s_\nu(h)\}\) proves
+\eqref{eq:finite-full-kl}; the normal equations give Fisher orthogonality.
+Moreover,
+\(\tr(PE_\nu PE_\nu)=\|P^{1/2}E_\nu P^{1/2}\|_{\mathrm F}^2\), so the
+coefficient is zero exactly when the perturbation belongs to the tangent space.
+\end{proof}
+
+\begin{proof}[Proof of Corollary~\ref{cor:full-likelihood-lag-heterogeneity}]
+If \(E_\nu=0\), then
+\(\Gamma_\nu=\sum_j\beta_{\nu,j}\dot\Sigma_j\). Restrict this identity to a
+two-site principal submatrix. Its smoothed covariance agrees to first order
+with the point-support covariance at
+\(\theta_0+\beta_\nu s_\nu(h)\). Uniqueness and smooth local inversion of the
+exact pair target imply
+\[
+ \log(\alpha_{h,ab}^\dagger/\alpha)
+ =\beta_{\nu,2}s_\nu(h)+o\{s_\nu(h)\},
+ \qquad \kappa_{ab}=-\alpha\beta_{\nu,2}
+\]
+for every pair. Thus two unequal pair coefficients force \(E_\nu\ne0\).
+Equation~\eqref{eq:finite-positive-full-kl} follows from
+\eqref{eq:finite-full-kl} and the squared-norm identity.
 \end{proof}
 
 \section{Proof of the transition-aware approximation}
@@ -1670,7 +1743,7 @@ are regenerated from audited aggregate CSV files.
 
 \begingroup
 \small
-\setlength{\bibsep}{2pt plus 0.3ex}
+\setlength{\bibsep}{0pt plus 0.2ex}
 \bibliographystyle{plainnat}
 \bibliography{references}
 \endgroup
