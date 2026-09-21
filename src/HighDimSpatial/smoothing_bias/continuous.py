@@ -851,6 +851,13 @@ def continuous_matern_full_likelihood_target(
 ) -> ContinuousFullLikelihoodTarget:
     """Compute the exact finite-design variance--decay Gaussian KL target."""
     points = _finite_locations(locations)
+    # The KL target is invariant to site labels. Canonical ordering removes
+    # label-dependent floating-point paths in covariance quadrature and the
+    # subsequent scalar optimization.
+    ordering = np.lexsort(
+        tuple(points[:, axis] for axis in reversed(range(points.shape[1])))
+    )
+    points = points[ordering]
     truth = continuous_matern_covariance_matrix(
         points,
         variance=variance,
