@@ -6,12 +6,12 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=6G
 #SBATCH --time=00:30:00
-#SBATCH --output=/nfs/roberts/project/pi_btk22/zc362/HighDimSpatialStatistics/outputs/slurm/%x_%j.out
-#SBATCH --error=/nfs/roberts/project/pi_btk22/zc362/HighDimSpatialStatistics/outputs/slurm/%x_%j.err
+#SBATCH --output=/nfs/roberts/project/pi_btk22/zc362/high-dimensional-spatial-statistics/outputs/slurm/%x_%j.out
+#SBATCH --error=/nfs/roberts/project/pi_btk22/zc362/high-dimensional-spatial-statistics/outputs/slurm/%x_%j.err
 
 set -euo pipefail
 
-REPO_ROOT=/nfs/roberts/project/pi_btk22/zc362/HighDimSpatialStatistics
+REPO_ROOT=/nfs/roberts/project/pi_btk22/zc362/high-dimensional-spatial-statistics
 HDS_PYTHON=${HDS_PYTHON:-/nfs/roberts/project/pi_btk22/zc362/environments/current/kt-main/bin/python}
 
 export OMP_NUM_THREADS=1

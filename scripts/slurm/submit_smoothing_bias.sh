@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-REPO_ROOT=/nfs/roberts/project/pi_btk22/zc362/HighDimSpatialStatistics
+REPO_ROOT=/nfs/roberts/project/pi_btk22/zc362/high-dimensional-spatial-statistics
 HDS_PYTHON=${HDS_PYTHON:-/nfs/roberts/project/pi_btk22/zc362/environments/current/kt-main/bin/python}
 SBATCH=/opt/slurm/current/bin/sbatch
 MANIFEST=${1:-$REPO_ROOT/configs/smoothing_bias/shakedown_20260802.json}

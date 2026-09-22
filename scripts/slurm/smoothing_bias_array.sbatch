@@ -6,12 +6,12 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=4G
 #SBATCH --time=00:45:00
-#SBATCH --output=/nfs/roberts/project/pi_btk22/zc362/HighDimSpatialStatistics/outputs/slurm/%x_%A_%a.out
-#SBATCH --error=/nfs/roberts/project/pi_btk22/zc362/HighDimSpatialStatistics/outputs/slurm/%x_%A_%a.err
+#SBATCH --output=/nfs/roberts/project/pi_btk22/zc362/high-dimensional-spatial-statistics/outputs/slurm/%x_%A_%a.out
+#SBATCH --error=/nfs/roberts/project/pi_btk22/zc362/high-dimensional-spatial-statistics/outputs/slurm/%x_%A_%a.err
 
 set -euo pipefail
 
-REPO_ROOT=/nfs/roberts/project/pi_btk22/zc362/HighDimSpatialStatistics
+REPO_ROOT=/nfs/roberts/project/pi_btk22/zc362/high-dimensional-spatial-statistics
 HDS_PYTHON=${HDS_PYTHON:-/nfs/roberts/project/pi_btk22/zc362/environments/current/kt-main/bin/python}
 MANIFEST=${1:?"manifest path is required"}
 
